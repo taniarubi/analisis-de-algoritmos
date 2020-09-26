@@ -19,6 +19,7 @@
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage[linguistics]{forest}
 % Modificamos los márgenes del documento.                                       %
 \usepackage[lmargin=2cm,rmargin=2cm,top=2cm,bottom=2cm]{geometry}
 
@@ -98,6 +99,8 @@
     the $n$ integers fall into a range $[a ... b]$ in $O(1)$ time. Your 
     algorithm should use $\Theta(n + k)$ preprocessing time.
 
+    \textsc{Solución:}
+
     % Ejercicio 6.
     \item Sea $A$ un arreglo de $n$ elementos, tal que cada elemento se 
     encuentra a lo más a $k$ posiciones de su posición ordenada. Diseñe un 
@@ -133,10 +136,64 @@
     algorithm that rearranges the items into four clusters in $O(n)$ time 
     using only $O(1)$ extra space.
 
+    \newpage
     % Ejercicio 8.
     \item Pruebe que el segundo elemento más chico de una lista de $n$ elementos 
-    distintos puede encontrarse con $n + \lceil \log n \rceil - 1$ comparaciones.
+    distintos puede encontrarse con $n + \lceil \log n \rceil - 2$ comparaciones.
+
+    \begin{proof}
+        Sea $T$ el árbol binario que contiene a los $n$ elementos de nuestra 
+        lista en sus hojas. Por lo discutido en clase, sabemos que para 
+        encontrar al elemento más pequeño necesitamos realizar $n-1$ 
+        comparaciones, ya que al ir comparando los elementos desde las hojas, 
+        vamos formando nuestros nodos internos (éstos serán los elementos 
+        más pequeños de las comparaciones que se vayan haciendo), los cuales 
+        siempre son $n-1$.
+
+        Ahora bien, para encontrar al segundo elemento más pequeño debemos
+        tener en cuenta una observación importante: como siempre vamos 
+        \textit{subiendo} a los elementos más pequeños, eso quiere decir que el 
+        segundo elemento más pequeño ya fue comparado con la raíz del árbol $T$,
+        así que sólo queda ubicar a todos los elementos que \textit{perdieron}
+        contra la raíz de $T$ y compararlos entre sí. Al ubicar estos elementos, 
+        obtendremos que hay uno de ellos (a lo más) en cada nivel del árbol, y 
+        como la altura del árbol es $\log_2 n$ entonces hacer esta última 
+        pasada al árbol nos tomará $\lceil \log_2 n \rceil - 1$ comparaciones.
+        Por lo tanto, encontrar al segundo elemento más pequeño de una lista de 
+        $n$ elementos distintos nos toma 
+        \begin{equation*}
+            (n - 1) + (\lceil \log_2 n \rceil - 1) = n + \lceil \log_2 \rceil - 2
+        \end{equation*}
+
+        comparaciones.
+
+        \begin{figure}[ht]
+        \centering
+        \forestset{default preamble={for tree={circle,draw}}}
+        \begin{forest}
+        [-1, red
+          [-1,
+            [-1
+              [24, blue]
+              [-1]
+            ]
+            [2, blue
+              [2]
+              [7]
+            ]
+          ]
+          [0, blue
+            [9]
+            [0]
+          ]
+        ]
+        \end{forest}
+            
+        \caption{Ejemplo de la explicación con la lista $[24, -1, 2, 7, 9, 0]$.
+                 Los elementos en azul son aquellos que \textit{perdieron} contra 
+                 el elemento más pequeño.}
+        \end{figure}
+    \end{proof}
 
 \end{enumerate}
-
 \end{document}
