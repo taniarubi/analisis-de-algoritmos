@@ -20,6 +20,9 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage[linguistics]{forest}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
 % Modificamos los márgenes del documento.                                       %
 \usepackage[lmargin=2cm,rmargin=2cm,top=2cm,bottom=2cm]{geometry}
 
@@ -64,8 +67,81 @@
     % Ejercicio 2.
     \item Dados dos arreglos ordenados $A$ y $B$ de longitud $n$ y $m$, 
     respectivamente. Diseña un algoritmo de tiempo $O(n + m)$ que obtenga un 
-    arreglo $C$ que contenga los elementos entre $A$ y $B$, $C$ no debe tener 
-    elementos repetidos.
+    arreglo $C$ que contenga los elementos en común entre $A$ y $B$, $C$ no 
+    debe tener elementos repetidos.
+
+    \textsc{Solución:} El algoritmo propuesto para resolver este problema es 
+    el siguiente
+    \begin{center}
+    \begin{minipage}[c]{0.7\textwidth}
+    \begin{algorithm}[H]
+        \caption{Obtener los elementos en común entre los arreglos $A$ y $B$} 
+        \begin{algorithmic}[1]
+            \State $i \gets 0$
+            \State $j \gets 0$
+            \State $C = []$
+            \While {$(i < n$ \textbf{and} $j < m)$}
+                \If {$A[i] == B[j]$}
+                    \If {$C.length > 0$ \textbf{and} $C[C.length - 1] == A[i]$}
+                        \State $i \gets i + 1$
+                        \State $j \gets j + 1$
+                    \Else
+                        \State $C.append[A[i]]$
+                        \State $i \gets i + 1$
+                        \State $j \gets j + 1$
+                    \EndIf
+                \Else \If {A[i] < A[j]}
+                    \State $i \gets i + 1$
+                \Else
+                    \State $j \gets j + 1$
+                \EndIf
+                \EndIf
+            \EndWhile
+        \end{algorithmic} 
+    \end{algorithm}
+    \end{minipage}
+    \end{center}
+   
+    Primero, explicaremos porqué el algoritmo funciona. En las líneas $(1 - 2)$ 
+    estamos definiéndo dos variables $i, j$; las cuales nos ayudarán a recorrer
+    los arreglos $A$ y $B$, respectivamente. En la línea $3$ simplemente creamos 
+    a nuestro arreglo $C$. A partir de la línea $4$ empieza lo interesante: como
+    sabemos que los arreglos $A$ y $B$ están ordenados, eso significa que 
+    tenemos que checar tres casos en específico:
+    \begin{enumerate}
+        \item (líneas $(5 - 13)$). Si el $i-$ésimo elemento de $A$ es igual al 
+        $j-$ésimo elemento de $B$ eso significa que tienen un elemento en común 
+        y, en teoría, se debe agregar al arreglo $C$. Pero antes de agregarlo,
+        comprobamos que no esté repetido en $C$: para verificar esto simplemente
+        hay que ver si el elemento $A[i]$ (o $B[j]$) es igual al último elemento 
+        que fue agregado a $C$ (como $A$ y $B$ están ordenados, si es que tienen 
+        elementos repetidos, entonces éstos están juntos). Si el elemento ya se 
+        encuentra en $C$ entonces simplemente incrementamos nuestros contadores 
+        en \textit{uno}; en caso contrario, agregamos al elemento a $C$ e 
+        incrementamos los contadores en \textit{uno}.
+
+        \item (líneas $(15 - 16)$). Si el $i-$ésmo elemento de $A$ es menor que 
+        el $j-$ésimo elemento de $B$, eso quiere decir que debemos movernos un 
+        índice a la derecha en el arreglo $A$; ya que como están ordenados ambos 
+        arreglos, eso quiere decir que, si tienen elementos en común, entonces 
+        éste (o éstos) son mayores que el $i-$ésimo elemento de $A$.
+
+        \item (línea $18$). Aquí cae el caso en que $B[j] < A[i]$, y 
+        análogamente al caso anterior, tenemos que movernos un índice a la 
+        derecha en el arreglo $B$; ya que como están ordenados ambos arreglos, 
+        eso quiere decir que, si tiene elementos en común, entonces éste (o 
+        éstos) son mayores que el $j-$ésimo elemento de $B$. 
+    \end{enumerate} 
+
+    Todo esto se realizará hasta que la condición de nuestro \textit{while} 
+    (línea $14$) se cumpla: como $n$ puede ser diferente de $m$, lo que hay 
+    que tener en cuenta es que si terminamos de recorrer un arreglo, entonces 
+    debemos terminar el proceso. Esto se debe al hecho de que los arreglos
+    están ordenados. Si terminamos de recorrer un arreglo, entonces ya no 
+    habrá más elementos en común, es decir, podríamos recorrer un arreglo sin 
+    terminar de recorrer al otro; pero en el peor caso, debemos recorrer 
+    completamente ambos arreglos, por este motivo la complejidad de nuestro 
+    algoritmo es $O(n + m)$. 
 
     % Ejercicio 3.
     \item Consider the following sorting algorithm:
