@@ -142,13 +142,13 @@
     distintos puede encontrarse con $n + \lceil \log n \rceil - 2$ comparaciones.
 
     \begin{proof}
-        Sea $T$ el árbol binario que contiene a los $n$ elementos de nuestra 
-        lista en sus hojas. Por lo discutido en clase, sabemos que para 
-        encontrar al elemento más pequeño necesitamos realizar $n-1$ 
-        comparaciones, ya que al ir comparando los elementos desde las hojas, 
-        vamos formando nuestros nodos internos (éstos serán los elementos 
-        más pequeños de las comparaciones que se vayan haciendo), los cuales 
-        siempre son $n-1$.
+        Sea $T$ el árbol binario, en particular un \textit{min-Heap}, que 
+        contiene a los $n$ elementos de nuestra lista en sus hojas. Por lo 
+        discutido en clase, sabemos que para encontrar al elemento más pequeño 
+        necesitamos realizar $n-1$ comparaciones, ya que al ir comparando los 
+        elementos desde las hojas, vamos formando nuestros nodos internos (éstos 
+        serán los elementos más pequeños de las comparaciones que se vayan 
+        haciendo), los cuales siempre son $n-1$.
 
         Ahora bien, para encontrar al segundo elemento más pequeño debemos
         tener en cuenta una observación importante: como siempre vamos 
