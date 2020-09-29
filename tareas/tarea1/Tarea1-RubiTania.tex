@@ -150,7 +150,7 @@
                         \State $i \gets i + 1$
                         \State $j \gets j + 1$
                     \EndIf
-                \Else \If {A[i] < A[j]}
+                \Else \If {A[i] < B[j]}
                     \State $i \gets i + 1$
                 \Else
                     \State $j \gets j + 1$
@@ -184,17 +184,18 @@
         el $j-$ésimo elemento de $B$, eso quiere decir que debemos movernos un 
         índice a la derecha en el arreglo $A$; ya que como están ordenados ambos 
         arreglos, eso quiere decir que, si tienen elementos en común, entonces 
-        éste (o éstos) son mayores que el $i-$ésimo elemento de $A$.
+        éste (o éstos) es mayor que el $i-$ésimo elemento de $A$.
 
         \item (línea $18$). Aquí cae el caso en que $B[j] < A[i]$, y 
         análogamente al caso anterior, tenemos que movernos un índice a la 
         derecha en el arreglo $B$; ya que como están ordenados ambos arreglos, 
         eso quiere decir que, si tiene elementos en común, entonces éste (o 
-        éstos) son mayores que el $j-$ésimo elemento de $B$. 
+        éstos) es mayor que el $j-$ésimo elemento de $B$. 
     \end{enumerate} 
 
     Todo esto se realizará hasta que la condición de nuestro \textit{while} 
-    (línea $14$) se cumpla: como $n$ puede ser diferente de $m$, lo que hay 
+    (línea $14$) se cumpla: como $n$ puede ser diferente de $m$,
+     lo que hay 
     que tener en cuenta es que si terminamos de recorrer un arreglo, entonces 
     debemos terminar el proceso. Esto se debe al hecho de que los arreglos
     están ordenados. Si terminamos de recorrer un arreglo, entonces ya no 
