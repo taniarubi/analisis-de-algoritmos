@@ -64,6 +64,66 @@
     \item ¿Cuántas comparaciones son necesarias y suficientes para ordenar 
     cualquier lista de cinco elementos? Justifique su respuesta.
 
+    \textsc{Solución:} Un árbol de decisión es un árbol binario completo que 
+    representa las comparaciones realizadas en todas las ejecuciones posibles 
+    sobre entradas de tamaño $n$. Cada nodo interno se representa de la forma 
+    $i:j$ con $1 \leq i < j \leq n$ y cada hoja con una permutación 
+    $\langle \pi(1), \pi(2), ..., \pi(n) \rangle$ sobre $\{1, 2, ..., n\}$.
+
+    La ejecución del algoritmo de ordenamiento sobre una entrada dada 
+    corresponde a un camino en el árbol desde la raíz hasta la hoja. Dicho 
+    camino denota las comparaciones realizadas y su órden de realización para 
+    la entrada. Es decir, un nodo $i:j$ en el camino denota la comparación 
+    $a_i \leq a_j$. Si el camino continúa sobre el hijo izquierdo, la
+    comparación es cierta y si continúa sobre el hijo derecho entonces la 
+    comparación es falsa. Si la entrada alcanza la hoja $\langle \pi(1), 
+    \pi(2), ..., \pi(n) \rangle$, entonces la permutación de entrada ordenada 
+    es $\langle a_{v\pi(1)}, a_{\pi(2)}, ..., a_\pi(n) \rangle$.
+
+    Un ejemplo de árbol de decisión sería el siguiente:
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\linewidth]{imagenes/decision-tree.png}
+        \caption{Árbol de decisión correspondiente a tres elementos (Cormen, 
+        192 pag.)}
+        \label{fig:decision-tree}
+    \end{figure}
+
+    La entrada corresponde a $\langle a_1, a_2, a_3 \rangle = \langle 6, 8, 5, 
+    \rangle$. Lo primero que hace es la comparación $a_1 \leq a_2$, que es 
+    cierta. Luego se compara $a_2 \leq a_3$, que es falsa. Finalmente compara 
+    $a_1 \leq a_3$, que también es falsa. La entrada ordenada es $\langle 5, 6, 
+    8 \rangle$. Notemos que hay $3! = 6$ posibles permutaciones en la entrada 
+    de elementos, por lo que el árbol de decisión tiene $6$ hojas.
+
+    Ahora bien, de manera más general, digamos que para $n$ elementos tenemos 
+    un árbol de decisión $T$ de altura $h$ y con $l$ hojas alcanzables. Como el 
+    árbol ordena las $n!$ distintas permutaciones, entonces el árbol contiene 
+    una hoja por cada una de las $n!$ permutaciones, por lo que $n! \leq l$. 
+    Como un árbol binario de altura $h$ tiene a lo más $2^h$ hojas, entonces 
+    $n! \leq l \leq 2^h$, de donde 
+    \begin{align*}
+        2^h &\geq n!
+        && \text{por transitividad} \\
+        \log_2 (2^h) &\geq \log_2 (n!)
+        && \text{tomando los logaritmos} \\
+        h &\geq \log_2 (n!)
+        && \text{propiedad de logaritmo} \\
+        &= \log_2 (n \cdot (n-1) \cdot (n-2) \cdot (n-3) \cdots \cdot 3 \cdot 
+        2 \cdot 1)
+        && \text{definición de factorial} \\ 
+        &= \log_2 (n) + \log_2 (n-1) + \log_2 (n-2) + \log_2 (n-3) +
+        && \text{propiedad de logaritmo} \\ 
+        & \; \; \; \; \;  \cdots + \log_2 (3) + \log_2 (2) + \log_2 (1) \\
+        &= \int_1^n \! \log_2 (x) \, \mathrm{d}x.
+        && \text{es el área bajo la curva} \\ 
+        &= x \log_2 (x) - x \Big|_1^n
+    \end{align*}
+
+    Es decir, en el peor de los casos tenemos que hacer $x \log_2 (x) - x 
+    \Big|_1^n$ comparaciones. Por lo tanto, para ordenar una lista de $5$ 
+    elementos son \textit{necesarias} $7$ comparaciones. 
+
     % Ejercicio 2.
     \item Dados dos arreglos ordenados $A$ y $B$ de longitud $n$ y $m$, 
     respectivamente. Diseña un algoritmo de tiempo $O(n + m)$ que obtenga un 
