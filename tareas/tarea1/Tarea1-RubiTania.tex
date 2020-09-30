@@ -85,7 +85,7 @@
         \centering
         \includegraphics[width=0.5\linewidth]{imagenes/decision-tree.png}
         \caption{Árbol de decisión correspondiente a tres elementos (Cormen, 
-        192 pag.)}
+        pag. 192)}
         \label{fig:decision-tree}
     \end{figure}
 
@@ -230,13 +230,63 @@
     elementos de $L$ pueden ser ordenados en tiempo lineal. ¿Qué pasa si $m$ es 
     de $O(n^2)$? ¿Se puede realizar en tiempo lineal? ¿Por qué?
 
+    \begin{proof}
+        Supongamos que $m$ es $O(n)$. Para probar nuestra primera interrogante,
+        nos auxiliaremos del algoritmo de ordenamiento \textit{Counting Sort}.
+        Éste supone que cada uno de los $n$ elementos de entrada es un entero 
+        en un rango de a lo más $k$. El objetivo de este algoritmo es 
+        determinar, para cada elemento de entrada $x$, el número de elementos 
+        que son menores a $x$. Esto es usado para colocar a $x$ en la posición 
+        adecuada de salida del arreglo. En el algoritmo de \textit{Counting 
+        Sort} suponemos que la entrada es el arreglo $A_{[1...n]}$ y que su 
+        longitud es $n$. Además, necesitamos de dos arreglos extra: 
+        $B_{[1...n]}$ que tiene los elementos ordenados, y $C_{[0...k]}$ que 
+        sirve como almacenamiento temporal. Hay que tener en cuenta que este 
+        algoritmo nunca hace comparaciones, sino que usa los valores de los 
+        elementos para indicar las posiciones en el arreglo.
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.55\linewidth]
+            {imagenes/counting-sort-normal.jpeg}
+            \caption{Algoritmo Counting Sort (Cormen, pag. 195)}
+            \label{fig:counting-sort-normal}
+        \end{figure}
+
+        Ahora, realizamos el análisis de complejidad: el ciclo en las líneas 
+        $(2 - 3)$ toman $O(k)$, el ciclo en las líneas $(4 - 5)$ toman $O(n)$, 
+        el ciclo de las líneas $(7 - 8)$ toman $k$ y el ciclo en las líneas 
+        $(10 - 12)$ toman $O(n)$. Así, $O(k + n)$ es el tiempo total que toma 
+        este algoritmo. Entonces, si $k = O(n)$ eso quiere decir que 
+        $T(n) = (n)$; y por lo tanto el algoritmo será lineal. 
+    \end{proof}
+
     % Ejercicio 5.
     \item Describe an algorithm that, given $n$ integers in the range $0$ to 
     $k$, preprocesses its input and then answers any query about how many of 
     the $n$ integers fall into a range $[a ... b]$ in $O(1)$ time. Your 
     algorithm should use $\Theta(n + k)$ preprocessing time.
 
-    \textsc{Solución:}
+    \textsc{Solución:} La solución propuesta es utilizar las líneas $(1 - 9)$
+    del algoritmo \textit{Counting Sort} para preprocesar los $n$ enteros en 
+    el rango $0$ a $k$.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\linewidth]{imagenes/counting-sort.png}
+        \caption{Algoritmo Counting Sort (Cormen, pag. 195)}
+        \label{fig:counting-sort}
+    \end{figure}
+
+    Por el análisis visto en el inciso anterior, sabemos que esto se hace en 
+    $\Theta(k + n)$. 
+
+    Ahora tenemos un arreglo $C_{[0...k]}$ en donde cada $C_{[i]}$ contiene el 
+    número de enteros que son menores o iguales a $i$, por lo que es fácil ver 
+    que el número de enteros en el rango $[a...b]$ es $C_[b] - C_[a-1]$, donde 
+    podemos interpretar a $C_{[-1]}$ como $0$. Esto último toma $O(1)$ porque 
+    lo único que hacemos es acceder a dos elementos en el arreglo $C$ (sabemos 
+    que esto es constante) y posteriormente restar. 
 
     % Ejercicio 6.
     \item Sea $A$ un arreglo de $n$ elementos, tal que cada elemento se 
