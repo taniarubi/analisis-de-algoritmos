@@ -552,7 +552,7 @@
     $O(n \log n)$. Además, obtener el índice de los elementos $i$ y $s$ nos 
     tomará, en el peor caso, $O(n)$ pues tendríamos que recorrer todo el 
     arreglo. Por lo tanto, la complejidad del algoritmo será 
-    $O(n \log n) + O(n) = O(n \log n)$. 
+    $O(n \log n) + O(n \log n) + O(n) + O(n) = O(n \log n)$. 
         
     % Ejercicio 8.
     \item \textbf{The Hogwarts Sorting Hat}
@@ -577,8 +577,7 @@
 
     \textsc{Solución:}
 
-    \newpage
-    % Ejercicio 8.
+    % Ejercicio 9.
     \item Pruebe que el segundo elemento más chico de una lista de $n$ elementos 
     distintos puede encontrarse con $n + \lceil \log n \rceil - 2$ comparaciones.
 
@@ -596,19 +595,20 @@
         \textit{subiendo} a los elementos más pequeños, eso quiere decir que el 
         segundo elemento más pequeño ya fue comparado con la raíz del árbol $T$,
         así que sólo queda ubicar a todos los elementos que \textit{perdieron}
-        contra la raíz de $T$ y compararlos entre sí. Al ubicar estos elementos, 
-        obtendremos que hay uno de ellos (a lo más) en cada nivel del árbol, y 
-        como la altura del árbol es $\log_2 n$ entonces hacer esta última 
-        pasada al árbol nos tomará $\lceil \log_2 n \rceil - 1$ comparaciones.
-        Por lo tanto, encontrar al segundo elemento más pequeño de una lista de 
-        $n$ elementos distintos nos toma 
+        contra la raíz de $T$, actualizar el árbol y compararlos entre sí. Al 
+        ubicar estos elementos, obtendremos que hay uno de ellos (a lo más) en 
+        cada nivel del árbol, y como la altura del árbol es $\log_2 n$ entonces 
+        hacer esta última pasada al árbol nos tomará $\lceil \log_2 n \rceil - 1$ 
+        comparaciones (menos $1$ porque ya no vamos a tomar en cuenta al elemento 
+        más pequeño). Por lo tanto, encontrar al segundo elemento más pequeño de 
+        una lista de $n$ elementos distintos nos toma 
         \begin{equation*}
             (n - 1) + (\lceil \log_2 n \rceil - 1) = n + \lceil \log_2 \rceil - 2
         \end{equation*}
 
         comparaciones.
 
-        \begin{figure}[ht]
+        \begin{figure}[h]
         \centering
         \forestset{default preamble={for tree={circle,draw}}}
         \begin{forest}
