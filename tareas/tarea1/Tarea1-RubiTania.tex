@@ -434,7 +434,99 @@
     encuentra a lo más a $k$ posiciones de su posición ordenada. Diseñe un 
     algoritmo que ordene $A$ en $O(n \log k)$.
 
-    \textsc{Solución:}
+    \textsc{Solución:} El algoritmo propuesto es el siguiente 
+    \begin{center}
+        \begin{minipage}[c]{0.75\textwidth}
+        \begin{algorithm}[H]
+            \caption{Ordenar un arreglo cuyos elementos se encuentran a lo más 
+                     $k$ posiciones de su posición correcta. \\ 
+                     ordenaArreglo(A, k):} 
+            \begin{algorithmic}[1]
+                \State $T \gets creaMinHeap(A, k+1)$
+                \State $T \gets$ T.actualizaMinimo
+                \State $i \gets 0$
+                \State $j \gets k + 1$
+
+                \While{$i \leq A.length - 1$}
+                    \State $A[i] \gets$ T.getRaiz
+                    \State $i \gets i + 1$
+                    \State $T \gets$ T.eliminaMinimo()
+                    \If{$j < A.length - 1$}
+                        \State $j \gets j +1$
+                        \State $T \gets$ T.agregaElemento(A[j])
+                    \EndIf
+                \EndWhile
+
+                \State return $A$
+            \end{algorithmic} 
+        \end{algorithm}
+        \end{minipage}
+    \end{center}
+
+    Primero, explicaremos por qué el algoritmo funciona. Como los elementos del 
+    arreglo $A$ se encuentran a lo más $k$ posiciones de su posición correcta,
+    entonces el elemento más pequeño se debería encontrar en el subarreglo 
+    de longitud $k+1$, ya que en el peor caso, éste se encuentra justo a $k$ 
+    posiciones de su posición correcta; y al tomar el subarreglo con los 
+    elementos $k+1$ entonces nos aseguramos de tomar al elemento más pequeño
+    (y en caso de que esté antes de la posición $k$ entonces de todas formas 
+    lo estamos agarrando). Tomando este subarreglo de longitud $k+1$ vamos a 
+    crear un árbol, en particular un \texttt{MinHeap}, por lo que éste tendrá 
+    $k+1$ elementos. La línea $(1)$ justo esto es lo que hará: 
+    \texttt{creaMinHeap} creará un minHeap (por lo general se usa un arreglo) de 
+    tamaño $k+1$ y se agregarán los primeros $k+1$ elementos de $A$ en el árbol.
+    Una vez que ya tengamos el \texttt{minHeap}, lo que haremos es subir al 
+    elemento más pequeño a la raíz del árbol (como se mencionó al inicio, ya 
+    tenemos garantizado que el elemento más pequeño de $A$ se encuentra dentro 
+    del \texttt{minHeap}). Esto se realiza durante la línea $(2)$, y las líneas 
+    $(3 - 4)$ simplemente inicializan contadores que nos ayudarán a saber cuándo 
+    terminar ciertas partes del algoritmo.
+    
+    Ahora bien, comenzamos con la parte más interesante: como ya tenemos al 
+    elemento más chiquito en la raíz del árbol, entonces cambiámos al elemento 
+    que se encuentra en la $i$-ésima posición del arreglo original por el 
+    elemento que se encuentra en la raíz del \texttt{minHeap} y aumentamos 
+    nuestro contador. Luego, eliminamos al elemento más pequeño (y esto en el 
+    algoritmo de los \texttt{minHeap} implica que además de eliminar al elemento, 
+    actualiza al árbol para mantener en todos sus nodos la definición de 
+    \texttt{minHeap}, por lo que en particular tendremos al nuevo elemento más 
+    chico en la raiz del árbol). El contador $j$ nos ayudará a ir 
+    agregando a los elementos del arreglo $A$ que nos faltaron por incluir en 
+    el \texttt{minHeap}, es decir, los elementos que estaban después de la 
+    posición $k+1$. Entonces, si aún nos falta agregar elementos del arreglo $A$, 
+    aumentamos el contador $j$ y agregamos al \texttt{minHeap} el elemento que 
+    se encuentra en la entrada $j$-ésima del arreglo original (y al igual que 
+    cuando eliminamos, se debe actualizar el árbol para mantener la definición 
+    de \texttt{minHeap} en todos sus nodos). De igual manera, como cada elemento 
+    está a lo más $k$ posiciones de su posición correcta, al ir agregando de 
+    uno en uno los elementos que nos faltan del arreglo original, entonces 
+    seguimos garantizando que el más pequeño se encuentra dentro del 
+    \texttt{minHeap}. Todo esto se realiza en las líneas $(6 - 12)$. Así,
+    vamos a ir realizando este proceso hasta que agreguemos todos los elementos
+    de $A$ en el \texttt{minHeap} y los hallamos eliminado a todos (lo que 
+    implicaría que ya todos fueron acomodados en el arreglo). Así, en la 
+    línea $(14)$ sólo regresamos al arreglo $A$ ya que todas sus entradas fueron
+    actualizadas durante el algoritmo.
+
+    Finalmente, como hemos visto en clase, crear un \texttt{minHeap} nos toma 
+    $O(k)$, donde $k$ es el número de elementos en el árbol (en particular, 
+    $k+1$). Actualizar al mínimo nos toma la altura del árbol (en el peor caso) 
+    y como nuestra altura será $\log k$ (por el número de elementos) entonces 
+    la línea $(2)$ nos toma $O(\log k)$. Obtener al elemento que se encuentra en 
+    la raíz nos toma tiempo constante. Además, eliminar al elemento mínimo y 
+    agregar un elemento al árbol nos toma igual $O(\log k)$ ya que ambas 
+    operaciones implican que se tiene que actualizar el árbol; pero ambas 
+    operaciones no las realizamos en la misma cantidad. Como sólo agregamos los 
+    elementos que nos faltaron por añadir al \texttt{minHeap}, entonces la 
+    operación \texttt{agregaElemento} se realiza $n-(k+1)$ veces, por lo que en 
+    total nos toma $O((n-(k+1)) \log k)$; mientras que la operación 
+    \texttt{eliminaMinimo} la estamos realizando por cada elemento de $A$, lo 
+    que implica que nos tomará en total $O(n \log k)$. 
+
+    Así pues, el algoritmo en total nos toma 
+    \begin{equation*}
+        O(k) + O(\log k) + O(n \log k) + O((n - (k + 1)) \log k) = O(n \log k)
+    \end{equation*}
 
     % Ejercicio 7.
     \item An abs-sorted array is an array of numbers in which $|A[i] \leq A[j|$
@@ -460,8 +552,8 @@
                 \While {$i \leq B.length - 1$}
                     \State $s = busquedaBinaria(B, k-B[i])$
                     \If {$s$} 
-                        \State $x \gets A[i].getIndice(A)$
-                        \State $y \gets A[s].getIndice(A)$
+                        \State $x \gets A.getIndice(A[i])$
+                        \State $y \gets A.getIndice(A[s])$
                         \State return (x, y)
                     \EndIf
                 \EndWhile
