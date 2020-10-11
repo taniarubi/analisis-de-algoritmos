@@ -23,7 +23,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
-% Modificamos los márgenes del documento.                                       %
+% Modificamos los márgenes del documento.                                       
 \usepackage[lmargin=2cm,rmargin=2cm,top=2cm,bottom=2cm]{geometry}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -118,12 +118,35 @@
         &= \int_1^n \! \log_2 (x) \, \mathrm{d}x.
         && \text{es el área bajo la curva} \\ 
         &= x \log_2 (x) - x \Big|_1^n
+        && \text{resolvemos la integral}
     \end{align*}
 
-    Es decir, en el peor de los casos tenemos que hacer $x \log_2 (x) - x 
-    \Big|_1^n$ comparaciones. Por lo tanto, para ordenar una lista de $5$ 
-    elementos son \textit{necesarias} $7$ comparaciones. 
+    Es decir, para poder ordenar un arreglo de $n$ elementos son 
+    \texttt{necesarias} y \texttt{suficientes} 
+    \begin{equation*}
+        h = x \log_2 (x) - x \Big|_1^n
+    \end{equation*}
 
+    comparaciones. ¿Por qué? Esto se debe a que el árbol de decisión ya contempla 
+    las $n!$ permutaciones de nuestro arreglo y éstas se encuentran en las hojas 
+    del árbol, así que para acceder a ellas necesitamos recorrer (en un peor caso, 
+    si se quiere ver así) toda la altura del árbol. Son \texttt{suficientes} porque 
+    si agregamos un nivel al árbol, realmente no estamos obteniéndo información 
+    nueva (sino repetida) pues el árbol ya se encargó de contemplar todas las 
+    comparaciones que necesitamos. Ahora bien, son \texttt{necesarias} porque si 
+    eliminamos un nivel al árbol entonces estamos eliminando comparaciones que son 
+    realmente de utilidad, por lo que como mínimo debemos tener ese número de 
+    comparaciones.
+
+    En particular, si $n = 5$ entonces tendríamos que son \texttt{necesarias} y 
+    \texttt{suficientes}
+    \begin{equation*}
+        h = 5 \log_2 (5) - 5 \Big|_1^5 = 7
+    \end{equation*} 
+    
+    comparaciones.
+
+    \newpage
     % Ejercicio 2.
     \item Dados dos arreglos ordenados $A$ y $B$ de longitud $n$ y $m$, 
     respectivamente. Diseña un algoritmo de tiempo $O(n + m)$ que obtenga un 
@@ -135,7 +158,8 @@
     \begin{center}
     \begin{minipage}[c]{0.7\textwidth}
     \begin{algorithm}[H]
-        \caption{Obtener los elementos en común entre los arreglos $A$ y $B$} 
+        \caption{Obtener los elementos en común entre los arreglos $A$ y $B$ \\
+                 encontrarInterseccion(A, B): } 
         \begin{algorithmic}[1]
             \State $i \gets 0$
             \State $j \gets 0$
@@ -202,7 +226,8 @@
     habrá más elementos en común, es decir, podríamos recorrer un arreglo sin 
     terminar de recorrer al otro; pero en el peor caso, debemos recorrer 
     completamente ambos arreglos, por este motivo la complejidad de nuestro 
-    algoritmo es $O(n + m)$. 
+    algoritmo es $O(n + m)$. En particular, porque sólo estamos recorriéndo los 
+    arreglos y las demás operaciones que realizamos se hacen en tiempo constante.
 
     % Ejercicio 3.
     \item Consider the following sorting algorithm:
@@ -214,14 +239,105 @@
     \begin{enumerate}
         % Ejercicio 3.1
         \item Prove that \textsc{stupidsort} actually sorts its input.
+        \begin{proof}
+            Inducción fuerte sobre la longitud $n$ del arreglo. 
+            \begin{itemize}
+                \item \textbf{Caso base}
+
+                $n = 2$. Aquí tenemos dos posibles casitos:
+                \begin{enumerate}
+                    \item $A[0] < A[1]$. No se contempla como tal en el
+                    algoritmo, pero seguramente es porque esto significa que 
+                    el arreglo ya está ordenado y no hay nada más que hacer.
+
+                    \item $A[0] > A[1]$. En este  caso, como el elemento menor 
+                    se encuentra al final del arreglo, entonces intercambiamos 
+                    las posiciones del primer y último elemento con ayuda del 
+                    \texttt{swap}; y así obtenemos que el algoritmo ordena 
+                    este caso, y por lo tanto se cumple. 
+                \end{enumerate}
+
+                \item \textbf{Hipótesis de inducción}
+
+                Supongamos que el algoritmo \textsc{StupidSort} ordena todos 
+                los arreglos de longitud $k$ que sean menores a $n$. 
+
+                \item \textbf{Paso inductivo}
+
+                Primero, mostraremos que $\lceil \frac{2n}{3} \rceil < n$ para 
+                $n > 2$.
+                \begin{proof}
+                    Inducción sobre $n$.
+                    \begin{itemize}
+                        \item \textbf{Caso base}
+
+                        $n = 3$. Este caso se cumple ya que 
+                        \begin{align*}
+                            \Big \lceil \frac{2(3)}{3} \Big \rceil &< 3 \\
+                            \lceil 2 \rceil &< 3 \\ 
+                            2 &< 3
+                        \end{align*}
+
+                        \item \textbf{Hipótesis de inducción}
+
+                        Supongamos que se cumple para $n > 2$, es decir, que se 
+                        cumple $\lceil \frac{2n}{3} \rceil < n$.  
+
+                        \item \textbf{Paso inductivo}
+                        
+                        Queremos mostrar que se cumple para $n+1$, es decir, 
+                        que se cumple $\lceil \frac{2(n+1)}{3} \rceil < n+1$. 
+                        Entonces 
+                        \begin{align*}
+                            \Big \lceil \frac{2(n+1)}{3} \Big \rceil
+                            &= \Big \lceil \frac{2n + 2}{3} \Big \rceil  
+                            && \text{aritmética} \\
+                            &= \Big \lceil \frac{2n}{3} + \frac{2}{3} \Big \rceil
+                            && \text{propiedad de fracciones} \\
+                            &< \Big \lceil n + \frac{2}{3} \Big \rceil
+                            && \text{por H.I} \\
+                            &< \lceil n + 1 \rceil
+                            && \text{ya que $\frac{2}{3} < 1$} \\
+                            &< n + 1
+                        \end{align*}
+
+                        Por lo tanto, $\lceil \frac{2n}{3} \rceil < n, n > 2$.
+                    \end{itemize}
+                \end{proof}
+
+                Ahora bien, como $m = \lceil \frac{2n}{3} \rceil < n, n > 2$, 
+                entonces 
+                \begin{itemize}
+                    \item \texttt{STUPIDSORT(A[0...m-1])}
+
+                    Como $m - 1 < n$, por hipótesis de inducción podemos concluir
+                    que el algoritmo efectivamente ordena este arreglo.
+
+                    \item \texttt{STUPIDSORT(A[n-m...n-1])}
+
+                    Como $n-m < n$ y $n-1 < n$, por hipótesis de inducción 
+                    podemos concluir que el algoritmo efectivamente ordena este 
+                    arreglo.
+                \end{itemize}
+            \end{itemize}
+
+            Por lo tanto, el algoritmo \textsc{StupidSort} realmente ordena su 
+            entrada. 
+        \end{proof}
 
         % Ejercicio 3.2
         \item Would the algorithm still sort correctly if we replaced 
         $m = \lceil \frac{2n}{3}\rceil$. Justify your answer.
 
+        \textsc{Solución:}
+
         % Ejercicio 3.3
         \item Show that the number of swaps executed by \textsc{stupidsort} is
         at most $\big(\begin{smallmatrix} n \\ 2 \end{smallmatrix}\big)$.
+
+        \begin{proof}
+            
+        \end{proof}
     \end{enumerate}
 
     % Ejercicio 4.
@@ -233,7 +349,7 @@
     \begin{proof}
         Supongamos que $m$ es $O(n)$. Para probar nuestra primera interrogante,
         nos auxiliaremos del algoritmo de ordenamiento \textit{Counting Sort}.
-        Éste supone que cada uno de los $n$ elementos de entrada es un entero 
+        Éste supone que cada uno de los $n$ elementos de entrada es un natural
         en un rango de a lo más $k$. El objetivo de este algoritmo es 
         determinar, para cada elemento de entrada $x$, el número de elementos 
         que son menores a $x$. Esto es usado para colocar a $x$ en la posición 
@@ -253,12 +369,37 @@
             \label{fig:counting-sort-normal}
         \end{figure}
 
-        Ahora, realizamos el análisis de complejidad: el ciclo en las líneas 
-        $(2 - 3)$ toman $O(k)$, el ciclo en las líneas $(4 - 5)$ toman $O(n)$, 
-        el ciclo de las líneas $(7 - 8)$ toman $k$ y el ciclo en las líneas 
-        $(10 - 12)$ toman $O(n)$. Así, $O(k + n)$ es el tiempo total que toma 
-        este algoritmo. Entonces, si $k = O(n)$ eso quiere decir que 
-        $T(n) = (n)$; y por lo tanto el algoritmo será lineal. 
+        Las líneas $(2 - 3)$ inicializan al arreglo $C$ (creado en la línea $1$)
+        con todas sus entradas en $0$. Este proceso nos toma $\Theta(k)$. En las 
+        líneas $(4 - 5)$ estamos contando las veces que aparece cada uno de los 
+        elementos de $A$ en este mismo arreglo. Como tenemos que recorrerlo todo, 
+        entonces este proceso nos toma $\Theta(n)$. Las líneas $(7 - 8)$ 
+        determinan, para cada $i = 0, 1, ..., k$, cuántos elementos de $A$ son 
+        menor o iguales a $i$, al estar realizando una suma \textit{corrida} 
+        entre los elementos de $C$. Nuevamente, como estamos recorriendo todo 
+        el arreglo $C$, este proceso nos toma $\Theta(k)$. Finalmente, las 
+        líneas $(10 - 12)$ colocan a cada elemento $A[j]$ en la correcta 
+        posición que le corresponde para que esté ordenad, y esta colocación
+        se hará en el arreglo $B$. Como recorremos a todo nuestro arreglo $A$,
+        eso quiere decir que este proceso nos toma $\Theta(n)$. Por lo tanto, 
+        la complejidad del algoritmo \textit{Counting Sort} es $\Theta(k + n)$.
+        Así, por lo anterior, si $k = O(n)$, esto quiere decir que $T(n) = n$, 
+        y por lo tanto el algoritmo será lineal. 
+
+        Cuando $m$ es $O(n^2)$, también es posible ordenarlo en $O(n)$. Para 
+        ello, utilizaremos una variación de \textit{Radix Sort}, el cual 
+        también hemos discutido en clase. El siguiente paso forma parte del 
+        algoritmo original: \textit{para cada elemento i lo que haremos es 
+        ordenar el arreglo de entrada tomando en consideración el número de 
+        menos significado del más pequeño al más grande}. Para usar este 
+        algoritmo debe haber $d$ digitos en los enteros de entrada. Usualmente, 
+        \textit{Radix Sort} toma $O(d \cdot (n + k))$, donde $k$ es la base 
+        para representar números (por ejemplo, la base decimal). Como 
+        $m = O(n^2)$, entonces ese es su mayor valor posible, por lo que 
+        $d = O(\log_k n)$. Así, la complejidad sería $O(n + k) \cdot O(\log_k n)$.
+        El truco aquí está en cambiar la base $k$. Si reemplazamos a $k$ con $n$
+        entonces el valor de $O(\log_k n)$ se convierte en $O(1)$, y la 
+        complejidad se convierte en $O(n)$.
     \end{proof}
 
     % Ejercicio 5.
@@ -293,6 +434,8 @@
     encuentra a lo más a $k$ posiciones de su posición ordenada. Diseñe un 
     algoritmo que ordene $A$ en $O(n \log k)$.
 
+    \textsc{Solución:}
+
     % Ejercicio 7.
     \item An abs-sorted array is an array of numbers in which $|A[i] \leq A[j|$
     whenever $i < j$. For example, the array $A = [-49, 75, 103, -147, 164, -197,
@@ -302,6 +445,115 @@
     $k$. For example, if $k = 167$ your algorithm should output $(3, 7)$. Output 
     $(-1, -1)$ if the is no such pair.
 
+    \textsc{Solución:} El algoritmo propuesto es el siguiente 
+    \begin{center}
+        \begin{minipage}[c]{0.75\textwidth}
+        \begin{algorithm}[H]
+            \caption{Obtener la pareja de índices del arreglo A que son iguales 
+                     a k \\ encuentraPares(A, k):} 
+            \begin{algorithmic}[1]
+                \State $B \gets sort(A)$
+                \State $i \gets 0$
+                \State $x \gets -1$
+                \State $y \gets -1$
+
+                \While {$i \leq B.length - 1$}
+                    \State $s = busquedaBinaria(B, k-B[i])$
+                    \If {$s$} 
+                        \State $x \gets A[i].getIndice(A)$
+                        \State $y \gets A[s].getIndice(A)$
+                        \State return (x, y)
+                    \EndIf
+                \EndWhile
+                
+                \State{return (x, y)}
+            \end{algorithmic} 
+        \end{algorithm}
+        \end{minipage}
+    \end{center}
+
+    donde 
+    \begin{center}
+        \begin{minipage}[c]{0.75\textwidth}
+        \begin{algorithm}[H]
+            \caption{Busca un elemento e en el arreglo A usando búsqueda binaria. 
+                     \\ busquedaBinaria(A, e):} 
+            \begin{algorithmic}[1]
+                \State $L \gets 0$
+                \State $R \gets A.length - 1$
+    
+                \While {$L \leq R$}
+                    \State $mid = \lfloor \frac{L + R}{2} \rfloor$
+                    \If {$A[mid] < e$} 
+                        \State $L \gets mid + 1$
+                    \Else \If {$A[mid] > e$}
+                        \State $R \gets mid -1$
+                    \Else 
+                        \State return mid 
+                    \EndIf
+                    \EndIf
+                \EndWhile
+                
+                \State{return}
+            \end{algorithmic} 
+        \end{algorithm}
+        \end{minipage}
+    \end{center}
+
+    Primero, veremos por qué funciona el algoritmo. Sabemos que nuestro arreglo 
+    $A$ es un \texttt{abs-sorted}, por lo que va a estar ordenado, pero
+    respecto a los valores absolutos de sus elementos. Para buscar la pareja 
+    de índice $(i, j)$ cuya suma de sus elementos sea igual a $k$ se podría 
+    pensar inicialmente en comparar todos los elementos con todos hasta 
+    encontrar los elementos que buscamos, pero esto sería bastante ineficiente 
+    pues sería de complejidad $O(n^2)$. La propuesta en esta ocasión es 
+    ordenar nuestro arreglo $A$ y después utilizar búsqueda binaria para hallar 
+    a la pareja. 
+
+    Notemos que cualquier suma es de la forma $a + b = c$, en particular, la 
+    suma que buscamos se ve de la forma $A[i] + A[j] = k$. Así que, haciendo 
+    un simple despeje, obtenemos
+    \begin{equation*}
+        k - A[i] = A[j]
+    \end{equation*}
+
+    Entonces, una vez que tengamos nuestro arreglo $A$ ordenado, si aplicamos 
+    a cada elemento $A[i]$ búsqueda binaria para buscar a $k - A[i]$ podemos 
+    obtener los índices que estamos buscando. En la línea $(1)$ estamos 
+    ordenando nuestro arreglo $A$ (en este caso, \texttt{sort} es el 
+    algoritmo de ordenamiento \texttt{heapSort}, el cual tiene complejidad 
+    en tiempo $O(n \; \log \; n)$ y espacio adicional $O(1)$). En las 
+    líneas $(2 - 4)$ simplemente definimos nuestro contador $i$ y los índices 
+    $x$ y $y$ (éstos tienen valor de $-1$ ya que si el \texttt{while} 
+    termina, entonces no encontramos nuestra pareja y regresamos los 
+    índices pertinentes para representar esto). En las líneas $(6 - 10)$
+    tenemos lo interesante: definimos a $s$ como el resultado de aplicar 
+    búsqueda binaria (escribí el algoritmo porque había que hacer una 
+    modificación al último \texttt{return}, pues si no encontramos al 
+    elemento deseado, no regresamos nada). Como se explicó antes, si 
+    hallamos el valor $k - B[i]$ entonces hemos encontrado al otro sumando 
+    que buscamos (ya tenemos el primero, que es $B[i]$). Con la condición 
+    de la línea $(7)$ verificamos que $s$ exista, es decir, que búsqueda 
+    binaria le haya regresado un valor. En caso de que esto ocurra, ya 
+    tenemos los dos números que sumados dan como resultado a $k$, pero los 
+    índices corresponden al arreglo ordenado, por lo que hay que buscar 
+    los índices que corresponden a esos elementos en $A$; y para esto 
+    están las líneas $(8 - 9)$. Una vez que hallamos los índices del 
+    arreglo original, entonces los regresamos en forma de tupla.
+
+    Si al aplicar búsqueda binaria a cada elemento $A[i]$ no hemos encontrado 
+    en $B$ al elemento $k - B[i]$ entonces la tupla no existe. 
+
+    Finalmente, mencionaremos la complejidad del algoritmo. Como mencionamos 
+    que \texttt{sort} será para nosotros \texttt{heapSort} entonces esto nos
+    toma $O(n \log n)$ en tiempo. Sabemos que búsqueda binaria toma 
+    $O(\log n)$, pero como se aplica a cada uno de los elementos del arreglo, 
+    entonces estar buscando a $k - B[i]$, en el peor caso, nos tomará 
+    $O(n \log n)$. Además, obtener el índice de los elementos $i$ y $s$ nos 
+    tomará, en el peor caso, $O(n)$ pues tendríamos que recorrer todo el 
+    arreglo. Por lo tanto, la complejidad del algoritmo será 
+    $O(n \log n) + O(n) = O(n \log n)$. 
+        
     % Ejercicio 8.
     \item \textbf{The Hogwarts Sorting Hat}
 
@@ -322,6 +574,8 @@
     possibly with a pointer to some additional data. Design and analyze an 
     algorithm that rearranges the items into four clusters in $O(n)$ time 
     using only $O(1)$ extra space.
+
+    \textsc{Solución:}
 
     \newpage
     % Ejercicio 8.
