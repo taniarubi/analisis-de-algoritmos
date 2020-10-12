@@ -181,6 +181,8 @@
                 \EndIf
                 \EndIf
             \EndWhile
+
+            \State return $C$
         \end{algorithmic} 
     \end{algorithm}
     \end{minipage}
@@ -371,35 +373,38 @@
 
         Las líneas $(2 - 3)$ inicializan al arreglo $C$ (creado en la línea $1$)
         con todas sus entradas en $0$. Este proceso nos toma $\Theta(k)$. En las 
-        líneas $(4 - 5)$ estamos contando las veces que aparece cada uno de los 
-        elementos de $A$ en este mismo arreglo. Como tenemos que recorrerlo todo, 
-        entonces este proceso nos toma $\Theta(n)$. Las líneas $(7 - 8)$ 
-        determinan, para cada $i = 0, 1, ..., k$, cuántos elementos de $A$ son 
-        menor o iguales a $i$, al estar realizando una suma \textit{corrida} 
-        entre los elementos de $C$. Nuevamente, como estamos recorriendo todo 
-        el arreglo $C$, este proceso nos toma $\Theta(k)$. Finalmente, las 
-        líneas $(10 - 12)$ colocan a cada elemento $A[j]$ en la correcta 
-        posición que le corresponde para que esté ordenad, y esta colocación
-        se hará en el arreglo $B$. Como recorremos a todo nuestro arreglo $A$,
-        eso quiere decir que este proceso nos toma $\Theta(n)$. Por lo tanto, 
-        la complejidad del algoritmo \textit{Counting Sort} es $\Theta(k + n)$.
-        Así, por lo anterior, si $k = O(n)$, esto quiere decir que $T(n) = n$, 
-        y por lo tanto el algoritmo será lineal. 
+        líneas $(4 - 5)$ revisamos cada elemento del arreglo. Si el valor de 
+        un elemento es igual a $i$, entonces incrementamos $C_{[i]}$. Así, 
+        después de la línea $5$ obtenemos el número de elementos de $A$ que son 
+        iguales a cada $i \in \{0, 1, ..., k\}$. Como tenemos que recorrerlo 
+        todo, entonces este proceso nos toma $\Theta(n)$. Las líneas $(7 - 8)$ 
+        determinan, para cada $i \in \{0, 1, ..., k\}$, cuántos elementos de 
+        $A$ son menor o iguales a $i$, al estar realizando una suma 
+        \textit{corrida} entre los elementos de $C$. Nuevamente, como estamos 
+        recorriendo todo el arreglo $C$, este proceso nos toma $\Theta(k)$. 
+        Finalmente, las líneas $(10 - 12)$ colocan a cada elemento $A[j]$ en 
+        la correcta posición que le corresponde para que esté ordenado, y esta 
+        colocación se hará en el arreglo $B$. Como recorremos a todo nuestro
+        arreglo $A$, eso quiere decir que este proceso nos toma $\Theta(n)$. 
+        Por lo tanto, la complejidad del algoritmo \textit{Counting Sort} es 
+        $\Theta(k + n)$. Así, por lo anterior, si $k = O(n)$, esto quiere 
+        decir que $T(n) = n$, y por lo tanto el algoritmo será lineal. 
 
         Cuando $m$ es $O(n^2)$, también es posible ordenarlo en $O(n)$. Para 
-        ello, utilizaremos una variación de \textit{Radix Sort}, el cual 
-        también hemos discutido en clase. El siguiente paso forma parte del 
-        algoritmo original: \textit{para cada elemento i lo que haremos es 
-        ordenar el arreglo de entrada tomando en consideración el número de 
-        menos significado del más pequeño al más grande}. Para usar este 
-        algoritmo debe haber $d$ digitos en los enteros de entrada. Usualmente, 
-        \textit{Radix Sort} toma $O(d \cdot (n + k))$, donde $k$ es la base 
-        para representar números (por ejemplo, la base decimal). Como 
-        $m = O(n^2)$, entonces ese es su mayor valor posible, por lo que 
-        $d = O(\log_k n)$. Así, la complejidad sería $O(n + k) \cdot O(\log_k n)$.
-        El truco aquí está en cambiar la base $k$. Si reemplazamos a $k$ con $n$
-        entonces el valor de $O(\log_k n)$ se convierte en $O(1)$, y la 
-        complejidad se convierte en $O(n)$.
+        ello, utilizaremos una variación de \texttt{Radix Sort}, el cual 
+        también hemos discutido en clase. La idea de \texttt{Radix} es ordenar
+        dígito por dígito, empezando por el dígito menos significativo y 
+        pasando al más significativo. Aquí, \texttt{Counting Sort} se usa como 
+        una subrutina para ordenar. Para usar este algoritmo debe haber $d$ 
+        digitos en los enteros de entrada. Usualmente, \texttt{Radix Sort} toma 
+        $O(d \cdot (n + k))$, donde $k$ es la base para representar números 
+        (por ejemplo, la base decimal). Como $m = O(n^2)$, entonces ese es su 
+        mayor valor posible, por lo que $d = O(\log_k n)$. Así, la complejidad 
+        sería $O((\log_k n) \cdot (n + k))$. Para hacer esto lineal, el truco 
+        está en cambiar la base $k$. Si reemplazamos a $k$ con $n$, entonces 
+        el valor de $O(\log_k n)$ se convierte en $O(1)$, y la complejidad se 
+        convierte en $O(n)$. 
+
     \end{proof}
 
     % Ejercicio 5.
@@ -422,12 +427,12 @@
     Por el análisis visto en el inciso anterior, sabemos que esto se hace en 
     $\Theta(k + n)$. 
 
-    Ahora tenemos un arreglo $C_{[0...k]}$ en donde cada $C_{[i]}$ contiene el 
-    número de enteros que son menores o iguales a $i$, por lo que es fácil ver 
-    que el número de enteros en el rango $[a...b]$ es $C_[b] - C_[a-1]$, donde 
-    podemos interpretar a $C_{[-1]}$ como $0$. Esto último toma $O(1)$ porque 
-    lo único que hacemos es acceder a dos elementos en el arreglo $C$ (sabemos 
-    que esto es constante) y posteriormente restar. 
+    Ahora, tenemos un arreglo $C_{[0...k]}$ en donde cada $C_{[i]}$ contiene el 
+    número de enteros que son menores o iguales a $i$, por lo que el número de 
+    enteros en el rango $[a...b]$ es $C_{[b]} - C_{[a-1]}$, donde podemos 
+    interpretar a $C_{[-1]}$ como $0$. Esto último toma $O(1)$ porque lo único 
+    que hacemos es acceder a dos elementos en el arreglo $C$ (sabemos que esto 
+    es constante) y posteriormente restar. 
 
     % Ejercicio 6.
     \item Sea $A$ un arreglo de $n$ elementos, tal que cada elemento se 
@@ -667,7 +672,144 @@
     algorithm that rearranges the items into four clusters in $O(n)$ time 
     using only $O(1)$ extra space.
 
-    \textsc{Solución:}
+    \textsc{Solución:} El algoritmo propuesto es el siguiente 
+    \begin{center}
+        \begin{minipage}[c]{0.81\textwidth}
+        \begin{algorithm}[H]
+            \caption{Reorganizar un arreglo cuyos valores se encuentra en un 
+                    rango de [1..4] \\ reorganizaArreglo(A):} 
+            \begin{algorithmic}[1]
+                \State $i \gets 0$ 
+                \State $j \gets 0$ \Comment{Gryffindor}
+                \State $k \gets 0$ \Comment{Hufflepuff}
+                \State $l \gets 0$ \Comment{Ravenclaw}
+
+                \While{$i \leq A.length - 1$}
+                    \If{$A[i] == 1$} \Comment{Hay un estudiante de Gryffindor}
+                        \State $i \gets i + 1$
+                        \State $j \gets j + 1$
+                    \Else \If{$A[i] == 2$} \Comment{Hay un estudiante de Hufflepuff}
+                        \State $i \gets i + 1$
+                        \State $k \gets k + 1$
+                    \Else \If{$A[i] == 3$} \Comment{Hay un estudiante de Ravenclaw}
+                        \State $i \gets i + 1$
+                        \State $l \gets l + 1$
+                    \Else 
+                        \State $i \gets i + 1$
+                    \EndIf
+                    \EndIf
+                    \EndIf
+                \EndWhile
+
+                \State $i \gets 0$
+                \While{$i < j$}
+                    \State $A[i] = 1$
+                    \State $i \gets i + 1$
+                \EndWhile
+
+                \State $i \gets j$
+                \While{$i < (j + k)$}
+                    \State $A[i] = 2$
+                    \State $i \gets i + 1$
+                \EndWhile
+
+                \State $i \gets (j + k)$
+                \While{$i < (j + k + l)$}
+                    \State $A[i] = 3$
+                    \State $i \gets i + 1$
+                \EndWhile
+
+                \State $i \gets (j + k + l)$
+                \While{$i < $ A.length} \Comment{El resto debería corresponder a 
+                                                Slytherin}
+                    \State $A[i] = 4$
+                    \State $i \gets i + 1$
+                \EndWhile
+
+                \State return $A$
+            \end{algorithmic} 
+        \end{algorithm}
+        \end{minipage}
+    \end{center}
+
+    Antes que nada, haremos notar que a cada una de las casas se le asignó un 
+    número:
+    \begin{itemize}
+        \item Gryffindor tiene asignado el número $1$.
+        \item Hufflepuff tiene asignado el número $2$.
+        \item Ravenclaw tiene asignado el número $3$.
+        \item Slytherin tiene asinado el número $4$.
+    \end{itemize}
+
+    Esto se hace para poder reconocer a cada una de las casas dentro de un 
+    arreglo; pero si éste fuera de String o Char, bastaría con hacer la 
+    asignación de las casas a un número en el código.
+
+    Ahora bien, veremos por qué el algoritmo funciona. En las líneas $(1-4)$ 
+    estamos simplemente inicializando cuatro variables: la primera nos ayudará 
+    a recorrer el arreglo en todo momento, mientras que las otras tres 
+    corresponden a tres de las cuatro casas que podemos tener (suponiéndo que 
+    la entrada es un arreglo de $n$ enteros en un rango de $[1..4]$). Más 
+    adelante se explicará por qué se tomó la decisión de sólo contar tres casas.
+    Lo que hacemos en las líneas $(5 - 22)$ es recorrer todo el arreglo $A$ con 
+    el objetivo de contar cuántas veces aparece cada una de las casas en el 
+    arreglo. Como \texttt{Griffindor} tiene asignado el número $1$, si es que 
+    aparece en el arreglo, el contador $j$ es el que se encargará de llevar la 
+    cuenta acerca de cuántos estudiantes están en esa casa. Como 
+    \texttt{Hufflepuff} tiene asignado el número $2$, si es que aparece en el 
+    arreglo, el contador $k$  es el que se encargará de llevar la cuenta acerca 
+    de cuántos estudiantes están en esa casa. Y, como \texttt{Ravenclaw} tiene 
+    asignado el número $3$, si es que aparece en el arreglo, el contador $l$ es 
+    el que se encargará de llevar la cuenta acerca de cuántos estudiantes están 
+    en esta casa. Si encontramos a un elemento en el arreglo que no corresponde 
+    a $1$, $2$ o $3$ eso significa que hemos encontrado a un estudiante de 
+    \texttt{Slytherin}, pero ésto no lo vamos a contar, sólo seguiremos avanzando
+    en el arreglo. Con esto logramos saber cuántos estudiantes hay en cada casa: 
+    al realizar la operación A.length $- (j + l + k)$ obtenemos fácilmente el 
+    número de estudiantes en la casa de \texttt{Slytherin}. Esto se debe a que 
+    tenemos $n = $ A.length estudiantes en total. Si a $n$ le restamos la suma 
+    del número de estudiantes de las tres primeras casas, por aritmética
+    estaríamos obteniéndo como resultado el número de estudiantes en la casa
+    que falta, que es la de \texttt{Slytherin}.
+
+    En las líneas $(23 - 42)$ estamos actualizando los valores del arreglo 
+    original, y esto lo hacemos gracias a los contadores $j, k, l$. Primero, 
+    empezamos al inicio del arreglo, y como tenemos $j$ estudiantes de
+    \texttt{Gryffindor} entonces reemplazaremos los primeros $j$-ésimos
+    elementos de $A$ por $1s$, los cuales corresponden a esta casa. Como el 
+    primer índice de un arreglo es $0$, entonces las líneas $(24 - 27)$
+    llenarán las entradas $[0...j-1]$ del arreglo (aunque eso no significa 
+    que omitamos algún estudiante). Por esta observación, una vez que 
+    terminamos de el primer while, nuestra $i$ debe posicionarse en el índice 
+    $j$. Como tenemos $k$ estudiantes de \texttt{Hufflepuff} entonces vamos a
+    reemplazar a los elementos de $A$ que se encuentran entre los índices 
+    $[j...j+(k-1)]$. Empezamos desde $j$, y como ya llevamos $j-1$ posiciones 
+    llenas, entonces debemos llenar otras $k-1$ posiciones (esto por el desfase
+    de los índices que mencionabamos antes). Esta actualización se hará en las 
+    líneas $(29 - 32)$. Una vez que terminamos el segundo while, nuestra $i$
+    debe posicionarse en el índice $(j + k)$ (el razonamiento es análogo al 
+    primer caso). Como hay $l$ estudiantes de \texttt{Ravenclaw} entonces 
+    vamos a reemplazar a los elementos de $A$ que se encuentren entre los 
+    índices $[j+k...j+k+(l-1)]$. Esta actualización se realizará en las líneas 
+    $(34 - 37)$. Finalmente, las posiciones para los estudiantes correspondientes 
+    a la casa \texttt{Slytherin} deberían de ser aquellas que no hemos recorrido 
+    en el arreglo, es decir, las posiciones en el intervalo $[j+k+l...n-1]$.
+    Así pues, colocamos a nuestro contador $i$ en la posición $j + k + l$ y 
+    recorremos el arreglo hasta el final. Esta actualización se realizará en 
+    las líneas $(39 - 42)$. Como estamos actualizando todos los valores de 
+    $A$ de acuerdo al número de estudiantes en cada casa, entonces el arreglo 
+    que regresamos estará reordenado en los bloques pertinentes.
+
+    Para ver cuál es la complejidad de nuestro algoritmo, notemos lo siguiente:
+    en las líneas $(5 - 22)$ estamos recorriéndo todo el arreglo (esto nos 
+    toma $O(n)$) y en las líneas $24 - 42$ estamos recorriéndo nuevamente todo 
+    el arreglo, sólo que en partes. Por lo tanto, el algoritmo toma 
+    $O(n) + O(n) \in O(n)$ en tiempo. Además, solo tomamos $O(1)$ en espacio extra, 
+    ya que sólo estamos utilizando un número constante de contadores y no 
+    estamos creando nada más (para mantener esta complejidad, justo estamos 
+    actualizando las entradas del arreglo $A$, para no tener que crear otro 
+    nuevo y así usar más espacio extra). 
+
 
     % Ejercicio 9.
     \item Pruebe que el segundo elemento más chico de una lista de $n$ elementos 
