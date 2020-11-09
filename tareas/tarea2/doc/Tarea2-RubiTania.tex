@@ -23,13 +23,13 @@
 \usetikzlibrary{positioning,matrix, arrows.meta}
 
 % Modificamos los márgenes del documento.                                       
-\usepackage[lmargin=2cm,rmargin=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[lmargin=1.5cm,rmargin=1.5cm,top=1.5cm,bottom=1.5cm]{geometry}
 
 \title{Facultad de Ciencias, UNAM \\ 
        Análisis de Algoritmos \\ 
-       Tarea 1}
+       Tarea 2}
 \author{Rubí Rojas Tania Michelle}
-\date{14 de octubre de 2020}
+\date{10 de noviembre de 2020}
 
 \begin{document}
 \maketitle
@@ -46,11 +46,173 @@
         $M$ o que determine si que no está. ¿Cuántas comparaciones usa tu 
         algoritmo en el peor caso?
 
+        \textsc{Solución:} Como los elementos de las columnas y las filas 
+        están ordenados de forma creciente, entonces podemos buscar el valor 
+        de $k$ buscando en submatrices desde uno de los extremos, en 
+        particular, desde el extremo superior derecho de la matriz. Usando la 
+        información que nos proporciona la matriz, podemos encontrar un 
+        camino que nos lleve al valor indicado. Esto se puede hacer con el 
+        siguiente algoritmo:
+        \begin{enumerate}
+            \item Definimos \texttt{fila} $= 1$ y  \texttt{columna} $= n$.
+
+            \item Mientras \texttt{fila} sea menor o igual a $n$ y 
+            \texttt{columna} sea mayor que $0$, 
+            hacemos:
+            \begin{itemize}
+                \item Si $M[fila][columna]$ = k, entonces regresamos la tupla 
+                $(i,j)$.Terminamos.
+
+                \item Si $M[fila][columna] < k$, entonces incrementamos en 
+                una unidad el valor de \texttt{fila}.
+
+                \item En otro caso, entonces disminuimos en una unidad el 
+                valor de \texttt{columna}.
+            \end{itemize}
+
+            \item Si llegamos a este punto, es que no hemos encontrado el 
+            valor del elemento que nos piden, por lo que simplemente regresamos 
+            un $-1$. Terminamos. 
+        \end{enumerate}
+
+        Este algoritmo funciona porque en cada submatriz de tamaño $fila \times 
+        columna$ garantizamos que está el elemento que buscamos. Como iniciamos 
+        a comparar desde el elemento que está en la esquina superior derecha 
+        de la matriz, entonces si hay un elemento mayor que él, éste debería 
+        de estar en alguna de las filas que están abajo de él (ya que las 
+        columnas y las filas están ordenadas). Pero si es menor que él, 
+        entonces debería de estar en alguna de las columnas anteriores. 
+        De acuerdo a esto, vamos actualizando nuestra posición (lo que implica 
+        que iremos reduciéndo el tamaño de la submatriz donde debería de estar 
+        el elemento que buscamos) y aplicamos el mismo razonamiento para los
+        elementos en cada una de las nuevas posiciones hasta encontrar al 
+        elemento deseado. 
+
+        Ahora bien, en el peor caso, recorremos toda una fila y toda una 
+        columna de la matriz para encontrar el valor que buscamos. Cada 
+        uno de estos recorridos nos toma tiempo lineal, por lo que la 
+        complejidad total del algoritmo será de $O(n) + O(n) = O(n)$. Usando 
+        este mismo razonamiento, como la matriz es cuadrada, entonces a lo 
+        más hacemos $2n-1$ comparaciones para buscar al elemento en el peor 
+        caso.
+
         % Ejercicio 1.b
         \item Describe y analiza un algoritmo para resolver el siguiente 
         problema en tiempo lineal. Dados $4$ indices  $i, j, i', j'$ como 
         entrada, calcule el número de elementos de $M$ que son más pequeños que 
         $M[i][j]$ y más grandes que $M[i'][j']$.
+
+        \textsc{Solución:} Primero, veamos cómo podemos calcular el número de 
+        elementos de $M$ que son más pequeños que $M[i][j]$. Los elementos sobre 
+        los cuales tenemos certeza de que son menores que $M[i][j]$ están en el 
+        subarreglo de tamaño $i \times j$ (los que están por encima de $M[i][j]$
+        y a la izquierda de éste). A este número le restamos una unidad para no 
+        considerar al propio elemento, por lo que tendremos $(i \times j) - 1$
+        elementos que forzosamente son menores a $M[i][j]$ (esto se debe a que 
+        los elementos de las filas y las columnas están ordenados de forma 
+        creciente). Ahora bien, puede que existan más elementos que sean menores 
+        que $M[i][j]$ y que se encuentren a su derecha y por encima de la fila 
+        $i$. Para poder determinar el número de elementos menores que $M[i][j]$
+        en este subarreglo, entonces comparamos a $M[i][j]$ con cada 
+        $M[i-1][j+k]$, donde $k \in \{1, 2, \ldots, (n-j)\}$. Entonces, mientras 
+        $j+k$ sea menor o igual a $n$, hacemos 
+        \begin{enumerate}
+            \item Si $M[i-1][j+k] < M[i][j]$, eso significa que todos los 
+            elementos anteriores a $M[i-1][j+k]$ dentro de esa columna deberían 
+            de ser menores que $M[i][j]$, por transitividad. Así, tenemos $i-1$ 
+            elementos adicionales que son menores que $M[i][j]$. Aumentamos en 
+            una unidad el valor de $k$, para así movernos a la siguiente columna.
+
+            \item En otro caso, tenemos que subir una fila más arriba para 
+            verificar si los elementos anteriores a $M[i-1][j+k]$ dentro de esa
+            columna son menores a $M[i][j]$.
+            \begin{itemize}
+                \item La suma de los elementos menores a $M[i][j]$ se realizará 
+                de manera análoga al paso anterior, considerando los $i-m$ 
+                elementos que fueron menores por transitividad, donde $m$ fue 
+                el número de filas hacia arriba que tuvimos que subir para que 
+                se cumpliera $M[i-m][j+k] < M[i][j]$.
+
+                \item Si encontramos a un elemento $A[i-m][j+k] < M[i][j]$
+                entonces sumamos $i-m$ elementos a nuestra cuenta y nos 
+                movemos a la columna de la derecha, para realizar el 
+                procedimiento del paso $1$, pero desde la posición actual donde
+                nos encontramos y con los valores $i-m$, $j+k$ correspondientes.
+
+                \item Si llegamos al primer elemento de la columna, y tenemos 
+                que este elemento tampoco es menor que $M[i][j]$, eso significa 
+                que ya no hay elementos más a la derecha que puedan ser menores 
+                que $M[i][j]$, así que terminamos de buscar y nos quedamos con 
+                la cuenta de los elementos que llevamos. 
+            \end{itemize}
+
+            \item Una vez que terminamos el ciclo del punto anterior, significa 
+            que ya no podemos recorrer más la matriz (o que ya no debemos, por 
+            el último punto del paso $2$). Así que terminamos y regresamos la 
+            cuenta de los números menores a $M[i][j]$ que llevamos.
+        \end{enumerate}
+
+        Ahora, para poder encontrar la cantidad de elementos que son mayores que
+        $M[i'][j']$, usaremos un algoritmo análogo al anterior. Los elementos que 
+        forzosamente son mayores a $M[i'][j']$ son aquellos que están por debajo 
+        de $M[i'][j']$ y a la derecha de éste. Así, hay $((n-i')+1) \times 
+        ((n-j')+1)$ elementos dentro de este subarreglo. Nuevamente, disminuimos 
+        una unidad para no contar al propio elemento. Entonces, hay 
+        $((((n-i)+1) \times ((n-j) + 1)))-1$ elementos que son forzosamente
+        mayores que $M[i'][j']$. Luego, puede que existan más elementos que 
+        sean mayores que $M[i'][j']$ a su izquierda y por debajo de la fila 
+        $i$. Para poder determinar el número de elementos que son mayores 
+        que $M[i'][j']$ en este subarreglo, entonces comparamos a $M[i'][j']$
+        con cada $M[i'+1][j'-k]$, donde $k \in \{1, 2, \ldots, (n-j')\}$. 
+        Entonces, mientras $j'-k$ sea mayor o igual a $1$, hacemos:  
+        \begin{enumerate}
+            \item Si $M[i'+1][j'-k] > M[i'][j']$, eso significa que todos los 
+            elementos siguientes a $M[i'+1][j'-k]$ dentro de esa columna 
+            deberían de ser mayores que $M[i'][j']$, por transitividad. Así, 
+            tenemos $i'+1$ elementos adicionales que son mayores que $M[i'][j']$. 
+            Disminuimos en una unidad el valor de $k$, para así movernos a la 
+            columna anterior (una a la izquierda).
+
+            \item En otro caso, tenemos que bajar una fila para verificar si los
+            elementos siguientes a $M[i'+1][j'-k]$ dentro de esa columna son 
+            mayores a $M[i']['j]$.
+            \begin{itemize}
+                \item La suma de los elementos mayores a $M[i'][j']$ se 
+                realizará de manera análoga al paso anterior, considerando los 
+                $i+m$ elementos que fueron mayores por transitividad, donde 
+                $m$ es el número de filas hacia abajo que tuvimos que recorrer 
+                para que se cumpliera $M[i'+m][j'-k] < M[i'][j']$.
+
+                \item Si encontramos a un elemento $A[i'+m][j'-k] < M[i'][j']$
+                entonces sumamos $i+m$ elementos a nuestra cuenta y nos movemos 
+                a la columna de la izquierda para realizar el procedimiento del 
+                paso $1$, pero desde la posición actual donde nos encontramos 
+                y con los valores $i+m$, $j-k$ correspondientes.
+
+                \item Si llegamos al último elemento de la columna, y tenemos 
+                que este elemento tampoco es mayor que $M[i'][j']$, eso 
+                significa que ya no hay elementos más a la izquierda que puedan 
+                ser mayores que $M[i'][j']$, así que terminamos de buscar y nos 
+                quedamos con la cuenta de los elementos que llevamos. 
+            \end{itemize}
+
+            \item Una vez que terminamos el ciclo del punto anterior, significa 
+            que ya no podemos recorrer más la matriz (o que ya no debemos, por 
+            el último punto del paso $2$). Así que terminamos y regresamos la 
+            cuenta de los números menores a $M[i'][j']$ que llevamos.
+        \end{enumerate}
+
+        Este algoritmo funciona porque contemplamos todos las \textit{zonas} 
+        o subarreglos cuyos elementos podrían ser menores (mayores) que 
+        $M[i][j]$. 
+
+        Ahora bien, para encontrar la cantidad de elementos que son menores a 
+        $M[i][j]$ sólo recorremos linealmente a la matriz, y en el peor de los
+        casos tenemos que recorrer toda una columna y toda una fila; por lo que 
+        la complejidad para obtener esta cantidad de elementos será $O(n)$. De 
+        manera análoga, para encontrar la cantidad de elementos que son mayores 
+        a $M[i'][j']$, el algoritmo toma tiempo lineal. Así, la complejidad 
+        total del algoritmo nos tomará tiempo $O(n)$.
     \end{enumerate}
     
     % Ejercicio 2.
@@ -70,9 +232,351 @@
         \item Supongamos que $m$ es constante. De un algoritmo lineal para generar
         la $(n,m)$-permutación de Josephus.
 
+        \textsc{Solución:} Usaremos una lista circular para este caso. Las listas 
+        circulares tienen las mismas propiedades que las listas ligadas, sólo se 
+        añade que la cola y la cabeza están conectadas.
+
+        Como tenemos $n$ personas alrededor de la mesa, entonces creamos una lista 
+        circular \texttt{listaC} de longitud $n$, cuyos elementos son los enteros 
+        $1, 2, 3, \ldots n$. Pero también necesitamos una lista vacía 
+        \texttt{listaP} para ir agregando la $(n, m)$-permutación de Josephus, 
+        así que también la creamos. Ahora lo que tenemos que hacer es encontrar 
+        al $m-$ésimo elemento de \texttt{listaC} desde nuestra posición actual 
+        (esto lo hacemos moviéndonos $m-1$ luagres desde donde estamos, e 
+        iniciamos en la cabeza), lo agregamos a \texttt{listaP}, lo eliminamos
+        de \texttt{listaC} y repetimos el proceso hasta que eliminemos a todos 
+        los elementos de la lista. Esto se puede ver con el siguiente algoritmo:
+        \begin{enumerate}
+            \item Nos posicionamos en la cabeza de \texttt{listaC}.
+
+            \item Si la longitud de \texttt{listaC} es igual a $1$, entonces 
+            simplemente agregamos el elemento en la cabeza de \texttt{listaC} a
+            \texttt{listaP}. 
+
+            \item Avanzamos $m-1$ posiciones a la derecha de la lista para 
+            encontrar al $m-$ésimo elemento de la lista (esto porque comenzamos 
+            a contar a partir del siguiente elemento). Lo agregamos a 
+            \texttt{listaP}, actualizamos nuestra posición actual en 
+            \texttt{listaC} a la posición siguiente de donde estamos y eliminamos 
+            al elemento anterior (que es el $m-$ésimo). Repetimos este proceso 
+            (comenzando por el paso $2$) desde nuestra posición actual (que es 
+            la posición siguiente del elemento que eliminamos) hasta que la 
+            longitud de \texttt{listaC} sea igual a $1$ (pues ya sólo agregamos 
+            a \texttt{listaP} al elemento que nos hace falta).
+
+            \item Regresamos \texttt{listaP}.
+        \end{enumerate}
+
+        Este algoritmo funciona porque en cada iteración nos aseguramos de 
+        encontrar al $m-$ésimo elemento e ir actualizando nuestra posición 
+        correctamente. Como la lista es circular, entonces podemos ir 
+        \textit{dando vueltas} en la lista y sólo nos vamos moviéndo $m-1$ 
+        luagres para ir encontrando la posición deseada. Además, nos aseguramos
+        de eliminar al $m-$ésimo elemento e ir actualizando nuestras referencias 
+        adecuadamente. 
+
+        Finalmente, crear a \texttt{listaC} nos toma tiempo lineal (ya que le 
+        agregamos $n$ elementos) y crear a \texttt{listaP} nos toma tiempo 
+        constante (pues es vacía). Como $m \in O(1)$, entonces movernos $m-1$ 
+        posiciones a la derecha nos tomará también tiempo constante. Pero esto 
+        lo hacemos $n-1$ veces, por lo que esto también nos cuesta tiempo lineal 
+        en total. Agregar un elemento a \texttt{listaP} nos toma tiempo constante
+        (pues lo estamos agregando al final). Y eliminar al elemento también nos 
+        toma tiempo constante (pues siempre eliminamos al elemento anterior, y 
+        para hacer esto sólo actualizamos las referencias de los nodos; por lo 
+        que nunca recorremos la lista para poder eliminarlo), pero esto lo hacemos 
+        también $n-1$ veces, por lo que en total nos toma tiempo lineal. Así, como 
+        realizamos puras operaciones lineales a lo largo de este algoritmo, 
+        entonces la complejidad total de éste es de $O(n)$.
+
+        Un ejemplo para ilustrar el algoritmo sería el siguiente: si $n = 5$ y 
+        $m = 4$, entonces
+        \begin{figure}[h!]
+        \centering
+        \begin{tikzpicture}
+            \matrix (A) [matrix of nodes, nodes={draw, minimum size=8mm},
+                             column sep=-\pgflinewidth]{
+            1 & 2 & 3 & \textcolor{blue}{4} & 5 \\};
+        \end{tikzpicture}
+        \caption{\texttt{listaC.cabeza.elemento = 1; $m-1 = 3$ y listaP = []}}
+        \end{figure}
+
+        \begin{figure}[h!]
+        \centering
+        \begin{tikzpicture}
+            \matrix (A) [matrix of nodes, nodes={draw, minimum size=8mm},
+                             column sep=-\pgflinewidth]{
+            1 & 2 & 3 & \textcolor{red}{5} \\};
+        \end{tikzpicture}
+        \caption{\texttt{listaP = [4], posicionActual.elemento = 5}}
+        \end{figure}
+        
+        \begin{figure}[h!]
+        \centering
+        \begin{tikzpicture}
+            \matrix (A) [matrix of nodes, nodes={draw, minimum size=8mm},
+                             column sep=-\pgflinewidth]{
+            1 & 2 & \textcolor{blue}{5} \\};
+        \end{tikzpicture}
+        \caption{\texttt{listaP = [4, 3], posicionActual.elemento = 5}}
+        \end{figure}
+
+        \begin{figure}[h!]
+        \centering
+        \begin{tikzpicture}
+            \matrix (A) [matrix of nodes, nodes={draw, minimum size=8mm},
+                             column sep=-\pgflinewidth]{
+            \textcolor{red}{1} & 2 \\};
+        \end{tikzpicture}
+        \caption{\texttt{listaP = [4, 3, 5], posicionActual.elemento = 1}}
+        \end{figure}
+
+        \begin{figure}[h!]
+        \centering
+        \begin{tikzpicture}
+            \matrix (A) [matrix of nodes, nodes={draw, minimum size=8mm},
+                             column sep=-\pgflinewidth]{
+            \textcolor{blue}{1} \\};
+        \end{tikzpicture}
+        \caption{\texttt{listaP = [4, 3, 5, 2], posicionActual.elemento = 1}}
+        \end{figure}
+
+        \begin{figure}[h!]
+        \centering
+        \begin{tikzpicture}
+            \matrix (A) [matrix of nodes, nodes={draw, minimum size=8mm},
+                             column sep=-\pgflinewidth]{
+            \textcolor{red}{1} \\};
+        \end{tikzpicture}
+        \caption{\texttt{listaC.length = 1 => listaP = [4, 3, 5, 2, 1] Terminamos}}
+        \end{figure}
+          
         % Ejercicio 2.b
         \item Supongamos que $m$ no es constante. Describa un algoritmo con
-        complejidad $O(n \log n)$ para encontrar la $(n,m)$-permutación de Josephus.
+        complejidad $O(n \log n)$ para encontrar la $(n,m)$-permutación de 
+        Josephus.
+
+        \textsc{Solución:} Para este caso, utilizaremos un árbol binario 
+        balanceado cuyas hojas tendrán como elemento a los enteros del conjunto 
+        \{1, 2, \ldots, n\}, respectivamente; por lo que tendremos $n$ hojas. 
+        Además, se debe cumplir que los nodos padres de las hojas tengan como 
+        elemento el número de hojas que tienen. El resto de los nodos internos 
+        tendrán como elemento el número de hojas que tienen sus dos subárboles
+        (cada nodo obtiene esto sumando los elementos que tienen sus nodos 
+        hijos, pues desde la propiedad anterior estamos garantizando que los 
+        padres de las hojas nos proporcionan esta información).
+        La construcción de este árbol la haremos de abajo hacia arriba, y será 
+        como sigue:
+        \begin{itemize}
+            \item Construimos $n$ hojas cuyos elementos son $1, 2, \ldots, n$;
+            respectivamente. Además, los marcamos como no visitados.
+
+            \item Para crear los padres de las hojas:
+            \begin{itemize}
+                \item Calculamos \texttt{altura} $= \lceil \log(n)\rceil$ + 1. 
+    
+                \item Tomamos el primer par de hojas (de izquierda a derecha) y 
+                construimos al nodo padre. Éste tendrá como elemento al número 
+                $2$, ya que tiene dos hojas.
+    
+                \item Después, tomamos el siguiente par de hojas y realizamos el 
+                paso anterior. 
+                
+                \item Si al momento de querer tomar un par de nodos tenemos que 
+                sólo podemos tomar uno, es decir, sólo queda o sólo hay una hoja 
+                en el nivel, entonces construimos al nodo padre y su elemento 
+                será el número $1$, pues sólo tiene una hoja. Pasamos al
+                siguiente punto del algoritmo.
+
+                \item Si al momento de querer tomar un par de nodos tenemos que 
+                ya no hay nodos (es decir, el número de hojas era par), entonces 
+                pasamos al siguiente punto del algoritmo.
+            \end{itemize}
+
+            \item Una vez que terminamos de construir los nodos padre de las
+            hojas, disminuimos en uno la variable \texttt{altura}.
+
+            \item Para crear los nodos internos faltantes:
+
+            Mientras \texttt{altura} sea mayor que $1$, hacemos lo siguiente 
+            para los últimos nodos padres que hayamos creado (la primera 
+            iteración es sobre los padres de las hojas, después será sobre 
+            los padres de los padres de las hojas y así sucesivamente); 
+            \begin{itemize}
+                
+                \item Tomamos los primeros dos nodos y construimos el nodo 
+                padre. El elemento del padre tendrá la suma de los elementos 
+                de sus hijos, por lo que \\ 
+                \texttt{padre.elemento = padre.izquierdo.elemento + 
+                padre.derecho.elemento}.
+    
+                \item Después tomamos el siguiente par de nodos y realizamos 
+                el paso anterior. 
+                
+                \item Si al momento de querer tomar un par de nodos sólo podemos 
+                tomar uno, es decir, sólo queda un nodo en el nivel, entonces 
+                construimos un nodo padre, y tendrá como hijos a este último nodo 
+                y al último nodo padre que construimos. El elemento de este 
+                nuevo nodo padre será la suma de los elementos de sus hijos. 
+                Disminuimos en una unidad a la variable \texttt{altura} y 
+                volvemos a repetir el proceso, pero ahora sobre los nuevos nodos 
+                padres que hemos creado.
+
+                \item Si al momento de querer tomar un par de nodos tenemos 
+                que ya no hay nodos (es decir, el número de nodos era par), 
+                entonces disminuimos en una unidad a la variable \texttt{altura}
+                y volvemos a repetir el proceso, pero ahora sobre los nuevos 
+                nodos padres que hemos creado. 
+            \end{itemize}
+
+            \item Cuando llegamos a que \texttt{altura} es menor o igual a $1$, 
+            significa que ya construimos la raíz del árbol. Terminamos.
+        \end{itemize}
+
+        Ahora necesitamos una forma de recorrer el árbol de tal forma que 
+        podamos encontrar cualquiera de las $m$ posiciones que necesitemos 
+        buscar. Para buscar nuestra hoja, nos apoyaremos de la información 
+        que contiene cada uno de nuestros nodos internos. Cada nodo conoce 
+        el número de elementos de $n$ que contiene cada uno de sus subárboles, 
+        así que usando esto podemos determinar, estando desde la raíz del árbol, 
+        hacia cuál de los subárboles debemos movernos. Este proceso lo hacemos 
+        recursivamente (desde la raíz de los subárboles) hasta que encontramos 
+        la hoja que necesitamos. 
+        
+        Esto se puede ver con el siguiente algoritmo:
+        \begin{enumerate}
+            \item Nos posicionamos en la raíz del árbol y hacemos 
+            \texttt{nodo = raiz}.
+
+            \item Mientras el hijo izquierdo del \texttt{nodo} no sea una 
+            hoja, hacemos:
+            \begin{itemize}
+                \item Si $m$ es menor o igual al elemento del hijo izquierdo 
+                del \texttt{nodo}, entonces nos movemos al subárbol izquierdo 
+                de éste, es decir, \texttt{nodo = nodo.hijoIzquierdo}.
+
+                \item En otro caso, actualizamos el valor de $i$ como 
+                $m = m -$ \texttt{nodo.hijoIzquierdo.elemento}, y nos movemos 
+                al subárbol derecho; es decir, \texttt{nodo = nodo.hijoDerecho}.
+            \end{itemize}
+
+            \item Para este punto, los hijos del \texttt{nodo} serán ambos 
+            hojas (si es que tiene dos). Así que tenemos dos opciones:
+            \begin{itemize}
+                \item Si $m$ es igual a $1$ pero el hijo izquierdo ya ha sido 
+                visitado, entonces nos movemos a la hoja derecha; es decir, 
+                \texttt{nodo = nodo.hijoDerecho}.
+
+                \item Si $m$ es igual a $1$, entonces nos movemos a la 
+                hoja izquierda; es decir, \\ 
+                \texttt{nodo = nodo.hijoIzquierdo}. Marcamos como visitada a 
+                la hoja. Terminamos.
+
+                \item En otro caso, nos movemos a la hoja derecha; es decir, 
+                \texttt{nodo = nodo.hijoDerecho}. Marcamos como visitada a la 
+                hoja. Terminamos. 
+            \end{itemize}
+        \end{enumerate}
+
+        Una vez que tenemos una forma de buscar en el árbol, ya podemos comenzar 
+        a buscar la $(n-m)$ permutación de Josephus. Iniciamos en la primer 
+        posición, que sería el número $1$. Le sumamos $(m-1)$ (para poder obtener 
+        la $m-$ ésima posición) y lo buscamos en el árbol. Una vez que lo encontramos, 
+        guardamos el valor de su elemento en una lista y lo eliminamos. Actualizamos 
+        nuestras referencias (la próxima posición inicial es la posición siguiente del 
+        elemento que eliminamos) y repetimos este proceso hasta que hayamos eliminado 
+        a todos los elementos en el árbol.
+
+        El algoritmo entero sería como:
+        \begin{enumerate}
+            \item Construimos el árbol con las $n$ hojas y creamos una lista 
+            vacía \texttt{listaP}.
+
+            \item Definimos \texttt{posicion = 1}, un contador $i = 1$ y 
+            \texttt{len = n}.
+
+            \item Mientras $i$ sea menor o igual que \texttt{len}:
+            \begin{itemize}
+                \item Calculamos \texttt{posicion = posicion + (m-1)}
+
+                \item Si $n$ es menor que \texttt{posicion} entonces 
+                actualizamos el valor de la posición como 
+                \texttt{posicion = ((posicion-1) \% n) + 1} 
+
+                \item Buscamos a \texttt{posicion} en el árbol. Una vez 
+                que estemos en la hoja correspondiente, guardamos el valor 
+                de la hoja en \texttt{listaP} y \textit{eliminamos} al elemento:
+                siguiendo el mismo camino que recorrió nuestro algoritmo de 
+                búsqueda, vamos a disminuir en una unidad el valor de todos los 
+                nodos visitados durante la búsqueda. 
+
+                \item Disminuimos en una unidad a $n$ e incrementamos en una 
+                unidad al contador $i$.
+            \end{itemize}
+
+            \item Regresamos \texttt{listaP}. Terminamos.
+        \end{enumerate}
+
+        El algoritmo funciona por cómo está construido el árbol y porque gracias 
+        a las operaciones que realizamos, podemos obtener correctamente al 
+        $m-$ ésimo elemento y mantener actualizadas nuestras referencias. El 
+        árbol está construido de tal forma que los nodos internos nos 
+        proporcionen información valiosa para hacer la búsqueda de elementos 
+        hojas en el árbol (cada nodo sabe cuántas hojas contienen sus dos 
+        subárboles). La búsqueda de elementos en el árbol funciona correctamente 
+        gracias a que en cada iteración garantizamos que el subárbol en el que 
+        nos posicionamos contiene al $m-$ésimo elemento (como los nodos contienen 
+        el número de hojas que tiene cada uno de sus subárboles, entonces así 
+        podemos decidir a cuál subárbol movernos, y cada vez que nos movemos al 
+        subárbol derecho, actualizamos el valor de la posición que buscamos). 
+        Al momento de eliminar, basta con que borremos todas las referencias 
+        que indican que en esa hoja hay un elemento. Así, al momento de buscar 
+        nuevamente otro elemento en el árbol, gracias a cómo lo hace, podemos 
+        ignorar los subárboles donde no hay elementos y además como actualizamos 
+        parte del árbol (el recorrido de la hoja hacia la raíz), entonces siempre 
+        mantenemos las referencias actualizadas para poder saber cuántas hojas 
+        tiene cada subárbol. Luego, para calcular la $m-$ésima posición, damos 
+        $m-1$ saltos para poder encontrar la siguiente posición a eliminar. En 
+        dado caso de que la suma que realicemos esté fuera del rango $n$, 
+        tenemos que calcular \texttt{((posicion-1) \% n) + 1} para poder 
+        regresar nuestro valor de nuevo al rango $n$ y que además sea el 
+        correcto. Así que por esto podemos garantizar que las referencias están 
+        siempre actualizadas y que siempre vamos a poder calcular la $m-$ésima 
+        posición correctamente.
+
+        Ahora bien, notemos que construir el árbol nos toma $O(n)$ ya que lo 
+        estamos construyendo de abajo hacia arriba, y progresivamente vamos 
+        formando los $n-1$ nodos internos. Crear la lista vacía nos toma tiempo 
+        constante. Buscar al $m-$ésimo elemento nos toma $O(\log n)$ ya que en 
+        el peor de los casos recorremos la altura del árbol (pues los elementos 
+        que buscamos son hojas), pero esto lo hacemos $n$ veces, por lo que nos 
+        toma $O(n \log n)$ esta operación en total. La operación eliminar no 
+        elimina nodos del árbol, lo único que hace es borrar las referencias 
+        de él en el árbol al disminuir en una unidad todos los elementos en los 
+        nodos visitados al momento de buscar la hoja (hacemos como que no 
+        existe). Entonces, tenemos que recorrer en el peor de los casos la 
+        altura del árbol, por lo que nos toma tiempo $O(\log n)$. Pero, esta 
+        operación la realizamos $n$ veces, así que en total nos toma tiempo 
+        $O(n \log n)$. El resto de las operaciones que realizamos son constantes, 
+        pues sólo hacemos asignaciones. Por lo tanto, la complejidad total del 
+        algoritmo es de $O(n \log n)$.
+
+        Un ejemplo para ilustrar la construcción del árbol y la búsqueda de 
+        un elemento sería el siguiente: si $n=5$ (tenemos $5$ hojas) y 
+        buscamos al elemento $3$, entonces el árbol se vería como
+        \begin{figure}[h!]
+        \centering
+        \forestset{default preamble={for tree={circle,draw}}}
+        \begin{forest}
+        [5, red
+          [4, red 
+            [2 [1] [2]] 
+            [2, red [3, blue] [4]]] 
+          [1 [5]]]
+        \end{forest}
+        \caption{En color \textcolor{red}{rojo} está el camino a seguir para 
+                 encontrar al elemento $3$}
+        \end{figure}
     \end{enumerate}
          
     % Ejercicio 3.
@@ -95,6 +599,9 @@
     ¿Hay algún elemento de $A$ que aparezca al menos $\frac{n}{3}$ veces? 
     Encuentre un algoritmo lineal para resolver este problema.
 
+    \textsc{Solución:} Primero, necesitamos encontrar elementos que sean 
+    candidatos 
+
     % Ejercicio 5.
     \item Sea $A[1, \ldots , n]$ un arreglo de números reales. Diseña un 
     algoritmo que realice cualquier secuencia de las siguientes operaciones:
@@ -102,17 +609,212 @@
 	\begin{itemize}
         % Ejercicio 5.a
         \item $Add(i, y)$,  suma el valor $y$ al $i$-ésimo número.
+
+        \textsc{Solución:} Sea $n$ la longitud del arreglo $A$. Para realizar 
+        esta operación, lo que haremos será construir un árbol binario
+        balanceado donde las hojas de éste sean los elementos de $A$ (sin 
+        cambiar su órden de aparición). Los nodos internos los vamos a 
+        construir con la siguiente condición: el nodo padre de las hojas 
+        tendrá como elemento el número de elementos que contiene de $A$. 
+        Los demás nodos internos tendrán como elemento el número de elementos 
+        del arreglo $A$ que contienen sus dos subárboles. Una vez que tengamos 
+        el árbol construido, entonces debemos recorrerlo de tal forma que 
+        lleguemos al $i-$ésimo elemento de $A$ y luego sumarle el valor de $y$.
+
+        Esto lo podemos lograr realizando el siguiente algoritmo:
+        \begin{enumerate}
+            \item Nos posicionamos en la raíz del árbol y hacemos 
+            \texttt{nodo = raiz}. 
+
+            \item Mientras el hijo izquierdo del \texttt{nodo} no sea una 
+            hoja, hacemos:
+            \begin{itemize}
+                \item Si $i$ es menor o igual al elemento del hijo izquierdo 
+                del \texttt{nodo}, entonces nos movemos al subárbol izquierdo 
+                de éste, es decir, \texttt{nodo = nodo.hijoIzquierdo}.
+
+                \item En otro caso, actualizamos el valor de $i$ como 
+                $i = i -$ \texttt{nodo.hijoIzquierdo.elemento} y nos movemos 
+                al subárbol derecho; es decir, \texttt{nodo = nodo.hijoDerecho}.
+            \end{itemize}
+
+            \item Para este punto, los hijos del \texttt{nodo} serán ambos 
+            hojas (si es que tiene dos). Así que tenemos dos opciones:
+            \begin{itemize}
+                \item Si $i$ es igual a $1$, entonces nos movemos a la 
+                hoja izquierda; es decir, \texttt{nodo = nodo.hijoIzquierdo}.
+
+                \item En otro caso, nos movemos a la hoja derecha; es decir, 
+                \texttt{nodo = nodo.hijoDerecho}.
+            \end{itemize}
+
+            \item Al elemento de \texttt{nodo} le sumamos el valor $y$. 
+            Terminamos. 
+        \end{enumerate}
+
+        Este algoritmo funciona porque en cada paso siempre estamos en el 
+        subárbol donde se encuentra el $i-$ésimo elemento. Primero nos 
+        posicionamos en la raíz del árbol, y la variable \texttt{nodo} nos 
+        ayuda a mantener la referencia sobre el nodo en el que estamos 
+        posicionados en este momento. Luego hacemos un recorrido entre los
+        nodos internos hasta que llegamos a uno donde su hijo izquierdo es 
+        una hoja (sólo verificamos al hijo izquierdo, por que un nodo interno 
+        puede tener uno o dos hijos, y si sólo tiene uno, entonces será el 
+        izquierdo). Durante este recorrido tenemos dos casos: nos movemos al 
+        subárbol izquierdo o al subárbol derecho. Para tomar esta decisión, 
+        debemos comparar al elemento del hijo izquierdo del nodo donde estamos 
+        posicionados con nuestro índice $i$. Como los nodos internos 
+        \textit{saben} cuántos elementos de $A$ tienen sus subárboles, 
+        entonces si $i$ es menor o igual a \texttt{nodo.hijoIzquierdo.elemento}
+        eso quiere decir que el elemento $i$ se encuentra dentro del rango 
+        de elementos que contiene el subárbol izquierdo de \texttt{nodo}. En 
+        caso contrario, debe estar en el subárbol derecho de \texttt{nodo}. 
+        Pero, si nos movemos al subárbol derecho debemos de actualizar el 
+        valor de $i$, así que le restamos el número de elementos de $A$ donde 
+        sabemos que $i$ no va a estar (esto para que tenga el valor adecuado 
+        respecto al nuevo subárbol con el que vamos a tratar). Una vez que 
+        encontramos al nodo interno cuyos hijos (si es que tiene dos) son 
+        hojas, entonces tenemos dos opciones: elegir la hoja izquierda o la 
+        derecha. Esta decisión la tomaremos dependiéndo del valor que tenga 
+        $i$ en ese momento. Si $i$ es igual a $1$ entonces el elemento que 
+        buscamos está en la hoja izquierda. En caso contrario, el elemento que 
+        buscamos está en la hoja derecha. Por los cambios que sufre $i$ en el 
+        recorrido de nodos internos, entonces los valores finales que puede 
+        tomar $i$ son $1$ o $2$; así que dependiéndo de esto, decidimos la 
+        hoja que le corresponde. Finalmente, como encontramos la hoja que
+        contiene al $i-$ésimo elemento de $A$, simplemente le sumamos el 
+        valor de $y$ y terminamos. 
+
+        La construcción del árbol nos toma $O(n)$ en tiempo y en espacio (por 
+        lo visto en clase). Como los elementos del arreglo $A$ se encuentran 
+        en las hojas, entonces en el peor de los casos tenemos que recorrer 
+        la altura del árbol para encontrar al elemento que deseamos. Y como 
+        sumar el elemento $y$ con el elemento encontrado nos toma tiempo 
+        constante, entonces la complejidad total del algoritmo de búsqueda 
+        es de $O(\log n)$.
+
+        Un ejemplo para ilustrar el algoritmo sería el siguiente: si 
+        $A = [7, 14, 2, 8, 9, 11, 0, -1, 1]$ y \texttt{Add(7,6)}, entonces 
+        \begin{figure}[h!]
+        \centering
+        \forestset{default preamble={for tree={circle,draw}}}
+        \begin{forest}
+        [9, red
+          [4, 
+            [2 
+              [7] 
+              [14]]
+            [2 
+              [2]
+              [8]]]
+          [5, red, edge label={node[midway,right,font=\scriptsize]{\;\;\;\;\;\; 
+                                                                   i=7-4=3}}
+            [4, red, edge label={node[midway,left,font=\scriptsize]{\; i=3}}
+              [2
+                [9] 
+                [11]]
+              [2, red, edge label={node[midway,right,font=\scriptsize]{\;\;i=3-2=1}}
+                [6, blue]
+                [-1]]]
+            [1 
+              [1]]]]
+        \end{forest}
+        \caption{Como $i=7$, entonces actualizamos la posición con $0 + 6 = 6$}
+        \end{figure}
         
         % Ejercicio 5.b
         \item $Partial-sum(i)$, regresa la suma de los primeros $i$ números, 
         es decir, 
 
-	    $Partial-sum(i) = A[1] + \ldots + A[i]$
+        $Partial-sum(i) = A[1] + \ldots + A[i]$
+
+        \textsc{Solución:} Usaremos básicamente el árbol del inciso anterior, 
+        sólo agregaremos el hecho de que cada nodo tiene una llave, la cual es
+        la suma del valor de los elementos de sus hijos (para las hojas, el 
+        valor de su elemento es su propia llave). Ahora bien, para encontrar 
+        la suma de los $i-$ésimos elementos de $A$ entonces hay que recorrer 
+        el árbol hasta encontrar el $i-$ésimo elemento e ir sumando el valor 
+        de las llaves de los elementos anteriores en un contador, para que 
+        así podamos regresar la suma deseada. 
+
+        Esto lo podemos lograr realizando el siguiente algoritmo:
+        \begin{enumerate}
+            \item Nos posicionamos en la raíz del árbol y hacemos 
+            \texttt{nodo = raiz}. Además, creamos un contador \texttt{cc=0}.
+
+            \item Mientras el hijo izquierdo del \texttt{nodo} no sea una 
+            hoja, hacemos:
+            \begin{itemize}
+                \item Si $i$ es menor o igual al elemento del hijo izquierdo 
+                del \texttt{nodo}, entonces nos movemos al subárbol izquierdo 
+                de éste, es decir, \texttt{nodo = nodo.hijoIzquierdo}.
+
+                \item En otro caso, actualizamos el valor de $i$ como 
+                $i = i -$ \texttt{nodo.hijoIzquierdo.elemento}, actualizamos 
+                el valor de \texttt{cc} como 
+                \texttt{cc = cc + nodo.hijoIzquierdo.llave} y nos movemos al
+                subárbol derecho; es decir, \texttt{nodo = nodo.hijoDerecho}.
+            \end{itemize}
+
+            \item Para este punto, los hijos del \texttt{nodo} serán ambos 
+            hojas (si es que tiene dos). Así que tenemos dos opciones:
+            \begin{itemize}
+                \item Si $i$ es igual a $1$, entonces nos movemos a la 
+                hoja izquierda; es decir, \texttt{nodo = nodo.hijoIzquierdo}.
+
+                \item En otro caso, nos movemos a la hoja derecha; es decir, 
+                \texttt{nodo = nodo.hijoDerecho}.
+            \end{itemize}
+
+            \item Hacemos \texttt{cc = cc + nodo.llave}. Terminamos.
+        \end{enumerate}
+
+        Este algoritmo funciona porque en cada paso siempre estamos en el 
+        subárbol donde se encuentra el $i-$ésimo elemento y porque gracias 
+        a la llave siempre podemos obtener la suma de los elementos anteriores 
+        al $i-$ésimo. Por el inciso anterior, sabemos que este algoritmo 
+        efectivamente encuentra al $i-$ésimo elemento, lo único que agregamos
+        es que cada vez que nos movemos al subárbol derecho estamos sumando 
+        el valor de la llave del nodo hermano al contador \texttt{cc} que 
+        llevará la suma de los elementos anteriores a $i$. Como los cambios a 
+        la derecha que estamos contando son aquellos que están en el recorrido
+        que hacemos de la raíz al $i-$ésimo elemento, entonces así nos 
+        aseguramos de no contar de más ni de menos. Por lo que, cuando llegamos 
+        al $i-$ésimo elemento, ya tenemos en el contador \texttt{cc} la suma de 
+        los $(i-1)$ elementos de $A$, así que sólo sumamos la llave del $i-$ésimo 
+        elemento con el valor actual del contador y así obtenemos la suma de los 
+        primeros $i$-ésimos elementos de $A$. 
+
+        Finalmente, como el contador se actualiza de forma constante y éste va 
+        realizando su proceso durante el algoritmo de búsqueda del $i-$ésimo 
+        elemento, entonces la complejidad total del algoritmo será de $O(\log n)$, 
+        pues en el peor caso, tenemos que recorrer toda la altura del árbol 
+        para encontrar el $i-$ésimo elemento de $A$.
+
+        Un ejemplo para ilustrar el algoritmo sería el siguiente: si 
+        $A = [5, 6, -2, -1, 8, 7]$ e $i = 5$, entonces
+        \begin{figure}[h!]
+        \centering
+        \forestset{default preamble={for tree={circle,draw}}}
+        \begin{forest}
+        [6/23, red
+          [4/8,
+            [2/11
+              [5/5]
+              [6/6]]
+            [2/-3
+              [-2/-2]
+              [-1/-1]]]
+          [2/15, red, edge label={node[midway,right,font=\scriptsize]{\;\;\;cc=0+8=8}}
+            [8/8, blue, edge label={node[midway,left,font=\scriptsize]{cc=8+8=16}}]
+            [7/7]]]
+        \end{forest}
+
+        \caption{Visualmente, en cada nodo, los valores a la izquierda son los 
+                 elementos de los nodos y los valores a la derecha son las 
+                 llaves. Al final del algoritmo, \texttt{cc = 16}}
+        \end{figure}
     \end{itemize}     
-    
-    Considera que no hay ni inserciones ni borrado de elementos, sólo se cambia 
-    el valor de los números. Cada operación debe tomar $O(\log n)$ pasos. Puedes 
-    usar un arreglo de espacio extra de tamaño $n$.
     
     % Ejercicio 6.
     \item Sea $A$ un arreglo de $n$ números enteros distintos. Suponga que $A$ 
@@ -387,6 +1089,9 @@
     arreglos no contienen duplicados. Tu algoritmo debe tener complejidad de 
     tiempo $\Theta(\log n)$. Hint: Primero resuelve el caso especial $k = n$.
 
+    \textsc{Solución:} Sabemos que ambos arreglos $A$ y $B$ son del mismo 
+    tamaño $n$. 
+
     % Ejercicio 9.
     \item Considera que un río fluye de norte a sur con caudal constante. 
     Suponga que hay $n$ ciudades en ambos lados del río, es decir $n$ ciudades a 
@@ -394,6 +1099,30 @@
     ciudades fueron numeradas de $1$ a $n$, pero se desconoce el orden. Construye 
     el mayor número de puentes entre ciudades con el mismo número, tal que dos 
     puentes no se intersecten. 
+
+    \textsc{Solución:} Supongamos que las ciudades a la izquierda del río son 
+    $a_1, a_2, \ldots, a_n$ y las ciudades a la derecha del río son $b_1, b_2, 
+    \ldots, b_n$. Como las ciudades fueron etiquetadas con un número del $1$ al 
+    $n$, entonces definimos una función \texttt{etiqueta} que nos regresa el 
+    número que le fue asignado a cada una de las ciudades. Luego, escogemos las 
+    ciudades de un lado del río para poder 
+    Sin pérdida de generalidad, digamos que escogemos las ciudades del lado 
+    izquierdo del río para etiquetarlas y ordenarlas. Así, las ciudades de ese 
+    lado del río quedarían como: 
+    \begin{align*}
+        c_1 &= 1 \rightarrow a_1 \\
+        c_2 &= 2 \rightarrow a_2 \\
+        &\ldots \\
+        c_n &= n \rightarrow a_n 
+    \end{align*}
+
+    y
+    \begin{equation*}
+    c_1 < c_2 < \ldots < c_n
+    \end{equation*}
+
+    Ahora bien, mientras ordenamos las ciudades del lado izquierdo del río, 
+    también vamos a ir moviéndo las ciudades que estaban asociadas 
 
 \end{enumerate}
 \end{document}
