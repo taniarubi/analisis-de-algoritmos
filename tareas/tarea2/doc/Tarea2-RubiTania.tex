@@ -610,18 +610,91 @@
         % Ejercicio 5.a
         \item $Add(i, y)$,  suma el valor $y$ al $i$-ésimo número.
 
-        \textsc{Solución:} Sea $n$ la longitud del arreglo $A$. Para realizar 
-        esta operación, lo que haremos será construir un árbol binario
-        balanceado donde las hojas de éste sean los elementos de $A$ (sin 
-        cambiar su órden de aparición). Los nodos internos los vamos a 
-        construir con la siguiente condición: el nodo padre de las hojas 
-        tendrá como elemento el número de elementos que contiene de $A$. 
-        Los demás nodos internos tendrán como elemento el número de elementos 
-        del arreglo $A$ que contienen sus dos subárboles. Una vez que tengamos 
-        el árbol construido, entonces debemos recorrerlo de tal forma que 
-        lleguemos al $i-$ésimo elemento de $A$ y luego sumarle el valor de $y$.
+        \textsc{Solución:} Sea $n$ la longitud del arreglo $A$. Para ejecutar
+        esta operación, primero realizaremos un preprocesamiento de la 
+        información. Lo que haremos será construir un árbol binario balanceado 
+        donde las hojas de éste tendrán como elementos a los números reales de 
+        $A$ (sin cambiar su órden de aparición). Además, se debe cumplir que 
+        los nodos padres de las hojas tengan como elemento el número de hojas 
+        que tienen. El resto de los nodos internos tendrán como elemento el 
+        número de hojas que tienen sus dos subárboles (cada nodo obtiene esto 
+        sumando los elementos que tienen sus nodos hijos, pues desde la 
+        propiedad anterior estamos garantizando que los padres de las hojas nos 
+        proporcionan esta información). La construcción de éste árbol la haremos 
+        de abajo hacia arriba, y será como sigue:
+        \begin{itemize}
+            \item Construimos $n$ hojas cuyos elementos serán los elementos del 
+            arreglo $A$, es decir, los elementos $A[1], A[2], \ldots, A[n]$.
 
-        Esto lo podemos lograr realizando el siguiente algoritmo:
+            \item Para crear los padres de las hojas:
+            \begin{itemize}
+                \item Calculamos \texttt{altura} $= \lceil \log(n)\rceil$ + 1. 
+    
+                \item Tomamos el primer par de hojas (de izquierda a derecha) y 
+                construimos al nodo padre. Éste tendrá como elemento al número 
+                $2$, ya que tiene dos hojas.
+    
+                \item Después, tomamos el siguiente par de hojas y realizamos el 
+                paso anterior. 
+                
+                \item Si al momento de querer tomar un par de nodos tenemos que 
+                sólo podemos tomar uno, es decir, sólo queda o sólo hay una hoja 
+                en el nivel, entonces construimos al nodo padre y su elemento 
+                será el número $1$, pues sólo tiene una hoja. Pasamos al
+                siguiente punto del algoritmo.
+
+                \item Si al momento de querer tomar un par de nodos tenemos que 
+                ya no hay nodos (es decir, el número de hojas era par), entonces 
+                pasamos al siguiente punto del algoritmo.
+            \end{itemize}
+
+            \item Una vez que terminamos de construir los nodos padre de las
+            hojas, disminuimos en uno la variable \texttt{altura}.
+
+            \item Para crear los nodos internos faltantes:
+
+            Mientras \texttt{altura} sea mayor que $1$, hacemos lo siguiente 
+            para los últimos nodos padres que hayamos creado (la primera 
+            iteración es sobre los padres de las hojas, después será sobre 
+            los padres de los padres de las hojas y así sucesivamente); 
+            \begin{itemize}
+                \item Tomamos los primeros dos nodos y construimos el nodo 
+                padre. El elemento del padre tendrá la suma de los elementos 
+                de sus hijos, por lo que \\ 
+                \texttt{padre.elemento = padre.izquierdo.elemento + 
+                padre.derecho.elemento}.
+    
+                \item Después tomamos el siguiente par de nodos y realizamos 
+                el paso anterior. 
+                
+                \item Si al momento de querer tomar un par de nodos sólo podemos 
+                tomar uno, es decir, sólo queda un nodo en el nivel, entonces 
+                construimos un nodo padre, y tendrá como hijos a este último nodo 
+                y al último nodo padre que construimos. El elemento de este 
+                nuevo nodo padre será la suma de los elementos de sus hijos. 
+                Disminuimos en una unidad a la variable \texttt{altura} y 
+                volvemos a repetir el proceso, pero ahora sobre los nuevos nodos 
+                padres que hemos creado.
+
+                \item Si al momento de querer tomar un par de nodos tenemos 
+                que ya no hay nodos (es decir, el número de nodos era par), 
+                entonces disminuimos en una unidad a la variable \texttt{altura}
+                y volvemos a repetir el proceso, pero ahora sobre los nuevos 
+                nodos padres que hemos creado. 
+            \end{itemize}
+
+            \item Cuando llegamos a que \texttt{altura} es menor o igual a $1$, 
+            significa que ya construimos la raíz del árbol. Terminamos.
+        \end{itemize}
+
+        Sabemos que un árbol puede implementarse en un arreglo, así que este 
+        procedimiento se realizará dentro de uno para ocupar el arreglo que se 
+        nos permite usar como espacio extra. 
+        
+        Una vez que tengamos el árbol construido, entonces debemos recorrerlo de 
+        tal forma que lleguemos al $i-$ésimo elemento de $A$, para luego sumarle 
+        el valor de $y$. Esto lo podemos lograr realizando el siguiente 
+        algoritmo:
         \begin{enumerate}
             \item Nos posicionamos en la raíz del árbol y hacemos 
             \texttt{nodo = raiz}. 
@@ -642,7 +715,8 @@
             hojas (si es que tiene dos). Así que tenemos dos opciones:
             \begin{itemize}
                 \item Si $i$ es igual a $1$, entonces nos movemos a la 
-                hoja izquierda; es decir, \texttt{nodo = nodo.hijoIzquierdo}.
+                hoja izquierda; es decir, \\ 
+                \texttt{nodo = nodo.hijoIzquierdo}.
 
                 \item En otro caso, nos movemos a la hoja derecha; es decir, 
                 \texttt{nodo = nodo.hijoDerecho}.
@@ -652,9 +726,9 @@
             Terminamos. 
         \end{enumerate}
 
-        Este algoritmo funciona porque en cada paso siempre estamos en el 
-        subárbol donde se encuentra el $i-$ésimo elemento. Primero nos 
-        posicionamos en la raíz del árbol, y la variable \texttt{nodo} nos 
+        Este algoritmo funciona porque en cada iteración siempre garantizamos 
+        estar en el subárbol donde se encuentra el $i-$ésimo elemento. Primero 
+        nos posicionamos en la raíz del árbol, y la variable \texttt{nodo} nos 
         ayuda a mantener la referencia sobre el nodo en el que estamos 
         posicionados en este momento. Luego hacemos un recorrido entre los
         nodos internos hasta que llegamos a uno donde su hijo izquierdo es 
@@ -685,13 +759,14 @@
         contiene al $i-$ésimo elemento de $A$, simplemente le sumamos el 
         valor de $y$ y terminamos. 
 
-        La construcción del árbol nos toma $O(n)$ en tiempo y en espacio (por 
-        lo visto en clase). Como los elementos del arreglo $A$ se encuentran 
-        en las hojas, entonces en el peor de los casos tenemos que recorrer 
-        la altura del árbol para encontrar al elemento que deseamos. Y como 
-        sumar el elemento $y$ con el elemento encontrado nos toma tiempo 
-        constante, entonces la complejidad total del algoritmo de búsqueda 
-        es de $O(\log n)$.
+        La construcción del árbol nos toma $O(n)$ en tiempo y en espacio (ya 
+        que lo construimos de abajo hacia arriba y progresivamente vamos 
+        formando los $n-1$ nodos internos). Luego, como los elementos del 
+        arreglo $A$ se encuentran en las hojas, entonces en el peor de los 
+        casos tenemos que recorrer la altura del árbol para encontrar al 
+        elemento que deseamos. Y como sumar el elemento $y$ con el elemento 
+        encontrado nos toma tiempo constante, entonces la complejidad total 
+        del algoritmo de búsqueda es de $O(\log n)$.
 
         Un ejemplo para ilustrar el algoritmo sería el siguiente: si 
         $A = [7, 14, 2, 8, 9, 11, 0, -1, 1]$ y \texttt{Add(7,6)}, entonces 
@@ -719,7 +794,8 @@
             [1 
               [1]]]]
         \end{forest}
-        \caption{Como $i=7$, entonces actualizamos la posición con $0 + 6 = 6$}
+        \caption{En color \textcolor{red}{rojo} está el recorrido para llegar
+                 al elemento $i=7$.}
         \end{figure}
         
         % Ejercicio 5.b
@@ -728,19 +804,102 @@
 
         $Partial-sum(i) = A[1] + \ldots + A[i]$
 
-        \textsc{Solución:} Usaremos básicamente el árbol del inciso anterior, 
-        sólo agregaremos el hecho de que cada nodo tiene una llave, la cual es
-        la suma del valor de los elementos de sus hijos (para las hojas, el 
-        valor de su elemento es su propia llave). Ahora bien, para encontrar 
-        la suma de los $i-$ésimos elementos de $A$ entonces hay que recorrer 
-        el árbol hasta encontrar el $i-$ésimo elemento e ir sumando el valor 
-        de las llaves de los elementos anteriores en un contador, para que 
-        así podamos regresar la suma deseada. 
+        \textsc{Solución:} Usaremos básicamente el árbol del inciso anterior 
+        para el preprocesamiento de la información, sólo le agregaremos la 
+        propiedad de que cada nodo tiene una llave. La llave de las hojas 
+        será el valor de su elemento. Las llaves de los nodos padre de las 
+        hojas será la suma de las llaves de sus hijos. Las llaves de los 
+        demás nodos internos serán la suma de las llaves de sus subárboles 
+        (cada nodo obtiene esto sumando las llaves que tienen sus hijos, 
+        pues desde la propiedad anterior estamos garantizando que los padres 
+        de las hojas nos proporcionan esta información). La construcción
+        de éste árbol la haremos de abajo hacia arriba, y será como sigue:
+        \begin{itemize}
+            \item Construimos $n$ hojas cuyos elementos serán los elementos del 
+            arreglo $A$, es decir, los elementos $A[1], A[2], \ldots, A[n]$.
+            El valor de las llaves de las hojas será el mismo que el valor de 
+            su elemento. 
 
-        Esto lo podemos lograr realizando el siguiente algoritmo:
+            \item Para crear los padres de las hojas:
+            \begin{itemize}
+                \item Calculamos \texttt{altura} $= \lceil \log(n)\rceil$ + 1. 
+    
+                \item Tomamos el primer par de hojas (de izquierda a derecha) y 
+                construimos al nodo padre. Éste tendrá como elemento al número 
+                $2$, ya que tiene dos hojas. Su llave será la suma de las llaves
+                de sus hijos, es decir, de sus dos hojas.
+    
+                \item Después, tomamos el siguiente par de hojas y realizamos el 
+                paso anterior. 
+                
+                \item Si al momento de querer tomar un par de nodos tenemos que 
+                sólo podemos tomar uno, es decir, sólo queda o sólo hay una hoja 
+                en el nivel, entonces construimos al nodo padre y su elemento 
+                será el número $1$, pues sólo tiene una hoja. Su llave será la 
+                misma que la de su hijo. Pasamos al siguiente punto del 
+                algoritmo.
+
+                \item Si al momento de querer tomar un par de nodos tenemos que 
+                ya no hay nodos (es decir, el número de hojas era par), entonces 
+                pasamos al siguiente punto del algoritmo.
+            \end{itemize}
+
+            \item Una vez que terminamos de construir los nodos padre de las
+            hojas, disminuimos en uno la variable \texttt{altura}.
+
+            \item Para crear los nodos internos faltantes:
+
+            Mientras \texttt{altura} sea mayor que $1$, hacemos lo siguiente 
+            para los últimos nodos padres que hayamos creado (la primera 
+            iteración es sobre los padres de las hojas, después será sobre 
+            los padres de los padres de las hojas y así sucesivamente); 
+            \begin{itemize}
+                \item Tomamos los primeros dos nodos y construimos el nodo 
+                padre. El elemento del padre tendrá la suma de los elementos 
+                de sus hijos, por lo que \\ 
+                \texttt{padre.elemento = padre.izquierdo.elemento + 
+                padre.derecho.elemento}. Su llave será la suma de las llaves 
+                de sus hijos, por lo que \texttt{padre.llave = 
+                padre.izquierdo.llave + padre.derecho.llave}.
+    
+                \item Después tomamos el siguiente par de nodos y realizamos 
+                el paso anterior. 
+                
+                \item Si al momento de querer tomar un par de nodos sólo podemos 
+                tomar uno, es decir, sólo queda un nodo en el nivel, entonces 
+                construimos un nodo padre, y tendrá como hijos a este último nodo 
+                y al último nodo padre que construimos. El elemento de este 
+                nuevo nodo padre será la suma de los elementos de sus hijos. 
+                Su llave será la suma de las llaves de sus hijos. Disminuimos 
+                en una unidad a la variable \texttt{altura} y volvemos a repetir 
+                el proceso, pero ahora sobre los nuevos nodos padres que hemos 
+                creado.
+
+                \item Si al momento de querer tomar un par de nodos tenemos 
+                que ya no hay nodos (es decir, el número de nodos era par), 
+                entonces disminuimos en una unidad a la variable \texttt{altura}
+                y volvemos a repetir el proceso, pero ahora sobre los nuevos 
+                nodos padres que hemos creado. 
+            \end{itemize}
+
+            \item Cuando llegamos a que \texttt{altura} es menor o igual a $1$, 
+            significa que ya construimos la raíz del árbol. Terminamos.
+        \end{itemize}
+
+        Sabemos que un árbol puede implementarse en un arreglo, así que este 
+        procedimiento se realizará dentro de uno para ocupar el arreglo que se 
+        nos permite usar como espacio extra. 
+        
+        Notemos que las llaves de los padres de cada uno de los subárboles 
+        contendrán la suma de los elementos de las hojas que contiene cada 
+        subárbol. Así, una vez que tengamos el árbol construido, podemos 
+        recorrerlo de tal forma que lleguemos al $i-$ésimo elemento de $A$
+        y que durante ese recorrido, también podamos obtener la suma de los 
+        primeros $i$ elementos. Esto lo podemos lograr realizando el siguiente 
+        algoritmo:
         \begin{enumerate}
             \item Nos posicionamos en la raíz del árbol y hacemos 
-            \texttt{nodo = raiz}. Además, creamos un contador \texttt{cc=0}.
+            \texttt{nodo = raiz}. Además, creamos un contador \texttt{suma = 0}.
 
             \item Mientras el hijo izquierdo del \texttt{nodo} no sea una 
             hoja, hacemos:
@@ -751,68 +910,76 @@
 
                 \item En otro caso, actualizamos el valor de $i$ como 
                 $i = i -$ \texttt{nodo.hijoIzquierdo.elemento}, actualizamos 
-                el valor de \texttt{cc} como 
-                \texttt{cc = cc + nodo.hijoIzquierdo.llave} y nos movemos al
-                subárbol derecho; es decir, \texttt{nodo = nodo.hijoDerecho}.
+                el valor de \texttt{suma} como 
+                \texttt{suma = suma + nodo.hijoIzquierdo.llave} y nos movemos 
+                al subárbol derecho; es decir, \texttt{nodo = nodo.hijoDerecho}.
             \end{itemize}
 
             \item Para este punto, los hijos del \texttt{nodo} serán ambos 
             hojas (si es que tiene dos). Así que tenemos dos opciones:
             \begin{itemize}
                 \item Si $i$ es igual a $1$, entonces nos movemos a la 
-                hoja izquierda; es decir, \texttt{nodo = nodo.hijoIzquierdo}.
+                hoja izquierda; es decir, \\ 
+                \texttt{nodo = nodo.hijoIzquierdo}.
 
                 \item En otro caso, nos movemos a la hoja derecha; es decir, 
                 \texttt{nodo = nodo.hijoDerecho}.
             \end{itemize}
 
-            \item Hacemos \texttt{cc = cc + nodo.llave}. Terminamos.
+            \item Hacemos \texttt{suma = suma + nodo.llave}. 
+            
+            \item Regresamos \texttt{suma}. Terminamos.
         \end{enumerate}
 
-        Este algoritmo funciona porque en cada paso siempre estamos en el 
-        subárbol donde se encuentra el $i-$ésimo elemento y porque gracias 
-        a la llave siempre podemos obtener la suma de los elementos anteriores 
+        Este algoritmo funciona porque en cada iteración siempre estamos en el 
+        subárbol donde se encuentra el $i-$ésimo elemento y porque gracias a 
+        las llaves siempre podemos obtener la suma de los elementos anteriores 
         al $i-$ésimo. Por el inciso anterior, sabemos que este algoritmo 
         efectivamente encuentra al $i-$ésimo elemento, lo único que agregamos
         es que cada vez que nos movemos al subárbol derecho estamos sumando 
-        el valor de la llave del nodo hermano al contador \texttt{cc} que 
-        llevará la suma de los elementos anteriores a $i$. Como los cambios a 
-        la derecha que estamos contando son aquellos que están en el recorrido
-        que hacemos de la raíz al $i-$ésimo elemento, entonces así nos 
-        aseguramos de no contar de más ni de menos. Por lo que, cuando llegamos 
-        al $i-$ésimo elemento, ya tenemos en el contador \texttt{cc} la suma de 
-        los $(i-1)$ elementos de $A$, así que sólo sumamos la llave del $i-$ésimo 
-        elemento con el valor actual del contador y así obtenemos la suma de los 
-        primeros $i$-ésimos elementos de $A$. 
+        el valor de la llave de su nodo hermano al contador \texttt{suma}, el 
+        cual llevará la suma de los elementos anteriores a $i$ (al menos, 
+        hasta que llegamos al nodo hoja que buscamos). Como los cambios a la
+        derecha que estamos contando son aquellos que están en el recorrido de
+        la búsqueda que hacemos desde la raíz hasta el $i-$ésimo elemento, 
+        entonces así nos aseguramos de no contar de más ni de menos. Por lo que, 
+        cuando llegamos al $i-$ésimo elemento, ya tenemos en el contador 
+        \texttt{suma} la suma de los $(i-1)$ elementos de $A$, así que sólo 
+        sumamos la llave del $i-$ésimo elemento con el valor actual del 
+        contador y así obtenemos la suma de los primeros $i$ elementos de $A$.
 
-        Finalmente, como el contador se actualiza de forma constante y éste va 
-        realizando su proceso durante el algoritmo de búsqueda del $i-$ésimo 
-        elemento, entonces la complejidad total del algoritmo será de $O(\log n)$, 
-        pues en el peor caso, tenemos que recorrer toda la altura del árbol 
-        para encontrar el $i-$ésimo elemento de $A$.
+        Ahora bien, por el inciso anterior sabemos que el preprocesamiento de 
+        la información nos toma tiempo lineal. Y como la suma de los primeros 
+        $i$ elementos la hacemos al momento de recorrer el árbol hasta llegar 
+        al elemento hoja que buscamos, entonces en el peor de los casos debemos 
+        recorrer la altura del árbol, por lo que podemos realizar esta 
+        operación en $O(\log n)$.
 
         Un ejemplo para ilustrar el algoritmo sería el siguiente: si 
-        $A = [5, 6, -2, -1, 8, 7]$ e $i = 5$, entonces
+        $A = [5, 6, 40, 25, 8, 7]$ e $i = 5$, entonces
         \begin{figure}[h!]
         \centering
         \forestset{default preamble={for tree={circle,draw}}}
         \begin{forest}
-        [6/23, red
-          [4/8,
-            [2/11
-              [5/5]
-              [6/6]]
-            [2/-3
-              [-2/-2]
-              [-1/-1]]]
-          [2/15, red, edge label={node[midway,right,font=\scriptsize]{\;\;\;cc=0+8=8}}
-            [8/8, blue, edge label={node[midway,left,font=\scriptsize]{cc=8+8=16}}]
-            [7/7]]]
+        [\textcolor{Fuchsia}{6} | \textcolor{Green}{23}, red
+          [\textcolor{Fuchsia}{4} | \textcolor{Green}{76},
+            [\textcolor{Fuchsia}{2} | \textcolor{Green}{11}
+              [\textcolor{Fuchsia}{5} | \textcolor{Green}{5}]
+              [\textcolor{Fuchsia}{6} | \textcolor{Green}{6}]]
+            [\textcolor{Fuchsia}{2} | \textcolor{Green}{65}
+              [\textcolor{Fuchsia}{40} | \textcolor{Green}{40}]
+              [\textcolor{Fuchsia}{25} | \textcolor{Green}{25}]]]
+          [\textcolor{Fuchsia}{2} | \textcolor{Green}{15}, red, 
+           edge label={node[midway,right,font=\scriptsize]{\;\;\;suma=0+76=76}}
+            [\textcolor{Fuchsia}{8} | \textcolor{Green}{8}, blue, 
+             edge label={node[midway,left,font=\scriptsize]{suma=76+8=84}}]
+            [\textcolor{Fuchsia}{7} | \textcolor{Green}{7}]]]
         \end{forest}
 
-        \caption{Visualmente, en cada nodo, los valores a la izquierda son los 
-                 elementos de los nodos y los valores a la derecha son las 
-                 llaves. Al final del algoritmo, \texttt{cc = 16}}
+        \caption{En color \textcolor{Fuchsia}{fucsia} están los elementos, en color 
+                 \textcolor{Green}{Verde} están las llaves y en color 
+                 \textcolor{Red}{rojo} está el camino para encontrar al
+                 \textcolor{blue}{i-ésimo} elemento}
         \end{figure}
     \end{itemize}     
     
