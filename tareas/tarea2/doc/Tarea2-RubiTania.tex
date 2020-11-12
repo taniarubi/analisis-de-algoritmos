@@ -976,8 +976,8 @@
             [\textcolor{Fuchsia}{7} | \textcolor{Green}{7}]]]
         \end{forest}
 
-        \caption{En color \textcolor{Fuchsia}{fucsia} están los elementos, en color 
-                 \textcolor{Green}{Verde} están las llaves y en color 
+        \caption{En color \textcolor{Fuchsia}{fucsia} están los elementos, en 
+                 color \textcolor{Green}{Verde} están las llaves y en color 
                  \textcolor{Red}{rojo} está el camino para encontrar al
                  \textcolor{blue}{i-ésimo} elemento}
         \end{figure}
@@ -994,27 +994,14 @@
 		\item Diseña y analiza un algoritmo eficiente para encontrar $k$.
         
         \textsc{Solución:} Tenemos que nuestro arreglo está dividido en dos 
-        \textit{subarreglos}, el primero ordenado en forma creciente y el 
-        segundo está ordenado en forma decreciente. Supongamos que $n$ es la
-        longitud del arreglo $A$ y que $B$ y $C$ son los subarreglos contenidos
-        en el arreglo $A$. Por ejemplo, supongamos que $A$ es el siguiente 
-        arreglo:
-        \begin{center}
-        \begin{tikzpicture}
-            \matrix (A) [matrix of nodes, nodes={draw, minimum size=8mm},
-                         column sep=-\pgflinewidth]{
-            \textcolor{blue}{-5} & \textcolor{blue}{-2} & \textcolor{blue}{0} & 
-            \textcolor{blue}{2} & \textcolor{blue}{3} & \textcolor{blue}{8} & 
-            \textcolor{red}{6} & \textcolor{red}{4} & \textcolor{red}{1}\\};
-        \end{tikzpicture}
-        \end{center}
-
-        Entonces el arreglo \textcolor{blue}{B} corresponde a los valores que 
-        están de color azul, y el arreglo \textcolor{red}{C} corresponde a los
-        valores de color rojo. En este ejemplo, $k = 5$ y $A[k] = 8$.
-
-        Para encontrar el valor de $k$, lo que debemos hacer es buscar al 
-        elemento $A[i]$ tal que
+        subarreglos, el primero ordenado en forma creciente y el segundo está 
+        ordenado en forma decreciente. Supongamos que $B$ y $C$ son los 
+        subarreglos contenidos en el arreglo $A$, respectivamente. Entonces, 
+        al subarreglo $B$ le corresponden las entradas $A[1], A[2], \ldots, 
+        A[k]$ del arreglo $A$, mientras que al subarreglo $C$ le corresponden 
+        las entradas $A[k+1], A[k+2], \ldots, A[n]$ del arreglo $A$. Así, para 
+        encontrar el valor de $k$, lo que debemos hacer es buscar al elemento 
+        $A[i]$ tal que
         \begin{equation}
             \label{eq: ej6-1}
             A[i-1] < A[i] > A[i+1]
@@ -1022,206 +1009,99 @@
         
         es decir, al elemento en el arreglo cuyos elementos adyacentes son 
         menores que él; y por lo tanto, es el elemento que está al final del 
-        subarreglo \textcolor{blue}{B}. Esto se debe a que los subarreglos $B$ y 
-        $C$ están ordenados de forma creciente y decreciente, respectivamente. 
+        subarreglo $B$. Esto se debe a que los subarreglos $B$ y $C$ están 
+        ordenados de forma creciente y decreciente, respectivamente. 
         
         Ahora bien, utilizaremos el método \textit{divide y vencerás} para 
-        resolver este problema: Realizamos la operación 
-        $\lceil \frac{n}{2} \rceil$ para encontrar el índice del elemento que 
-        se encuentra a la mitad del arreglo. Si el elemento 
-        $A[\lceil \frac{n}{2} \rceil]$ cumple las condiciones de la expresión 
-        \ref{eq: ej6-1}, entonces hemos encontrado al elemento en el índice $k$. 
-        Terminamos. En caso contrario, lo que hacemos es verificar si el 
-        elemento $A[\lceil \frac{n}{2} \rceil]$ pertenece al subarreglo 
-        \textcolor{blue}{B} o al subarreglo \textcolor{red}{C}. Si el elemento 
-        $A[\lceil \frac{n}{2} \rceil]$ pertenece al subarreglo 
-        \textcolor{blue}{B}, entonces cumple la propiedad 
-        \begin{equation}
-            \label{eq: ej6-2}
-            A[i-1] < A[i]  
-        \end{equation}
+        resolver este problema: 
+        \begin{enumerate}
+            \item Calculamos la operación $\lceil \frac{n}{2} \rceil$ para 
+            encontrar el índice del elemento que se encuentra a la mitad del 
+            arreglo. 
 
-        es decir, el elemento anterior a $A[\lceil \frac{n}{2} \rceil]$ debería 
-        ser menor que él. Pero si el elemento $A[\lceil \frac{n}{2} \rceil]$
-        pertenece al subarreglo \textcolor{red}{C}, entonces debe cumplir la 
-        propiedad 
-        \begin{equation}
-            \label{eq: ej6-3}
-            A[i] > A[i+1]
-        \end{equation}
+            \item Si el elemento $A[\lceil \frac{n}{2} \rceil]$ cumple las 
+            condiciones de la expresión \ref{eq: ej6-1}, entonces hemos 
+            encontrado al elemento en el índice $k$. Regresamos a
+            $\lceil \frac{n}{2} \rceil$. Terminamos.
 
-        es decir, el elemento siguiente a $A[\lceil \frac{n}{2} \rceil]$ debería 
-        ser menor que él. Luego, si $A[\lceil \frac{n}{2} \rceil]$ pertence al 
-        subarreglo \textcolor{blue}{B}, entonces realizamos este procedimiento
-        recursivamente sobre la mitad derecha del arreglo $A$ (ya que todavía no
-        alcanzamos el final de este subarreglo), pero si 
-        $A[\lceil \frac{n}{2} \rceil]$ pertenece al subarreglo 
-        \textcolor{red}{C}, entonces realizamos este procedimiento 
-        recursivamente sobre la mitad izquierda del arreglo $A$ (ya que nos 
-        pasamos del final del subarreglo \textcolor{blue}{B}).
+            \item En caso contrario, tenemos tres posibles opciones:
+            \begin{itemize}
+                \item $A[i-1] > A[i] > A[i+1]$. Entonces, el elemento pertenece 
+                al subarreglo $C$. Volvemos al paso $1$, pero aplicamos el 
+                algoritmo sobre la mitad izquierda del arreglo (ya que nos 
+                pasamos del final del subarreglo $B$).
 
-        A esto se debe añadir un caso especial: Si el arreglo es de longitud 
-        $n = 1$, entonces simplemente regresamos el índice del primer (y 
-        único) elemento de $A$.
+                \item $A[i-1] < A[i] < A[i+1]$. Entonces, el elemento pertenece 
+                al subarreglo $B$. Volvemos al paso $1$, pero aplicamos el 
+                algoritmo sobre la mitad derecha del arreglo (ya que todavía no
+                alcanzamos el final de este subarreglo).
 
-        Durante la ejecución de este algoritmo realizamos operaciones constantes
-        (las comparaciones) y trabajamos con todo el arreglo $A$ sólo para 
-        encontrar la mitad del arreglo original, después vamos trabajando con 
-        subarreglos de longitud $\frac{n}{2}, \frac{n}{4}, \frac{n}{8}, \ldots, 
-        1$; por lo que la complejidad de nuestro algoritmo es de $O(\log n)$. 
-        Es decir, realizamos una variación de \textit{búsqueda binaria}. Y 
-        funciona porque cada subarreglo sobre el cual vamos trabajando 
-        eventualmente nos llevará al elemento que está en el índice $k$, que 
-        es el que estamos buscando. 
+                \item $A[i-1] > A[i] < A[i+1]$. Este caso no puede pasar, por 
+                cómo están ordenados los subarreglos.
+            \end{itemize}
+        \end{enumerate}
+
+        Este algoritmo funciona porque siempre garantizamos estar en el 
+        subarreglo que contiene al índice $k$. Esto pasa gracias a las 
+        comparaciones que hacemos para saber a cuál de las mitades del arreglo 
+        actual nos debemos mover. Así, nos movemos hasta encontrar el 
+        elemento que buscamos (el cual estará en la posición $k$).
+
+        Ahora bien, el algoritmo trabaja sobre subarreglos de tamaño $\frac{n}{2}, 
+        \frac{n}{4}, \frac{n}{8}, \ldots, 1$ para buscar al elemento que 
+        deseamos; por lo que esto nos tomará tiempo $O(\log n)$. Y como el resto
+        de las operaciones (las comparaciones) nos toma tiempo constante, 
+        entonces la complejidad total del algoritmo es de $O(\log n)$. 
         
         % Ejercicio 6.b
 		\item Si no conoces el valor de $n$, cómo resuelves el problema.
         
         \textsc{Solución:} Como no sabemos cuál es la longitud del arreglo $A$, 
-        entonces necesitamos ver una forma de cómo irnos moviéndo a través del 
-        arreglo. Para solucionar esto, los índices que vamos a ir revisando 
-        son aquellos que sean potencia de $2$, es decir, los índices $2^i$
-        tales que $i \in \{0, 1, 2, 3. \ldots\}$. Ahora bien , para poder 
-        encontrar el valor de $k$, primero obtendremos un rango $[a, b]$ de 
-        elementos donde poder aplicar el algoritmo del inciso anterior. Para 
-        esto, necesitaremos dos contadores $a$ y $b$, los cuales nos indicarán 
-        la posición de inicio y final del intervalo.
-
-        El algoritmo que seguiremos para encontrar el intervalo $[a, b]$ será 
-        el siguiente: inicializamos nuestros contadores $a$, $b$ e $i$ en $0$. 
-        Luego, realizamos la operación
-        \begin{equation*}
-            2^i = 2^0 = 1
-        \end{equation*}
-        
-        e incrementamos nuestro contador $i$ en una unidad. Además, como $b$ 
-        nos indicará la posición final del intervalo, entonces 
-        \begin{equation*}
-            b = b + 2^i = 0 + 1 = 1
-        \end{equation*}
-        
-        Así, nuestro primer candidato de intervalo será $[a, b] = [0, 1]$.
-        Luego, verificamos que el elemento en la posición $A[2^i]$ cumpla la 
-        propiedad \ref{eq: ej6-1}. Si lo hace, entonces hemos encontrado al 
-        elemento cuyo índice es $k$. En caso contrario, debemos verificar si el 
-        elemento $A[2^i]$ pertenece al subarreglo \textcolor{blue}{B} o al 
-        subarreglo \textcolor{red}{C}. Esto lo hacemos aplicándole las 
-        propiedades \ref{eq: ej6-2} y \ref{eq: ej6-3}, respectivamente. Ahora 
-        bien, 
+        entonces necesitamos ver una forma de calcularla. Para resolver esto, 
+        los índices que vamos a ir revisándo son aquellos que sean potencias 
+        de $2$, es decir, los índices $2^i$ tales que $i \in 
+        \{0, 1, 2, 3, \ldots\}$. Si al momento de querer acceder a la posición 
+        $2^i$ nos regresa una excepción del tipo \texttt{IndexOutOfBounds}, 
+        entonces sabemos que el tamaño del arreglo se encuentra ubicado en el 
+        intervalo $2^{i-1} < n < 2^{i}$, por lo que éste tendrá una longitud 
+        de $m =2^{i-1}$. Así, podemos aplicar búsqueda binaria en este intervalo.
+        Si encontramos un índice $\lceil \frac{m}{2} \rceil$ que cumple la 
+        condición de que su elemento anterior existe y su elemento siguiente no 
+        existe (manda una excepción), entonces hemos encontrado el final del 
+        arreglo $A$. En otro caso, 
         \begin{itemize}
-            \item Si el elemento $A[2^i]$ pertenece al subarreglo 
-            \textcolor{blue}{B}, entonces el valor de $a$ será el valor que 
-            tenga $b$ en este momento, ya que  queremos ir moviéndo el intervalo 
-            de tal forma que podamos asegurar que el elemento en el índice $k$ 
-            se encuentra dentro de éste. Luego, realizamos la operación $2^i$ 
-            con el valor que tenga $i$ en este momento, lo aumentamos en una 
-            unidad y volvemos a actualizar nuestro contador $b$ como 
-            \begin{equation*}
-                b = b + 2^i
-            \end{equation*}
-    
-            Esto lo hacemos porque aún nos falta camino por recorrer para llegar 
-            al final del subarreglo \textcolor{blue}{B}. Así, nuestro nuevo 
-            intervalo candidato es $[a, b]$. Luego, volvemos a la parte de 
-            verificación para saber si el elemento $A[b]$ es el que estamos 
-            buscando (o para saber qué hacer en casao de que no).
+            \item Si la posición que revisamos durante esta búsqueda binaria 
+            regresa una excepción, entonces ésta se repite sobre la mitad 
+            izquierda del intervalo.
 
-            \item Si el elemento $A[2^i]$ pertenece al subarreglo 
-            \textcolor{red}{C}, entonces ya hemos encontrado el intervalo que 
-            necesitamos. Esto se debe a que hemos estado moviéndo el intervalo 
-            hasta que nos encontramos con un elemento del subarreglo 
-            \textcolor{red}{C}, y aquí se detiene la búsqueda del intervalo 
-            porque ya no es necesario buscar más allá, ya que nuestro contador 
-            $a$ estará posicionado en un elemento del subarreglo 
-            \textcolor{blue}{B} (que no es el que buscamos) y $b$ estará 
-            posicionado en un elemento del subarreglo \textcolor{red}{C}. 
-            Entonces, así podemos garantizar que el elemento en el índice $k$
-            se encuentra en el intervalo $[a, b]$, donde $a$ y $b$ serán los 
-            valores que éstos contadores tengan al momento de encontrar al 
-            elemento en el subarreglo \textcolor{red}{C}, y éstos serán de 
-            la forma 
-            \begin{equation*}
-                a = 2^0 + 2^1 + \ldots 
-                \quad \text{y} \quad 
-                b = 2^0 + 2^1 + 2^2 + \dots
-            \end{equation*}
-
-            Es decir, $a$ tendrá un valor $2^i$ menor que $b$. Una vez que 
-            tenemos este intervalo, podemos mandar a llamar el algoritmo 
-            descrito en el inciso anterior y así obtener el valor $k$ que 
-            estamos buscando.
+            \item En caso contrario, se repite sobre la mitad derecha del 
+            intervalo. Y así sucesivamente hasta encontrar el tamaño del 
+            arreglo $n$.
         \end{itemize}
 
-        Como nota especial, si al momento de querer acceder al elemento $A[2^i]$
-        no lo logramos (no existe), entonces sólo hay que volver a iniciar desde 
-        cero desde la posición $2^{i-1}$; es decir, tendríamos $a = 2^{i-1}$ 
-        como el inicio del arreglo y empezamos a buscar las potencias de $2$
-        desde $i = 0$. Así, podemos continuar con el algoritmo descrito arriba.
+        Una vez que encontramos la longitud del arreglo (la cual será 
+        $2^{i-1} + \lceil \frac{m}{2} \lceil$), entonces simplemente 
+        aplicamos el algoritmo del inciso anterior para poder encontrar 
+        el valor de $k$.
 
-        Este algoritmo funciona porque las potencias de dos nos ayudan a 
-        encontrar el intervalo que necesitamos (el inicio es un elemento de 
-        \textcolor{blue}{B} y el final es un elemento de \textcolor{red}{C}), y 
-        el resto lo termina el algoritmo del inciso anterior; por lo que así 
-        obtenemos correctamente nuestro valor $k$. 
+        Este algoritmo funciona porque vamos dando brincos de tamaño $2^i$ 
+        para poder acotar un intervalo donde se debe de encontrar el último 
+        elemento de $A$ (el cual nos dará la longitud del arreglo). Si al 
+        momento de dar los brincos nos encontramos con que esa posición del 
+        arreglo no existe (regresa una excepción) entonces sabemos que el 
+        final del arreglo se encuentra en el intervalo $2^{i-1} < n < 2^i$, 
+        donde $2^i$ fue la posición que nos regresó la excepción. Una vez 
+        teniéndo este intervalo, basta aplicar búsqueda binaria para encontrar 
+        al elemento que se encuentra al final del arreglo. 
 
-        Para ilustrar un poco el algoritmo, mostraremos cómo funcionaría con el 
-        mismo arreglo $A$ del inciso anterior:
-        \begin{figure}[h!]
-        \centering
-        \begin{tikzpicture}
-            \matrix (A) [matrix of nodes, nodes={draw, minimum size=8mm},
-                             column sep=-\pgflinewidth]{
-            \textcolor{blue}{-5} & \textcolor{blue}{-2} & \textcolor{blue}{0} & 
-            \textcolor{blue}{2} & \textcolor{blue}{3} & \textcolor{blue}{8} & 
-            \textcolor{red}{6} & \textcolor{red}{4} & \textcolor{red}{1}\\};
-            
-            \foreach \i [evaluate=\i as \ni using {int(\i)},
-                         evaluate=\i as \ntext using {int(\i-1)}] in {1, 2} 
-            \draw [{Stealth}-, RubineRed!70] (A-1-\ni.south west)--++(-90:5mm) 
-                   node[below] {\ntext};
-        \end{tikzpicture}
-    
-        \caption{$A[2^0] = -2$ pertenece a \textcolor{blue}{B}, actualizamos
-                 $a = 1$, $b = b + 2^1 = 3$, $i = 2$}
-        \end{figure}
-
-        \begin{figure}[h!]
-        \centering
-        \begin{tikzpicture}
-            \matrix (A) [matrix of nodes, nodes={draw, minimum size=8mm},
-                             column sep=-\pgflinewidth]{
-            \textcolor{blue}{-5} & \textcolor{blue}{-2} & \textcolor{blue}{0} & 
-            \textcolor{blue}{2} & \textcolor{blue}{3} & \textcolor{blue}{8} & 
-            \textcolor{red}{6} & \textcolor{red}{4} & \textcolor{red}{1}\\};
-            
-            \foreach \i [evaluate=\i as \ni using {int(\i)},
-                         evaluate=\i as \ntext using {int(\i-1)}] in {2, 4} 
-            \draw [{Stealth}-, RubineRed!70] (A-1-\ni.south west)--++(-90:5mm) 
-                   node[below] {\ntext};
-        \end{tikzpicture}
-    
-        \caption{$A[2^i] = 2$ pertenece a \textcolor{blue}{B}, actualizamos 
-                 $a = 3$, $b = b + 2^2 = 3 + 4 = 7$, $i = 3$}
-        \end{figure}
-
-        \begin{figure}[h!]
-        \centering
-        \begin{tikzpicture}
-            \matrix (A) [matrix of nodes, nodes={draw, minimum size=8mm},
-                             column sep=-\pgflinewidth]{
-            \textcolor{blue}{-5} & \textcolor{blue}{-2} & \textcolor{blue}{0} & 
-            \textcolor{blue}{2} & \textcolor{blue}{3} & \textcolor{blue}{8} & 
-            \textcolor{red}{6} & \textcolor{red}{4} & \textcolor{red}{1}\\};
-            
-            \foreach \i [evaluate=\i as \ni using {int(\i)},
-                         evaluate=\i as \ntext using {int(\i-1)}] in {4, 8} 
-            \draw [{Stealth}-, RubineRed!70] (A-1-\ni.south west)--++(-90:5mm) 
-                   node[below] {\ntext};
-        \end{tikzpicture}
-    
-        \caption{$A[2^i] = 4$ pertenece a \textcolor{red}{C}, ya encontramos el 
-                 intervalo y aplicamos algoritmo del inciso $a)$}
-        \end{figure}
+        Ahora bien, encontrar el valor de $i$ que nos manda la excepción (es 
+        decir, encontrar el intervalo para acotar el tamaño del arreglo) nos 
+        cuesta $O(\log n)$ ya que calculamos el ($\log n$) a \textit{manita}. 
+        Luego, la búsqueda binaria que realizamos dentro del intervalo para 
+        poder encontrar el último elemento del arreglo nos cuesta $O(\log n)$.
+        Finalmente, aplicar el algoritmo del inciso anterior también nos toma 
+        $O(\log n)$, por lo que la complejidad total del algoritmo es de 
+        $O(\log n)$.
     \end{enumerate}
     
     % Ejercicio 7.
@@ -1246,6 +1126,141 @@
     Generalize the strategy above and show that given $n$ people such that less 
     than half are liars, you can sort them out in honest persons and liars by 
     asking $\theta(n)$ questions.
+
+    \textsc{Solución:} Sabemos que hay más honestos que mentirosos, lo que 
+    implica que más de la mitad de las personas son honestas. La estrategia 
+    será encontrar a una persona honesta para que nos indique si las demás 
+    personas son honestas o mentirosas (esto porque un honesto siempre dice 
+    la verdad). Para encontrar al honesto, vamos a agrupar a las $n$ personas 
+    en pares de la forma $(X, Y)$. Así, tenemos dos casos:
+    \begin{itemize}
+        \item $n$ es par. Entonces logramos formar todos nuestros pares sin 
+        problemas. Luego, le preguntamos a $X$ si $Y$ es honesto y le 
+        preguntamos a $Y$ si $X$ es honesto. De acuerdo a sus respuestas, 
+        tenemos cuatro posibles opciones:
+        \begin{itemize}
+            \item $X$ y $Y$ responden que la otra persona es honesta. Por 
+            lo que \texttt{respuesta = YY}.
+
+            \item $X$ responde que $Y$ es honesto, pero $Y$ responde que $X$ 
+            no lo es. Por lo que \texttt{respuesta = YN}.
+
+            \item $X$ responde que $Y$ no es honesta, pero $Y$ responde que 
+            $X$ sí lo es. Por lo que \texttt{respuesta = NY}.
+
+            \item $X$ y $Y$ responden que la otra persona no es honesta. Por 
+            lo que \texttt{respuesta = NN}.
+        \end{itemize}
+
+        Gracias a estas respuestas, tenemos lo siguiente: 
+        \begin{itemize}
+            \item Si de la pareja $(X,Y)$ obtenemos una \texttt{respuesta} del 
+            tipo \texttt{NY} ó \texttt{YN}, eso implica que al menos una persona
+            es mentirosa. Entonces, descartamos esta pareja. Como eliminamos 
+            a una persona honesta y a una mentirosa, entonces se mantiene el
+            hecho de que tenemos más honestos que mentirosos. 
+
+            \item Si de la pareja $(X,Y)$ obtenemos una \texttt{respuesta} del 
+            tipo \texttt{NN}, eso implica que al menos una persona es mentirosa.
+            Entonces, descartamos esta pareja. Como eliminamos a una persona 
+            honesta y a una mentirosa, entonces se mantiene el hecho de que 
+            tenemos más honestos que mentirosos.
+
+            \item Si de la pareja $(X,Y)$ obtenemos una \texttt{respuesta} del 
+            tipo \texttt{YY}, eso implica que ambas personas son honestas o 
+            son mentirosas. Entonces, nos quedamos con una persona del par. 
+            Notemos que como hay más honestos que mentirosos, entonces siempre 
+            tendremos una pareja de honestos. Luego, si ambos eran mentirosos, 
+            entonces eliminamos a un mentiroso; y si ambos eran honestos, 
+            entonces eliminamos a un honesto. Por esto, se mantiene el hecho 
+            de que tenemos más honestos que mentirosos. 
+        \end{itemize}
+
+        En esta primera pasada sobre las parejas, en el peor de los casos 
+        (todas las parejas cumplen que sus \texttt{respuestas} son del tipo 
+        \texttt{YY}) obtenemos a lo más $\lceil \frac{n}{2} \rceil$ parejas, 
+        pues no podemos descartar a ninguna. Notemos además que ocupamos  
+        $\lfloor \frac{n}{2} \rfloor$ comparaciones. 
+        
+        Ahora bien, aplicamos este mismo razonamiento para las 
+        $\lceil \frac{n}{2} \rceil$ parejas que nos quedan, y así sucesivamente.
+        Como hay más honestos que mentirosos y a las $n$ personas las agrupamos 
+        en parejas, entonces necesariamente nos quedan dos personas al final 
+        del proceso. Y como siempre se mantuvo la invariante, entonces la persona 
+        que nos queda al final es una persona honesta.  
+
+        \item $n$ es impar. Entonces nos sobra una persona al momento de formar
+        los pares. Esa persona la apartamos, y realizamos el proceso del inciso 
+        anterior con las parejas que sí logramos formar. Tenemos dos casos:
+        \begin{itemize}
+            \item La última pareja que obtenemos tiene una \texttt{respuesta} 
+            del tipo \texttt{NY, YN o NN}. Entonces, descartamos a esa pareja 
+            y nos quedamos con la persona que aislamos, pues esa debería de 
+            ser la persona honesta (ya que hay más honestos que mentirosos).
+
+            \item La última pareja que obtenemos tiene una \texttt{respuesta}
+            del tipo \texttt{YY}. Entonces, obtenemos a una persona honesta.
+            Así, ya no es necesaria la comparación con la persona que aislamos, 
+            pues no importa si es honesta o mentirosa, ya que encontramos a una 
+            persona honesta. 
+        \end{itemize}
+    \end{itemize}
+
+    Una vez que encontramos a una persona honesta, como él siempre dice la 
+    verdad, entonces ya sólo queda preguntarle por las demás $n-1$ personas 
+    para poder clasificarlas en honestas y mentirosas. 
+
+    Este algoritmo funciona porque, utilizando las diferentes respuestas que 
+    podemos obtener de nuestras parejas, siempre garantizamos que se cumpla 
+    la invariante sobre que hay más honestos que mentirosos. 
+
+    Ahora bien, el tiempo para encontrar a una persona honesta está dado por 
+    la recurrencia
+    \begin{equation*}
+        T(n) =
+        \left\{
+            \begin{array}{ll}
+                O(1)  & n = 1 \\
+                T(\lceil \frac{n}{2} \rceil) + \lfloor \frac{n}{2} \rfloor & 
+                n > 1
+            \end{array}
+        \right.
+    \end{equation*}
+
+    donde $T(\lceil \frac{n}{2} \rceil)$ se refiere a resolver el problema con 
+    el mismo algoritmo, pero con a lo más $\lceil \frac{n}{2} \rceil$ pares; 
+    mientras que $\lfloor \frac{n}{2} \rfloor$ se refiere al número de 
+    comparaciones por parejas que debemos de realizar para partir el problema 
+    aproximadamente a la mitad. Tenemos que $\lfloor \frac{n}{2} \rfloor$ es 
+    claramente lineal. Luego, el proceso \textit{recursivo} del algoritmo 
+    se realiza sobre un número de pares $\frac{n}{2}$, $\frac{n}{4}$, 
+    $\frac{n}{8}$, etc. Así, podemos considerar la serie geométrica:
+    \begin{align*}
+        \sum_{i=1}^{\infty} \left(\frac{n}{2} \right)^i 
+        &= \sum_{i=1}^{\infty} \left(\frac{1}{2} \cdot n \right)^i \\
+        &= n \cdot \sum_{i=1}^{\infty} \left(\frac{1}{2}\right)^i \\
+        &= n \cdot \frac{\frac{1}{2}}{1 - \frac{1}{2}} \\
+        &= n \cdot \frac{\frac{1}{2}}{\frac{1}{2}} \\
+        &= n \cdot 1 \\
+        &= n 
+    \end{align*}
+
+    Por lo que, la solución de la recurrencia es 
+    \begin{equation*}
+        T(n) = \Theta(n) + \Theta(n) = \Theta(n) 
+    \end{equation*}
+
+    Así, necesitamos $\Theta(n)$ comparaciones para obtener a una persona 
+    honesta. Y como sólo resta hacer $n-1$ comparaciones para poder clasificar 
+    a las personas en honestas y mentirosas, entonces necesitamos $\Theta(n-1)$
+    comparaciones. Por lo tanto, necesitamos $\Theta(n) + \Theta(n-1)$ 
+    comparaciones en total para resolver el problema. 
+
+    En particular, si $n = 100$ entonces tenemos que $n$ es par. Aplicamos 
+    la estrategia explicada anteriormente para resolver el problema, así 
+    que nosotros sabemos que el número mínimo de preguntas que debemos 
+    realizar en el peor caso es de $100 + (100 - 1) = 199$. También podemos 
+    notar que sí se puede resolver el problema en menos de $280$ preguntas.
 
     % Ejercicio 8.
     \item Suponga que tenemos dos arreglos ordenados $A[1 \dots n]$ y 
