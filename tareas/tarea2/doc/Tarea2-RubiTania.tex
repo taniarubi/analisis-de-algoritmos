@@ -599,8 +599,8 @@
     ¿Hay algún elemento de $A$ que aparezca al menos $\frac{n}{3}$ veces? 
     Encuentre un algoritmo lineal para resolver este problema.
 
-    \textsc{Solución:} Primero, necesitamos encontrar elementos que sean 
-    candidatos 
+    \textsc{Solución:} Primero, necesitamos encontrar los elementos que son  
+    candidatos a que se repitan $\frac{n}{3}$ veces. 
 
     % Ejercicio 5.
     \item Sea $A[1, \ldots , n]$ un arreglo de números reales. Diseña un 
@@ -1240,9 +1240,7 @@
         &= \sum_{i=1}^{\infty} \left(\frac{1}{2} \cdot n \right)^i \\
         &= n \cdot \sum_{i=1}^{\infty} \left(\frac{1}{2}\right)^i \\
         &= n \cdot \frac{\frac{1}{2}}{1 - \frac{1}{2}} \\
-        &= n \cdot \frac{\frac{1}{2}}{\frac{1}{2}} \\
-        &= n \cdot 1 \\
-        &= n 
+        &= n \cdot \frac{\frac{1}{2}}{\frac{1}{2}} = n \cdot 1 = n 
     \end{align*}
 
     Por lo que, la solución de la recurrencia es 
@@ -1253,7 +1251,10 @@
     Así, necesitamos $\Theta(n)$ comparaciones para obtener a una persona 
     honesta. Y como sólo resta hacer $n-1$ comparaciones para poder clasificar 
     a las personas en honestas y mentirosas, entonces necesitamos $\Theta(n-1)$
-    comparaciones. Por lo tanto, necesitamos $\Theta(n) + \Theta(n-1)$ 
+    comparaciones. Por lo tanto, necesitamos 
+    \begin{equation*}
+        \Theta(n) + \Theta(n-1) = \Theta(n)
+    \end{equation*} 
     comparaciones en total para resolver el problema. 
 
     En particular, si $n = 100$ entonces tenemos que $n$ es par. Aplicamos 
@@ -1266,13 +1267,149 @@
     \item Suponga que tenemos dos arreglos ordenados $A[1 \dots n]$ y 
     $B[1 \dots n]$ y un entero $k$. Describe un algoritmo para encontrar el 
     $k$-ésimo elemento en la unión de $A$ y $B$. Por ejemplo, si $k = 1$, tu 
-    algoritmo debe regresar al elemento más pequeño de $A \cup B$; si $k = n$, tu 
-    algoritmo debe regresar la mediana de $A \cup B$. Puedes suponer que los 
-    arreglos no contienen duplicados. Tu algoritmo debe tener complejidad de 
-    tiempo $\Theta(\log n)$. Hint: Primero resuelve el caso especial $k = n$.
+    algoritmo debe regresar al elemento más pequeño de $A \cup B$; si $k = n$, 
+    tu algoritmo debe regresar la mediana de $A \cup B$. Puedes suponer que 
+    los arreglos no contienen duplicados. Tu algoritmo debe tener complejidad 
+    de tiempo $\Theta(\log n)$. Hint: Primero resuelve el caso especial $k = n$.
 
-    \textsc{Solución:} Sabemos que ambos arreglos $A$ y $B$ son del mismo 
-    tamaño $n$. 
+    \textsc{Solución:} Primero resolveremos el caso especial $k = n$, es decir, 
+    analizaremos un algoritmo para encontrar al $n-$ésimo elemento de $A \cup B$.
+    Como no tenemos elementos duplicados, y ambos arreglos son de longitud $n$, 
+    entonces $|A \cup B| = 2n$. Así, el $n-$ésimo elemento de $A \cup B$ será 
+    su mediana. Para encontrarla, vamos a posicionarnos en las medianas de $A$ 
+    y $B$ por separado, los comparamos y vemos cómo son entre sí. 
+    
+    Sin pérdida de generalidad, suponemos que
+    \begin{equation*}
+        M_A = A[\lceil \frac{n}{2} \rceil] \leq 
+        B[\lceil \frac{n}{2} \rceil] = M_B
+    \end{equation*}
+
+    pues, en otro caso, basta con que intercambiémos los nombres. Como los 
+    arreglos están ordenados, entonces 
+    \begin{align*}
+        A[1], \ldots, A[\lceil \frac{n}{2} \rceil - 1]
+        &< A[\lceil \frac{n}{2} \rceil] \\
+        &\leq B[\lceil \frac{n}{2} \rceil] \\
+        &< B[\lceil \frac{n}{2} \rceil + 1], \ldots, B[n]
+    \end{align*}
+
+    Así, la mediana de $A$ puede ser a lo más mayor o igual a los 
+    $\lceil \frac{n}{2} \rceil - 1$ elementos anteriores a él en A y a los 
+    $\lceil \frac{n}{2} \rceil - 1$ elementos anteriores a la mediana de $B$.
+    Por lo que, a lo más tenemos
+    \begin{equation*}
+        M_A = A[\lceil \frac{n}{2} \rceil] \geq 
+              2 \left(\lceil \frac{n}{2} \rceil - 1\right) 
+            \approx n - 2 < n
+    \end{equation*}
+
+    Esto significa que no importa cómo vayan a estar acomodados los elementos
+    anteriores a $M_A$ en $A \cup B$ junto con los elementos anteriores a 
+    $M_B$ (de los cuales no sabemos nada), a lo más se tendría un número de 
+    ellos menor a $n$; lo que implica que el $n-$ésimo elemento de $A \cup B$ 
+    no puede estar en $A[1], \ldots, A[\lceil \frac{n}{2} \rceil] - 1$ 
+    independientemente de los elementos menores a $M_B$, pues nunca sumarán 
+    más de $n$ elementos en total. Así, podemos descartar esta parte. 
+
+    Luego, tenemos al menos $n$ elementos que son menores o iguales a $M_B$: 
+    los elementos $B[1], \ldots, B[\lceil \frac{n}{2} \rceil]$ y los 
+    elementos $A[1], \ldots, A[\lceil \frac{n}{2} \rceil]$; por lo que 
+    \begin{equation*}
+        2 \left(\lceil \frac{n}{2} \rceil\right) \approx n
+    \end{equation*}
+
+    Notemos además que pueden existir elementos que sean mayores o iguales a 
+    $M_B$ y que estén ubicados a la derecha de $M_A$ (de los cuales no sabemos 
+    nada). Por lo que, hay al menos $n$ elementos en $A \cup B$ hasta llegar a 
+    $M_B$. Por ende, el $n-$ésimo elemento no puede estar en 
+    $B[\lceil \frac{n}{2} \rceil + 1], \ldots, B[n]$, ya que contiene elementos 
+    que están \textit{más allá} del elemento que buscamos. Así, podemos 
+    descartar esta parte. 
+
+    De esta forma, descartamos una mitad de cada uno de los arreglos $A$ y $B$.
+    Aplicamos este mismo razonamiento en las mitades 
+    $A[\lceil \frac{n}{2} \rceil], \ldots, A[n]$ y 
+    $B[1], \ldots, B[\lceil \frac{n}{2} \rceil]$; y así sucesivamente. Si en 
+    algún punto llegamos a tener dos subarreglos con un solo elemento, entonces 
+    tenemos que regresar el menor de éstos o su promedio (dependiéndo de cómo 
+    definamos la mediana). Y si el tamaño de los dos arreglos es dos, entonces 
+    tomamos al menor de los primeros dos elementos de cada arreglo, los sumamos 
+    con el menor de los segundos y el resultado lo dividimos entre dos para 
+    encontrar la mediana. 
+
+    Este algoritmo funciona porque nos encargamos de descartar las mitades de 
+    los arreglos con los que vamos trabajando en las cuales no puede estar el 
+    $n-$ésimo elemento que buscamos. Así, garantizamos que siempre tenemos a 
+    los subarreglos donde el $n-$ésimo elemento de $A \cup B$ sí puede estar.
+    Además, al final realizamos las operaciones correspondientes para poder 
+    encontrar correctamente a nuetra mediana. 
+
+    Luego, como siempre estamos trabajando con subarreglos de tamaño 
+    $\frac{n}{2}, \frac{n}{4}, \frac{n}{8}, \ldots, 1$ para ambos $A$ y $B$
+    (en el peor de los casos) y el resto de nuestras operaciones nos cuestan 
+    tiempo constante, entonces este algoritmo en total nos toma 
+    \begin{equation*}
+        \Theta(\log n) + \Theta(\log n) = \Theta(\log n). 
+    \end{equation*}
+
+    Finalmente, podemos generalizar este algoritmo para encontrar al $k-$ésimo 
+    elemento de $A \cup B$ bajo las mismas hipótesis iniciales. Consideramos 
+    ahora a las medianas de los arreglos $A$ y $B$ como $M_A = 
+    A[\lceil \frac{n}{2} \rceil]$ y $M_B = B[k - \lceil \frac{n}{2} \rceil + 1]$,
+    respectivamente. Sin pérdida de generalidad, si tenemos que
+    \begin{equation*}
+        B[k - \lceil \frac{n}{2} \rceil] < 
+        A[\lceil \frac{n}{2} \rceil] < 
+        B[k - \lceil \frac{n}{2} \rceil + 1]
+    \end{equation*}
+
+    entonces $M_B - 1 < M_A < M_B$. Esto quiere decir que como $M_A$ es más 
+    grande que
+    \begin{equation*}
+        (k - \lceil \frac{n}{2} \rceil) + (\lceil \frac{n}{2} \rceil - 1) = k-1
+    \end{equation*} 
+    
+    elementos de ambos arreglos $A$ y $B$, entonces $M_A$ debe de ser el 
+    elemento $(k-1)+1 = k$ que buscamos (pues no hay duplicados). Luego, si 
+    $M_A < M_B - 1$ entonces $M_A$ puede ser mayor a lo más de
+    \begin{equation*}
+        (\lceil \frac{n}{2} \rceil - 1) + 
+        (k - \lceil \frac{n}{2} \rceil - 1) = k-2
+    \end{equation*} 
+    
+    elementos. Y como $k-2 < k$, entonces, usando un argumento similar para 
+    cuando resolvimos $k=n$, el $k-$ésimo elemento no puede estar en 
+    $A[1], \ldots, A[\lceil \frac{n}{2} \rceil - 1]$. Análogamente, tenemos 
+    al menos
+    \begin{equation*}
+        (k - \lceil \frac{n}{2} \rceil + 1) + \lceil \frac{n}{2} \rceil = k+1
+    \end{equation*}
+
+    elementos menores o iguales que $M_B$ en $A \cup B$. Como $k < k+1$, 
+    entonces al menos hay $k$ elementos al llegar a $M_B$ en $A \cup B$. 
+    Así, podemos descartar a $B[k - \lceil \frac{n}{2} \rceil + 2], \ldots,
+    B[n]$. 
+
+    De esta forma, descartamos una mitad de ambos arreglos $A$ y $B$. 
+    Aplicamos este mismo razonamiento en las mitades 
+    $A[\lceil \frac{n}{2} \rceil], \ldots, A[n]$ y 
+    $B[1], \ldots, B[k - \lceil \frac{n}{2} \rceil + 1]$, y así sucesivamente. 
+    Si al final obtenemos un arreglos de longitud $1$ o $2$, aplicamos la misma 
+    lógica que usamos cuando resolvimos $k=n$.
+
+    Este algoritmo funciona porque siempre garantizamos buscar en subarreglos 
+    donde el $k-$ésimo elemento de $A \cup B$ debería de estar. Esto lo 
+    hacemos al ir descartándo las mitades donde el elemento $k$ definitivamente 
+    no podría estar.
+
+    Luego, como siempre estamos trabajando con subarreglos de tamaño 
+    $\frac{n}{2}, \frac{n}{4}, \frac{n}{8}, \ldots, 1$ para ambos arreglos 
+    $A$ y $B$ (en el peor de los casos) y el resto de las operaciones nos 
+    cuestan tiempo constante, entonces el algoritmo en total nos toma 
+    \begin{equation*}
+        \Theta(\log n) + \Theta(\log n) = \Theta(\log n)
+    \end{equation*}
 
     % Ejercicio 9.
     \item Considera que un río fluye de norte a sur con caudal constante. 
