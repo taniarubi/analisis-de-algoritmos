@@ -1493,26 +1493,156 @@
     \textsc{Solución:} Supongamos que las ciudades a la izquierda del río son 
     $a_1, a_2, \ldots, a_n$ y las ciudades a la derecha del río son $b_1, b_2, 
     \ldots, b_n$. Como las ciudades fueron etiquetadas con un número del $1$ al 
-    $n$, entonces definimos una función \texttt{etiqueta} que nos regresa el 
+    $n$, entonces definimos una función \texttt{label} que nos regresa el 
     número que le fue asignado a cada una de las ciudades. Luego, escogemos las 
-    ciudades de un lado del río para poder 
-    Sin pérdida de generalidad, digamos que escogemos las ciudades del lado 
-    izquierdo del río para etiquetarlas y ordenarlas. Así, las ciudades de ese 
-    lado del río quedarían como: 
-    \begin{align*}
-        c_1 &= 1 \rightarrow a_1 \\
-        c_2 &= 2 \rightarrow a_2 \\
-        &\ldots \\
-        c_n &= n \rightarrow a_n 
-    \end{align*}
-
-    y
+    ciudades de un lado del río para poder ordenarlas, de acuerdo a su número, 
+    en forma ascendente. Sin pérdida de generalidad, digamos que escogemos las 
+    ciudades del lado izquierdo del río para ordenarlas. Así, las ciudades de 
+    ese lado del río quedarían como
     \begin{equation*}
-    c_1 < c_2 < \ldots < c_n
+        \texttt{label}(a_1) < \texttt{label}(a_2) < \ldots < \texttt{label}(a_n)
+    \end{equation*}
+
+    ya que la función es inyectiva (dos ciudades no tienen el mismo número).
+    Supongamos ahora que las ciudades que satisfacen este órden están dadas por 
+    la secuencia 
+    \begin{equation*}
+        x_1, x_2, \ldots, x_n
     \end{equation*}
 
     Ahora bien, mientras ordenamos las ciudades del lado izquierdo del río, 
-    también vamos a ir moviéndo las ciudades que estaban asociadas 
+    también vamos a ir moviéndo las ciudades que estaban asociadas con dicha 
+    ciudad del otro lado del río. Es decir, si $x_1 = a_i$ entonces $y_i = b_i$, 
+    donde $y_i$ con $i \in \{1, ..., n\}$ será este nuevo ordenamiento inducido 
+    en las ciuades del lado derecho del río. 
+
+    Consideremos la secuencia de números
+    \begin{equation*}
+        S_1 = \langle \texttt{label}(x_1), \ldots, \texttt{label}(x_n) \rangle
+    \end{equation*}
+    
+    del lado izquierdo del río y la secuencia de números 
+    \begin{equation*}
+        S_2 = \langle \texttt{label}(y_1), \ldots, \texttt{label}(y_n) \rangle
+    \end{equation*}
+
+    del lado derecho del río. Vamos a demostrar que la solución al problema es 
+    la longitud de la subsecuencia común más larga entre $S_1$ y $S_2$.
+
+    \begin{proof}
+        Sea $t$ el tamaño de la subsecuencia común más larga de $S_1$ y $S_2$
+        y sea $p$ el máximo número de puentes que podemos tener sin que se 
+        crucen. Consideremos a $z_1, z_2, \ldots, z_t$ como la subsecuencia
+        común más larga que corresponde a las ciudades $x_1, x_2, \ldots, x_t$ 
+        y $y_1, y_2, \ldots, y_t$. Entonces, para cada $1 \leq i \leq t$
+        vamos a poder crear un puente entre la ciudad $x_i$ y $y_i$ y no se 
+        van a intersectar, pues un puente sólo se puede crear entre números 
+        iguales y la subsecuencia crece cuando los símbolos coinciden. Así, 
+        al menos podemos tener tantos puentes como $t$ (que es la longitud 
+        de la subsecuencia común más larga), es decir, $t \leq p$.
+
+        Veamos ahora que la subsecuencia común más larga es al menos el máximo 
+        número de puentes que se pueden colocar para tener la igualdad $t = p$.
+        Supongamos que podemos colocar un total de $p$ puentes entre las 
+        ciudades $x_1, x_2, \ldots, x_p$ y $y_1, y_2, \ldots, y_p$. Sabemos 
+        entonces también que \texttt{label}$(x_i) = $ \texttt{label}$(y_i)$ 
+        con $i \in \{1, 2, \ldots, p\}$ para que dicho puente pueda ser 
+        formado. Además, se debe cumplir que
+        \begin{center}
+            \texttt{label}$(y_k) < $ \texttt{label}$(y_i) < $ 
+            \texttt{label}$(y_j)$
+        \end{center} 
+        
+        con $j \in \{1, 2, \ldots, i-1\}$ y $j \in \{i+1, \ldots, p\}$ para que 
+        estos puentes no se crucen entre sí. Por lo que, \texttt{label}$(x_1), 
+        \ldots, $ \texttt{label}$(x_p)$ es una subsecuencia de $S_1$ y a su vez 
+        \texttt{label}$(x_1), \ldots, $ \texttt{label}$(x_p)$ es una subsecuencia
+        de $S_2$ y es común a ambas para que los puentes pudieran colocarse. 
+        Así, el tamaño de la subsecuencia común más larga es al menos de la 
+        longitud del número de puentes que pueden colocarse, es decir, $p \leq m$.
+
+        Luego, como 
+        \begin{equation*}
+            m \leq p \land p \leq m \quad \Rightarrow \quad m = p
+        \end{equation*}
+
+        entonces podemos concluir que el número máximo de puentes que pueden 
+        colocarse corresponde a la subsecuencia común más larga de $S_1$ y 
+        $S_2$.
+
+    \end{proof}
+
+    Entonces, para obtener la longitud de esta subsecuencia, utilizaremos 
+    programación dinámica para almacenar los valores de la subsecuencia común 
+    más larga en una matriz dimensional de $n \times m$. 
+    
+    Sean las secuencias 
+    \begin{equation*}
+        X = \langle x_1, x_2, \ldots, x_m \rangle \quad \quad 
+        Y = \langle y_1, y_2, \ldots, y_n \rangle
+    \end{equation*}
+
+    de longitud $m$ y $n$, respectivamente. Por lo visto en clase, tenemos que 
+    \begin{itemize}
+        \item Si $x_m = y_n$ entonces debemos encontrar la $LCS$ de $X_{m-1}$ y 
+        $Y_{n-1}$. Al agregar $x_m = y_n$ se obtiene la $LCS$ de $X$ y $Y$ (pues 
+        no puede existir una más grande).
+
+        \item Si $x_m \neq y_n$ entonces debemos resolver dos subproblemas: 
+        $LCS(X_{m-1}, Y)$ y $LCS(X, Y_{n-1})$, El que sea más largo resolverá 
+        el $LCS(X, y)$. Notemos que para resolver cualquiera de las dos $LCS$
+        anteriores podríamos tener que calcular $LCS(X_{m-1}, Y_{n-1})$, lo 
+        que implica que podríamos tener subproblemas superpuestos, y por lo 
+        tanto, la programación dinámica nos ayudaría.
+    \end{itemize}
+    
+    Definimos a $c[i, j]$ como la longitud de una secuencia común más larga de 
+    las secuencias $X_i$ e $Y_j$. Si $i = 0$ o $j = 0$, entonces una de las 
+    secuencias es de longitud $0$, lo que implica que la subsecuencia común 
+    más larga es de longitud $0$. Así, por lo visto en clase, la subestructura 
+    óptima del problema $LCS$ está dada por la siguiente fórmula recursiva:
+    \begin{equation*}
+        c[i, j] =
+        \left\{
+            \begin{array}{ll}
+                0 & \text{if $i = 0$ o $j = 0$} \\
+                c[i-1, j-1] + 1 & \text{if $i, j > 0$ y $x_i = y_j$} \\
+                max(c[i, j-1], c[i-1, j]) & \text{if $i, j > 0$ y $x_i \neq y_j$}
+            \end{array}
+        \right.
+    \end{equation*}
+
+    Como el problema $LCS$ tiene sólo $\Theta(mn)$ distintos subproblemas, 
+    entonces es posible usar programación dinámica para resolverlo. Consideremos
+    a las secuencias $X$ y $Y$ definidas anteriormente como nuestras secuencias 
+    de entrada. Almacenamos los valores de $c[i,j]$ en una tabla  
+    $c[0 \ldots m, 0 \ldots n]$ y calculamos el valor de las entradas en orden de 
+    mayor a menor, es decir, la primera fila de $c$ se calcula de izquierda a 
+    derecha, luego hacemos lo mismo con la segunda fila, y así sucesivamente.
+    Este procedimiento mantiene una tabla $b[1 \ldots m, 1 \ldots n]$ para 
+    ayudar a construir una solcuión óptima. Así, $b[i, j]$ apunta a la entrada 
+    de la matriz correspondiente a la solución óptima del subproblema elegido 
+    al calcular $c[i, j]$. El algoritmo regresa las tablas $b$ y $c$, por lo 
+    que $c[i, j]$ contiene la longitud de la subsecuencia común más larga. 
+
+    Este proceso se puede ver como:
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\linewidth]{imagenes/LCS.png}
+        \caption{Algoritmo LCS (Cormen, pag. 394)}
+        \label{fig:lcs}
+    \end{figure}
+
+    Este algoritmo funciona porque en cada paso, siempre mantenemos la solución
+    más óptima hasta el momento, lo que eventualmente nos llevará a encontrar 
+    la subsecuencia común más larga. Ahora bien, tenemos dos ciclos que son 
+    lineales $O(m)$ y $O(n)$ en las líneas $4 - 7$; pero en las líneas $8 - 17$ 
+    tenemos dos ciclos anidados, lo que hace que tenga una complejidad de 
+    $O(mn)$. Así, este algoritmo nos toma $O(mn)$ tiempo en total.
+
+    Por lo tanto, podemos aplicar este algoritmo para encontrar la longitud de 
+    la subsecuencia más larga entre $S_1$ y $S_2$ en tiempo $O(n \times n) = 
+    O(n^2)$.
 
 \end{enumerate}
 \end{document}
