@@ -600,7 +600,78 @@
     Encuentre un algoritmo lineal para resolver este problema.
 
     \textsc{Solución:} Primero, necesitamos encontrar los elementos que son  
-    candidatos a que se repitan $\frac{n}{3}$ veces. 
+    candidatos a que se repitan $\frac{n}{3}$ veces. A lo más podemos tener 
+    $3$ candidatos, pues en caso de que éstos se repitan $\frac{n}{3}$ veces, 
+    entonces obtenemos el tamaño completo del arreglo. Así, creamos un arreglo 
+    auxiliar $B$ de tamaño $3$. La estrategia es recorrer el arreglo $A$ una 
+    primera vez para poder encontrar a los candidatos. Esto se hará como
+    sigue:
+    \begin{itemize}
+        \item Definimos los contadores $cc_1 = cc_2 = cc_3 = 0$. A cada uno 
+        de estos contadores le corresponde una entrada del arreglo $B$,
+        respectivamente.
+
+        \item Definimos un contador $i = 3$ para recorrer el arreglo.
+
+        \item Agregamos a los tres primeros elementos de $A$ al arreglo $B$ y 
+        aumentamos en una unidad a los tres contadores $cc$.
+        
+        \item Mientras $i < n$, hacemos:
+        \begin{itemize}
+            \item Si A[i] es igual a uno de los elementos de $B$, entonces 
+            aumentamos su respectivo contador.
+
+            \item En caso contrario, le restamos una unidad a todos nuestros 
+            contadores $cc$ y colocamos a $A[i]$ en cualquier posición del arreglo 
+            $B$ cuyo contador sea igual a $0$. 
+        \end{itemize}
+    \end{itemize}
+
+    Una vez que tenemos a nuestros candidatos, entonces le cambiamos el valor a 
+    nuestras variables $cc$ (ya que el valor que tenían antes ya no importa):
+    \begin{equation*}
+        c_1 = B[0] \quad \quad c_2 = B[1] \quad \quad c_3 = B[2]
+    \end{equation*} 
+    
+    las cuales tendrán ahora los valores de cada uno de nuestros candidatos. 
+    Así, basta con recorrer el arreglo $A$ como sigue:
+    \begin{itemize}
+        \item Definimos una variable $i=0$ para recorrer el arreglo.
+
+        \item Mientras $i < n$, hacemos:
+        \begin{itemize}
+            \item Si A[i] es igual a $c_1$, entonces aumentamos en una unidad 
+            al contador $cc_1$.
+
+            \item Si A[i] es igual a $c_2$, entonces aumentamos en una unidad 
+            al contador $cc_2$.
+
+            \item Si A[i] es igual a $c_3$, entonces aumentamos en una unidad 
+            al contador $cc_3$.
+        \end{itemize}
+    \end{itemize}
+
+    Si hay algún contador $cc$ que sea igual a $\frac{n}{3}$, entonces 
+    regresamos \texttt{true}. En caso contrario, regresamos \texttt{false}.
+
+    El algoritmo funciona porque garantizamos que el arreglo auxiliar $B$ 
+    contendrá al elemento que se repite $\frac{n}{3}$ veces. Esto se debe a 
+    que si existe tal elemento, entonces debería de aparecer un número 
+    suficiente de veces para que el arreglo lo guarde. Es decir, la primera 
+    parte del algoritmo se encarga de buscar a los elementos que se repiten 
+    más. Si un elemento se repite una cantidad \textit{significativa} de 
+    veces, entonces al momento de restar una unidad a los contadores, 
+    este elemento no podrá ser eliminado; o bien, si es eliminado, 
+    eventualmente volverá a guardarse en $B$. Así, podemos estar seguros 
+    de que guardamos al menos a un elemento que cumple la propiedad solicitada.
+
+    Ahora bien, encontrar a los elementos candidatos nos cuesta 
+    $3 \cdot O(n) = O(n)$, pues en el peor de los casos debemos recorrer todo 
+    el arreglo auxiliar $B$ (de tamaño $3$) $n$ veces. Luego, recorremos 
+    todo el arreglo $A$ para poder contar el número de apariciones de los 
+    candidatos, y eso nos toma tiempo lineal. El resto de las operaciones nos 
+    toman timpo constante. Por lo tanto, la complejidad total del algoritmo es 
+    de $O(n) + O(n) = O(n)$.
 
     % Ejercicio 5.
     \item Sea $A[1, \ldots , n]$ un arreglo de números reales. Diseña un 
