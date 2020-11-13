@@ -1482,6 +1482,17 @@
         \Theta(\log n) + \Theta(\log n) = \Theta(\log n)
     \end{equation*}
 
+    Otra forma de justificar la complejidad del algoritmo es por medio de su 
+    recurrencia. La recurrencia de este algoritmo es 
+    \begin{equation*}
+        T(n) = T\left(\frac{n}{2} \right) + O(1)
+    \end{equation*}
+
+    ya que cada vez partimos el problema a la mitad (dividimos a los arreglos 
+    en mitades) y el tiempo que nos toma hacer las comparaciones en cada etapa
+    es constante. Notemos que esta es la recurrencia de búsqueda binaria, y 
+    por lo visto en clase, su solución es de $\Theta(\log n)$.
+
     % Ejercicio 9.
     \item Considera que un río fluye de norte a sur con caudal constante. 
     Suponga que hay $n$ ciudades en ambos lados del río, es decir $n$ ciudades a 
