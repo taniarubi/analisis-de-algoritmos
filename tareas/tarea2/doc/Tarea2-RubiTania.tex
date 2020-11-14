@@ -1585,7 +1585,7 @@
 
     Entonces, para obtener la longitud de esta subsecuencia, utilizaremos 
     programación dinámica para almacenar los valores de la subsecuencia común 
-    más larga en una matriz dimensional de $n \times m$. 
+    más larga en una matriz dimensional de $m \times n$. 
     
     Sean las secuencias 
     \begin{equation*}
@@ -1626,15 +1626,32 @@
     Como el problema $LCS$ tiene sólo $\Theta(mn)$ distintos subproblemas, 
     entonces es posible usar programación dinámica para resolverlo. Consideremos
     a las secuencias $X$ y $Y$ definidas anteriormente como nuestras secuencias 
-    de entrada. Almacenamos los valores de $c[i,j]$ en una tabla  
-    $c[0 \ldots m, 0 \ldots n]$ y calculamos el valor de las entradas en orden de 
-    mayor a menor, es decir, la primera fila de $c$ se calcula de izquierda a 
-    derecha, luego hacemos lo mismo con la segunda fila, y así sucesivamente.
-    Este procedimiento mantiene una tabla $b[1 \ldots m, 1 \ldots n]$ para 
-    ayudar a construir una solcuión óptima. Así, $b[i, j]$ apunta a la entrada 
-    de la matriz correspondiente a la solución óptima del subproblema elegido 
-    al calcular $c[i, j]$. El algoritmo regresa las tablas $b$ y $c$, por lo 
-    que $c[i, j]$ contiene la longitud de la subsecuencia común más larga. 
+    de entrada. Iteramos a través de dos ciclos de longitudes $n$ y $m$ y 
+    usamos el siguiente algoritmo para actualizar los valores de $c[i,j]$:
+    \begin{itemize}
+        \item Si alguna de las variables del ciclo $i$ o $j$ es $0$, entonces 
+        $c[i][j] = 0$.
+
+        \item Si los números en los índices $i,j$ coinciden, entonces 
+        $c[i][j] = 1 + $c[i-1][j-1]
+
+        \item En otro caso, almacenamos el valor máximo que obtenemos después 
+        de considerar el número $x_i$ o el número $y_j$; es decir, 
+        $c[i][j] = max(c[i][j-1], c[i-1][j])$
+    \end{itemize}
+    
+    Así, almacenamos los valores de $c[i,j]$ en una tabla $c[0 \ldots m, 
+    0 \ldots n]$ y calculamos el valor de las entradas en orden de mayor a 
+    menor, es decir, la primera fila de $c$ se calcula de izquierda a derecha, 
+    luego hacemos lo mismo con la segunda fila, y así sucesivamente. Este 
+    procedimiento mantiene una tabla $b[1 \ldots m, 1 \ldots n]$ para ayudar a 
+    construir una solcuión óptima. Así, $b[i, j]$ apunta a la entrada de la 
+    matriz correspondiente a la solución óptima del subproblema elegido al 
+    calcular $c[i, j]$. El algoritmo regresa las tablas $b$ y $c$, por lo que 
+    $c[i, j]$ contiene la longitud de la subsecuencia común más larga. 
+    Por lo tanto, el algoritmo funciona porque en cada paso, siempre mantenemos 
+    la solución más óptima hasta el momento, lo que eventualmente nos llevará a 
+    encontrar la subsecuencia común más larga. 
 
     Este proceso se puede ver como:
     \begin{figure}[h]
@@ -1644,16 +1661,15 @@
         \label{fig:lcs}
     \end{figure}
 
-    Este algoritmo funciona porque en cada paso, siempre mantenemos la solución
-    más óptima hasta el momento, lo que eventualmente nos llevará a encontrar 
-    la subsecuencia común más larga. Ahora bien, tenemos dos ciclos que son 
-    lineales $O(m)$ y $O(n)$ en las líneas $4 - 7$; pero en las líneas $8 - 17$ 
-    tenemos dos ciclos anidados, lo que hace que tenga una complejidad de 
-    $O(mn)$. Así, este algoritmo nos toma $O(mn)$ tiempo en total.
+    Ahora bien, tenemos dos ciclos que son lineales $\Theta(m)$ y $\Theta(n)$ en 
+    las líneas $4 - 7$; pero en las líneas $8 - 17$ tenemos dos ciclos anidados 
+    (para encontrar la $LCS$) lo que hace que tengan una complejidad de 
+    $\Theta(mn)$, donde $n$ y $m$ son las longitudes de las secuencias. Así, 
+    este algoritmo nos toma $\Theta(mn)$ tiempo en total.
 
     Por lo tanto, podemos aplicar este algoritmo para encontrar la longitud de 
-    la subsecuencia más larga entre $S_1$ y $S_2$ en tiempo $O(n \times n) = 
-    O(n^2)$.
+    la subsecuencia más larga entre $S_1$ y $S_2$ en tiempo
+    $\Theta(n \times n) = \Theta(n^2)$.
 
 \end{enumerate}
 \end{document}

@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1605310039 "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea2/doc/Tarea2-RubiTania.tex" "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea2/doc/Tarea2-RubiTania.pdf" "Tarea2-RubiTania" 1605310042
-  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea2/doc/Tarea2-RubiTania.aux" 1605310042 2796 07769ef18d9b1f6e442b898c7c6c0e0b ""
-  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea2/doc/Tarea2-RubiTania.tex" 1605310038 89122 a1c8d4a6035043706d915b70e297f095 ""
+["pdflatex"] 1605312905 "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea2/doc/Tarea2-RubiTania.tex" "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea2/doc/Tarea2-RubiTania.pdf" "Tarea2-RubiTania" 1605312909
+  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea2/doc/Tarea2-RubiTania.aux" 1605312908 2796 07769ef18d9b1f6e442b898c7c6c0e0b ""
+  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea2/doc/Tarea2-RubiTania.tex" 1605312904 89852 1f065b3af0174b4755f90f90ea92548a ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1591545468 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1591545468 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1591545468 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -225,14 +225,14 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1591545468 33301 a3134070eacafb10b1f371612ce2650d ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1605207236 4855604 a2b69e422d881628e3d9a5db2035053f ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1605207222 2514049 a4a9c6529f28fca34d49fc061c5f6e6e ""
-  "Tarea2-RubiTania.aux" 1605310042 2796 07769ef18d9b1f6e442b898c7c6c0e0b "pdflatex"
-  "Tarea2-RubiTania.out" 1605310040 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "Tarea2-RubiTania.tex" 1605310038 89122 a1c8d4a6035043706d915b70e297f095 ""
+  "Tarea2-RubiTania.aux" 1605312908 2796 07769ef18d9b1f6e442b898c7c6c0e0b "pdflatex"
+  "Tarea2-RubiTania.out" 1605312906 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "Tarea2-RubiTania.tex" 1605312904 89852 1f065b3af0174b4755f90f90ea92548a ""
   "imagenes/LCS.png" 1605301473 57472 3d301cb11e7437cc57cc542cde02d46e ""
   (generated)
-  "Tarea2-RubiTania.pdf"
-  "Tarea2-RubiTania.out"
   "Tarea2-RubiTania.log"
   "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea2/doc/Tarea2-RubiTania.pdf"
   "Tarea2-RubiTania.aux"
   "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea2/doc/Tarea2-RubiTania.log"
+  "Tarea2-RubiTania.pdf"
+  "Tarea2-RubiTania.out"
