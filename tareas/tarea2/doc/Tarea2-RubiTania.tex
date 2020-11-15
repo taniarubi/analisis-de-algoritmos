@@ -105,17 +105,17 @@
         \textsc{Solución:} Primero, veamos cómo podemos calcular el número de 
         elementos de $M$ que son más pequeños que $M[i][j]$. Los elementos sobre 
         los cuales tenemos certeza de que son menores que $M[i][j]$ están en el 
-        subarreglo de tamaño $i \times j$ (los que están por encima de $M[i][j]$
-        y a la izquierda de éste). A este número le restamos una unidad para no 
-        considerar al propio elemento, por lo que tendremos $(i \times j) - 1$
+        subarreglo de tamaño $i \times j$. A este número le restamos una unidad 
+        para no considerar al propio elemento, por lo que tendremos $(i \times j) - 1$
         elementos que forzosamente son menores a $M[i][j]$ (esto se debe a que 
         los elementos de las filas y las columnas están ordenados de forma 
         creciente). Ahora bien, puede que existan más elementos que sean menores 
         que $M[i][j]$ y que se encuentren a su derecha y por encima de la fila 
-        $i$. Para poder determinar el número de elementos menores que $M[i][j]$
-        en este subarreglo, entonces comparamos a $M[i][j]$ con cada 
-        $M[i-1][j+k]$, donde $k \in \{1, 2, \ldots, (n-j)\}$. Entonces, mientras 
-        $j+k$ sea menor o igual a $n$, hacemos 
+        $i$ o a la izquierda y por debajo de la fila $i$. Para poder determinar 
+        el número de elementos menores que $M[i][j]$ en este subarreglo, entonces 
+        comparamos a $M[i][j]$ con cada $M[i-1][j+k]$, donde 
+        $k \in \{1, 2, \ldots, (n-j)\}$. Entonces, mientras $j+k$ sea menor o 
+        igual a $n$, hacemos 
         \begin{enumerate}
             \item Si $M[i-1][j+k] < M[i][j]$, eso significa que todos los 
             elementos anteriores a $M[i-1][j+k]$ dentro de esa columna deberían 
@@ -152,19 +152,24 @@
             cuenta de los números menores a $M[i][j]$ que llevamos.
         \end{enumerate}
 
+        De manera análoga, realizamos este procedimiento sobre $M[i+1][j-k]$ y
+        nos vamos moviéndo hacia la izquierda y hacia abajo. Además, el número 
+        de elementos lo contamos por columna y no por fila, es decir, $j-m$
+        es el número que debemos sumar, donde $m$ es el número de columnas que 
+        nos movimos hasta ese punto.
+
         Ahora, para poder encontrar la cantidad de elementos que son mayores que
-        $M[i'][j']$, usaremos un algoritmo análogo al anterior. Los elementos que 
-        forzosamente son mayores a $M[i'][j']$ son aquellos que están por debajo 
-        de $M[i'][j']$ y a la derecha de éste. Así, hay $((n-i')+1) \times 
-        ((n-j')+1)$ elementos dentro de este subarreglo. Nuevamente, disminuimos 
-        una unidad para no contar al propio elemento. Entonces, hay 
-        $((((n-i)+1) \times ((n-j) + 1)))-1$ elementos que son forzosamente
-        mayores que $M[i'][j']$. Luego, puede que existan más elementos que 
-        sean mayores que $M[i'][j']$ a su izquierda y por debajo de la fila 
-        $i$. Para poder determinar el número de elementos que son mayores 
-        que $M[i'][j']$ en este subarreglo, entonces comparamos a $M[i'][j']$
-        con cada $M[i'+1][j'-k]$, donde $k \in \{1, 2, \ldots, (n-j')\}$. 
-        Entonces, mientras $j'-k$ sea mayor o igual a $1$, hacemos:  
+        $M[i'][j']$, usaremos un algoritmo análogo al anterior. Así, hay 
+        $(n-i') \times (n-j')$ elementos que son forzosamente menores al 
+        elemento. Nuevamente, disminuimos una unidad para no contar al propio 
+        elemento. Entonces, hay $(n-i') \times (n-j') - 1$ elementos que son 
+        forzosamente mayores que $M[i'][j']$. Luego, puede que existan más 
+        elementos que sean mayores que $M[i'][j']$ a su izquierda y por debajo 
+        de la fila $i$ o a su derecha y por encima de la fila $i$. Para poder 
+        determinar el número de elementos que son mayores que $M[i'][j']$ en 
+        este subarreglo, entonces comparamos a $M[i'][j']$ con cada 
+        $M[i'+1][j'-k]$, donde $k \in \{1, 2, \ldots, (n-j')\}$. Entonces, 
+        mientras $j'-k$ sea mayor o igual a $1$, hacemos:  
         \begin{enumerate}
             \item Si $M[i'+1][j'-k] > M[i'][j']$, eso significa que todos los 
             elementos siguientes a $M[i'+1][j'-k]$ dentro de esa columna 
@@ -202,9 +207,15 @@
             cuenta de los números menores a $M[i'][j']$ que llevamos.
         \end{enumerate}
 
+        De manera similar, haremos este mismo procedimiento sobre $M[i-1][j+k]$
+        y nos vamos moviéndo hacia la derecha y hacia arriba. Los elementos 
+        que contamos son en dirección a las filas. 
+
         Este algoritmo funciona porque contemplamos todos las \textit{zonas} 
         o subarreglos cuyos elementos podrían ser menores (mayores) que 
-        $M[i][j]$. 
+        $M[i][j]$. Entonces, todo esto que contamos fueron las zonas que no 
+        nos pedían, así que basta con hacer un resta de $n \times n$ con la
+        suma total que arroja el algoritmo.
 
         Ahora bien, para encontrar la cantidad de elementos que son menores a 
         $M[i][j]$ sólo recorremos linealmente a la matriz, y en el peor de los
@@ -586,12 +597,85 @@
 
     \begin{itemize}
         % Ejercicio 3.a
-        \item Encuentre un algoritmo que toma a lo más $O(n \log n)$ tiempo para 
-        ordenar S.
+        \item Encuentre un algoritmo que toma a lo más $O(n \log \log n)$ tiempo 
+        para ordenar S.
+
+        \textsc{Solución:} Para este caso, vamos a utilizar un árbol $AVL$, ya 
+        que éste es un árbol binario de búsqueda que está balanceado. La única 
+        propiedad que le vamos a agregar es que cada nodo contiene el valor de 
+        su elemento y su número de repeticiones en el arreglo (inicialmente no 
+        lo sabemos y la definimos en $0$). La construcción del árbol será como 
+        sigue:
+        \begin{enumerate}
+            \item Definimos el árbol $T = \varnothing$.
+
+            \item Definimos \texttt{nodo = S.cabeza}.
+            
+            \item Mientras \texttt{nodo != null}, hacemos:
+            \begin{itemize}
+                \item Si el elemento en el \texttt{nodo} ya se encuentra en el 
+                árbol $T$, entonces no lo agregamos, simplemente aumentamos el 
+                contador en una unidad en su nodo correspondiente, es decir,
+                \texttt{nodo.repeticiones += 1} 
+
+                \item En caso contrario, agregamos el elemento al árbol y 
+                aumentamos su contador en una unidad. 
+
+                \item Pasamos al elemento siguiente en la lista $S$, es decir, 
+                \texttt{nodo = nodo.siguiente}.
+            \end{itemize}
+        \end{enumerate}
+
+        Así, tenemos un árbol binario balanceado $T$ con un máximo de 
+        $\log n$ nodos distintos en el árbol. Por lo tanto, la altura máxima 
+        de $T$ será de $\log (\log n)$. Como el árbol es de búsqueda, entonces 
+        basta con que recorramos el árbol en forma in-order para obtener al 
+        arreglo ordenado. Creando una lista $A$ podemos ir guardando los 
+        elementos que vayamos visitando en el árbol cuando lo recorremos, y de 
+        acuerdo al contador de repeticiones en el nodo, sabremos cuantas veces 
+        debemos copiar este elemento en la lista $A$. Finalmente, regresamos
+        la lista $A$.
+
+        Este algoritmo funciona porque gracias a las operaciones del árbol 
+        AVL podemos guardar correctamente a los $n$ elementos de la lista 
+        $S$ y contar las apariciones de éstos. Notemos que la operación 
+        agregar hace los giros necesarios para que el árbol siga balanceado.
+        Una vez que el árbol se haya creado, entonces el recorrido in-order 
+        nos garantiza obtener a los elementos ordenados (por como está 
+        definido un árbol de búsqueda), y el contador de repeticiones sólo nos 
+        indica cuántas veces hay que copiar ese elemento en la lista $A$.
+        Así, podemos obtener correctamente a la lista ordenada.
+
+        Ahora bien, la verificación de que un elemento ya está en el árbol se 
+        realiza en el mismo algoritmo para insertar. Si el elemento que vamos 
+        a agregar es igual a un nodo que visitamos durante la búsqueda del 
+        lugar donde debemos posicionarlo, entonces simplemente aumentamos en 
+        una unidad al contador del nodo correspondiente. En el peor de los 
+        casos, para agregar (o verificar) un nodo al árbol tenemos que recorrer 
+        toda la altura del árbol, que es $\log (\log n)$, por lo que esta 
+        operación nos tomará $O(\log (\log n))$. Pero esta operación la 
+        realizamos para cada uno de los $n$ elementos de la lista $S$, por lo 
+        que nos tomará $O(n \log (\log n))$ tiempo. Además, el recorrer el 
+        árbol de forma in-order nos cuesta $O(n)$ y llenar la lista $A$ también 
+        nos cuesta $O(n)$, por lo que la complejidad total del algoritmo será 
+        de 
+        \begin{equation*}
+            O(n \log (\log n)) + O(n) + O(n) = O(n \log (\log n))
+        \end{equation*}
 
         % Ejercicio 3.b
         \item ¿Por qué esto no viola la cota inferior de $O(n \log n)$ para el 
         problema de ordenación?
+
+        \textsc{Solución:} La cota inferior para ordenar es para $n$ elementos 
+        distintos usando comparaciones, y si un algoritmo de ordenamiento lo 
+        usamos con $n$ elementos distintos, entonces necesariamente es 
+        $O(n \log n)$. En este caso, tenemos información extra que nos da una 
+        característica de los elementos (que su valor es a lo más $\log n$), 
+        pero sobre ordenar no sabemos nada. En particular tenemos $\log n$
+        elementos distintos, pero si fueran $n$ distintos entonces la 
+        complejidad del algoritmo sería de $O(n \log n)$. Por este motivo,
+        no viola la cota inferior para el problema de ordenación.
     \end{itemize}
     
     % Ejercicio 4.
@@ -1266,8 +1350,11 @@
         \begin{itemize}
             \item La última pareja que obtenemos tiene una \texttt{respuesta} 
             del tipo \texttt{NY, YN o NN}. Entonces, descartamos a esa pareja 
-            y nos quedamos con la persona que aislamos, pues esa debería de 
-            ser la persona honesta (ya que hay más honestos que mentirosos).
+            y nos quedamos con las personas que quedaron aisladas (notemos 
+            que a lo más pueden ser $\log n$ personas). Como hay más honestos 
+            que mentirosos, entonces necesariamente estas personas que nos 
+            sobraron deberían de ser honestos. Por lo que, podemos tomar a 
+            cualquiera de ellos, pues todos son honestos.
 
             \item La última pareja que obtenemos tiene una \texttt{respuesta}
             del tipo \texttt{YY}. Entonces, obtenemos a una persona honesta.
