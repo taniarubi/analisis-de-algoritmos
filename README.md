@@ -16,6 +16,7 @@ Ayudante: Luis Fernando Yang Fong Baeza
 #### Contenido 
 
 Durante este curso se realizaron:
-1. Tareas
    * Tarea 1: Ordenamientos.
+   * Tarea 2: Búsqueda binaria y árboles binarios.
+   * Tarea 3: Programación dinámica y algoritmos Greedy.
 
