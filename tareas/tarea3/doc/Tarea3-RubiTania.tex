@@ -51,6 +51,13 @@
         \includegraphics[width=0.5\linewidth]{imagenes/ejercicio1.png}
     \end{figure}
 
+    \textsc{Solución:}
+
+    Esto se traduce al siguiente algoritmo:
+    \begin{itemize}
+        \item 
+    \end{itemize}
+
     % Ejercicio 2.
     \item Dados dos árboles generadores $T$ y $R$ de una gráfica $G$. Muestra 
     cómo encontrar la secuencia más corta de árboles generadores $T_0, T_1, 
@@ -79,25 +86,289 @@
         \item Describe un algoritmo voraz de tiempo $\theta(n \log n)$ que 
         resuelve este problema.
 
-        \textsc{Solución:}
+        \textsc{Solución:} Como podemos romper los tesoros, entonces una buena 
+        idea para atacar este problema es calcular el valor del costo unitario 
+        de cada uno de los $n$ tesoros que encontremos, esto con el objetivo 
+        de poder seleccionar aquellos tesoros que nos aportan mayor valor y 
+        tienen un menor peso. Luego, ordenamos los tesoros, en orden 
+        descendente, de acuerdo a su valor de costo unitario. Lo ordenamos de 
+        esta forma para ir tomándo siempre a los tesoros que nos aportan 
+        mayor valor en tiempo constante. Después, iremos metiéndo a la 
+        mochila lo máximo posible del tesoro con mayor valor unitario, es decir, 
+        del tesoro que está al inicio de esta nueva lista ordenada de tesoros. 
+        Si se termina este tesoro, es decir, logramos meterlo completo a la 
+        mochila, y queda más lugar en la mochila, entonces tomamos el segundo 
+        objeto con mayor valor unitario y repetimos el proceso (vamos metiéndo 
+        lo máximo posible del tesoro). Terminamos cuando llenamos por completo 
+        la mochila.
+
+        Así, esto se traduce al siguiente algoritmo:
+        \begin{itemize}
+            \item[1.] Obtenemos el valor del costo unitario de cada uno de los 
+            $n$ tesoros, es decir, calculamos 
+            \begin{equation*}
+                u_i = \frac{v_i}{w_i} \quad \quad \quad
+                \text{con } i \in \{1, 2, \ldots, n\}
+            \end{equation*}
+
+            \item[2.] Ordenamos los $n$ tesoros, en orden descendente, de 
+            acuerdo a su valor de costo unitario $u_i$. Así, supongamos que 
+            esta nueva lista es de la forma 
+            \begin{equation*}
+                l = \{t_1, t_2, \ldots, t_n\}
+            \end{equation*}
+
+            \item[3.] Sean $M$ la capacidad de la mochila y $c$ la capacidad 
+            actual de la misma en un momento dado. Escogemos el tesoro $t_i$
+            con $i \in \{1, 2, \ldots, n\}$ de la lista $l$.
+            \begin{itemize}
+                \item Si $c \geq w_i$, entonces metemos al tesoro $t_i$ a la 
+                mochila (pues podemos cargar con la totalidad del tesoro) y 
+                la capacidad actual es actualizada como $c = c - w_i$.
+
+                \item Si $c < w_i$, entonces tomamos únicamente una parte del 
+                tesoro $t_i$. Esta fracción será lo que nos falte para terminar 
+                de llenar la mochila, es decir, tomamos la parte 
+                $\frac{c_i}{w_i}$ del tesoro. Terminamos. 
+            \end{itemize}
+        \end{itemize}
+
+        Este algoritmo funciona porque 
+
+        Ahora bien, calcular el valor de costo unitario para cada uno de los 
+        $n$ tesoros nos toma tiempo lineal, ya que recorremos toda la lista 
+        de los $n$ tesoros. Ordenar la lista usando \texttt{HeapSort} nos 
+        toma $\Theta(n \log n)$. Luego, en el peor de los casos, se verifica 
+        que cada uno de los $n$ tesoros entre en la mochila, por lo que esto 
+        nos tomará tiempo lineal, pues recorremos toda la lista de los 
+        tesoros. Por lo tanto, la complejidad total del algoritmo es 
+        $\Theta(n \log n)$. 
 
         % Ejercicio 4.b
         \item ¿Se puede mejorar el tiempo de ejecución de tu algoritmo a 
         $\theta(n)$? Si es un no, explica por qué; si es un sí, menciona el 
         cambio.
+
+        \textsc{Solución:} Sí es posible mejorar la complejidad, y para lograrlo 
+        seguiremos el siguiente algoritmo
+        \begin{itemize}
+            \item[1.] Obtenemos el valor del costo unitario de los $n$ tesoros, 
+            esta vez sin ordenarlos. Así, supongamos que el conjunto de valores 
+            unitarios es 
+            \begin{equation*}
+                \rho = \{\frac{v_1}{w_i}, \ldots, \frac{v_n}{w_n}\}
+                     = \{u_1, \ldots, u_n\}
+            \end{equation*}
+
+            \item[2.] Encontramos la mediana del conjunto $\rho$ usando el 
+            algoritmo \textsc{Select}, visto en clase. Recordemos que 
+            \textsc{Select} funciona de la siguiente manera:
+            \begin{enumerate}
+                \item Separar a los $n$ elementos en $\lfloor \frac{n}{5} \rfloor$ 
+                grupos de $5$ elementos cada uno (a lo más un grupo de tamaño 
+                $n \pmod{5}$).
+
+                \item Encontrar la mediana de cada uno de los 
+                $\lfloor \frac{n}{5} \rfloor$ grupos (los cuales están ordenados 
+                por inserción y tomamos al elemento de enmedio; si el grupo tiene 
+                un número par de elementos, tomamos a la mayor de las medianas)
+
+                \item Usamos \textsc{Select} recursivamente para encontrar la 
+                mediana $x$ del conjunto de $\lceil \frac{n}{5} \rceil$ medianas 
+                encontradas en el paso anterior (si el conjunto de medianas es de 
+                longitud par, entonces tomamos la más pequeña). 
+
+                \item Luego, dividimos el conjunto de entrada con elemento pivote 
+                $x$ (la mediana de las medianas) usando el algoritmo 
+                \textsc{Partition} (del algoritmo \text{QuickSort}). Sea $k$ el 
+                número de elementos en la parte inferior de la partición, de 
+                manera que $x$ es el $k-$ésimo elemento y $n-k$ es el número de 
+                elementos en la parte superior.
+
+                \item Si $i = k$, entonces regresamos a $x$. En otro caso, 
+                usamos \textsc{Select} recursivamente para encontrar el 
+                $i-$ésimo elemento más pequeño en el lado inferior si $i < k$, o 
+                el $(i-k)-$ésimo elemento más pequeño en el lado superior si 
+                $i > k$.
+            \end{enumerate}
+
+            Definimos a $m$ como la mediana del conjunto $\rho$.
+            
+            \item[3.] Creamos tres nuevos conjuntos $C_1, C_2, C_3$, donde 
+            \begin{itemize}
+                \item $C_1$ tendrá los valores unitarios cuyos valores sean 
+                estrictamente mayores a la mediana $m$, es decir, 
+                \begin{equation*}
+                    C_1 = \{u_i \; | \; m < u_i, 1 \leq i \leq n\}
+                \end{equation*}
+
+                Este conjunto se refiere a los tesoros que nos conviene tener, 
+                pues tienen mayor valor por unidad.
+
+                \item $C_2$ tendrá los valores unitarios cuyos valores sean 
+                igual a la mediana $m$, es decir, 
+                \begin{equation*}
+                    C_2 = \{u_i \; | \; m = u_i, 1 \leq i \leq n\}
+                \end{equation*}
+
+                \item $C_3$ tendrá los valores unitarios cuyos valores sean 
+                estrictamente menores a la mediana $m$, es decir, 
+                \begin{equation*}
+                    C_3 = \{u_i \; | \; m > u_i, 1 \leq i \leq n\}
+                \end{equation*}
+            \end{itemize}
+
+            De esta forma, consideremos dos casos posibles:
+            \begin{enumerate}
+                \item Si el valor de la suma de los valores unitarios de los 
+                tesoros en el conjunto $C_1$
+                \begin{equation*}
+                    \sum_{i \in C_1} w_i
+                \end{equation*}
+
+                excede la capacidad de la mochila, entonces repetimos 
+                recursivamente el algoritmo, pero esta vez sólo lo aplicamos 
+                sobre $C_1$ para quedarnos con los tesoros que valen más.
+                
+                \item En otro caso, vamos metiéndo los tesoros que corresponden 
+                al conjunto $C_2$ mientras haya tesoros y no excedamos la 
+                capacidad de la mochila.
+                \begin{enumerate}
+                    \item Si se llena la mochila, entonces vamos a considerar
+                    los tesoros correspondientes al conjunto $C_1$ y a los 
+                    tesoros que agregamos del conjunto $C_2$.
+
+                    \item En otro caso, actualizamos la capacidad actual de la 
+                    mochila en 
+                    \begin{equation*}
+                        \sum_{i \in C_1} w_i + \sum_{i \in C_2} w_i
+                    \end{equation*}
+
+                    pues estamos considerando los tesoros correspondientes a 
+                    $C_1$ y $C_2$. Como todavía hay espacio, entonces volvemos 
+                    a repetir el algoritmo sobre el conjunto $C_3$.
+                \end{enumerate}
+            \end{enumerate}
+
+            Podemos resolver esta recurrencia utilizándo el Teorema Maestro:
+
+            La recurrencia 
+            \begin{align*}
+                T(n) &= aT \left( \frac{n}{b} \right) + cn^k \\
+                T(1) &= c \\
+            \end{align*}
+
+            donde $a, b, c, k$ son constantes, se resuelve como 
+            \begin{align*}
+                T(n) &\in \Theta(n^k) \quad \quad si a < b^k \\
+                T(n) &\in \Theta(n^k \log (n)) \quad \quad si a = b^k \\
+                T(n) &\in \Theta(n^{\log_b (a)}) \quad \quad si a > b^k
+            \end{align*}
+
+            Como en nuestro caso tenemos 
+            \begin{equation*}
+                T(n)
+            \end{equation*}
+
+            entonces con $a = 1, b = 2, c = 1, k = 1$ la solución a la 
+            recurrencia es $\Theta(n)$. 
+            
+            Por lo tanto, la complejidad total de nuestro algoritmo es 
+            $\Theta(n)$.
+            
+        \end{itemize}
     \end{itemize}
 
     % Ejercicio 5.
-    \item Un grupo de personas quiere comprar un ramo de flores, y el florista
-    que las vende quiere maximizar sus ganancias al venderlas. Para esto ha 
-    decidido determinar el precio de las flores que cada cliente compra como
-    sigue: el precio de su primer flor será $(0 + 1) \times c$, donde $c$ es 
-    el precio original de la flor; el costo de la segunda flor será $(1 + 1)
-    \times c$, y así sucesivamente. Dado un grupo de $n$ personas, un número 
-    $n$ de flores que desean comprar, y el costo original $c$ de las flores, 
-    diseñe un algoritmo que en tiempo $O(n \log n)$ minimice el costo total 
-    que los clientes tienen que pagar para que entre todos compren todas las 
-    flores. 
+    \item Un grupo de $n$ personas quiere comprar un ramo de $m$ flores, cada 
+    flor va a tener un costo asociado $c_i$, pero si un cliente ha comprado 
+    $c$ veces entonces el dueño del puesto le vende la flor $i$ en costo 
+    $(c + 1)v_i$. Diseña un algoritmo que en tiempo $O(m \log m)$ minimice el 
+    costo de comprar todas las flores.
+
+    \textsc{Solución:} Sabemos que entre más flores compre una persona más 
+    grande será el costo que tendrá que pagar, por lo que el objetivo es 
+    minimizar el número máximo de flores que cualquier persona compra, esto 
+    para que las compras se distribuyan lo más uniformemente posible. 
+    Además, debemos optimizar el órden en que compramos las flores, por lo 
+    que tenemos que comprar primero las flores más caras (el costo adicional 
+    que necesitamos pagar después es lineal en $c_i$). Así, podemos intuir 
+    que primero debemos ordenar las flores (en órden descendente) de acuerdo 
+    a su costo $c_i$; y después distribuirlas uniformemente entre las 
+    personas que compran las más caras primero. Siguiéndo esta idea, planteamos 
+    el siguiente algoritmo:
+    \begin{itemize}
+        \item[1.] Ordenamos las $m$ flores, en órden descendente, de acuerdo a 
+        su costo asociado $c_i$. Supongamos que la lista ordenada es de la 
+        siguiente forma:
+        \begin{equation*}
+            C = \{c_1, c_2, \ldots, c_m\}
+        \end{equation*}
+
+        \item[2.] Definimos una variable \texttt{cc=0}, la cual se encargará de 
+        llevar el valor del costo de comprar todas las flores. Además, definimos 
+        una variable \texttt{ad = 0}, la cual se encargará de indicar cuál es el 
+        costo adicional que debemos agregarle al costo de nuestras flores 
+        actuales.
+        \begin{itemize}
+            \item Si el número de flores es menor o igual al número de personas,
+            entonces regresamos la suma del costo de todas las flores, es decir, 
+            \begin{equation*}
+                cc = c_1 + c_2 + \ldots + c_m
+            \end{equation*}
+
+            \item En otro caso, mientras $i=0$ sea menor que $m$ hacemos:
+            \begin{itemize}
+                \item Sumamos el valor del costo de las primeras $m$ flores 
+                dentro de la lista $C$ (pues el valor adicional es $0$); luego 
+                sumamos el valor del costo de las siguientes $m$ flores, pero
+                multiplicándo el costo de cada una de las flores por $[ad + 1]$ 
+                con $i \in \{1, 2, \ldots\}$, y así sucesivamente. Esto se 
+                puede modelar con lo siguiente:
+                \begin{center}
+                    \texttt{cc += (ad + 1) * C[i]}
+                \end{center}
+
+                \item Si $i+1 \pmod{n}$ es igual a cero, esto implica que hemos 
+                agregado ya las $n$ flores y debemos aumentar en una unidad 
+                nuestro costo adicional.
+
+                \item Incrementamos en una unidad a nuestra variable $i$.
+            \end{itemize}
+        \end{itemize}
+
+        \item Regresamos \texttt{cc}.
+    \end{itemize}
+
+    Este algoritmo funciona porque siempre garantizamos que las flores con 
+    un costo asociado más grande sean las que tengan un valor adicional 
+    menor. Como tenemos una lista $C$ con los costos ordenados, entonces 
+    podemos acceder a las flores con mayor valor en tiempo constante. El 
+    caso trivial es cuando el número de flores $m$ es menor o igual que el 
+    número de personas, ya que podemos darle a lo más a cada persona una 
+    flor, así que nuestro costo adicional siempre es $0$ y esto resulta en 
+    sumar los costos de todas las flores $m$. Luego, cuando $m > n$ lo 
+    que hacemos es darle las primeras $n$ flores a cada una de las $n$
+    personas, donde el costo adicional es de $0$ (pues es la primer flor). 
+    Posteriormente, le damos las siguientes $n$ flores a cada una de las $n$ 
+    personas, lo que implica que nuestro costo adicional aumentará en una 
+    unidad y serán más caras que su precio original (pero como está ordenada 
+    la lista $C$ entonces sabemos que la suma de estos nuevos costos no es 
+    más grande que si hubiéramos multiplicado por este costo adicional actual 
+    a la suma de las $m$ flores anteriores). Repetimos este proceso hasta que 
+    las flores se hayan terminado, sumándo siempre bloques de $n$ flores con 
+    un costo adicional dado y en caso de que lleguemos al punto donde el número 
+    de flores que nos quedan sin repartir es menor que el número de personas, 
+    entonces simplemente las distribuimos entre las personas que podamos, 
+    pero sin perder de vista el valor adicional que les corresponde en ese
+    momento. Así, como las estamos distribuyéndo uniformemente entre las 
+    personas, siguiéndo esta idea podemos garantizar que obtenemos el mínimo
+    costo de comprar todas las flores. 
+
+    Ahora bien, sabemos que ordenar las flores nos toma $\Theta(m \log m)$.
+    Obtener la suma de los costos de las $m$ flores nos toma $\Theta(m)$, 
+    pues siempre debemos recorrer todo el arreglo $C$. Por lo tanto, la 
+    complejidad total del algoritmo es de $\Theta(m \log m)$.
 
     % Ejercicio 6.
     \item Sean $k, n \in \mathbb{N}$. El problema de los huevos, es el 

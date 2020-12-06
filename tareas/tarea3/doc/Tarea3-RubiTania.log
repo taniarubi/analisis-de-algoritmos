@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.11.12)  28 NOV 2020 01:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.11.12)  6 DEC 2020 02:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -924,39 +924,39 @@ Package pdftex.def Info: imagenes/ejercicio1.png  used on input line 51.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} </home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/imagenes/ejercicio1.png>]
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 177.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 140.
  (/usr/share/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-)
+) [2] [3] [4]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[2] [3] [4] [5] [6] [7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 885.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 885.
+[5] [6] [7] [8] [9] [10]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1156.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1156.
  (/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.aux
 LaTeX Info: Redefining \. on input line 21.
 LaTeX Info: Redefining \% on input line 21.
 )
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 885.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 885.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1156.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1156.
 Package rerunfilecheck Info: File `Tarea3-RubiTania.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 885.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1156.
  ) 
 Here is how much of TeX's memory you used:
- 37237 strings out of 480478
- 786830 string characters out of 5905958
- 1173033 words of memory out of 5000000
- 52685 multiletter control sequences out of 15000+600000
- 544482 words of font info for 60 fonts, out of 8000000 for 9000
+ 37254 strings out of 480478
+ 786970 string characters out of 5905958
+ 1173366 words of memory out of 5000000
+ 52688 multiletter control sequences out of 15000+600000
+ 545589 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 174i,14n,190p,1717b,3778s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on /home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.pdf (7 pages, 349299 bytes).
+ 174i,14n,190p,1717b,3779s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
+Output written on /home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.pdf (10 pages, 390537 bytes).
 PDF statistics:
- 140 PDF objects out of 1000 (max. 8388607)
- 112 compressed objects within 2 object streams
- 33 named destinations out of 1000 (max. 500000)
+ 176 PDF objects out of 1000 (max. 8388607)
+ 143 compressed objects within 2 object streams
+ 45 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
 
