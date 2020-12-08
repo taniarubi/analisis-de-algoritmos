@@ -73,7 +73,93 @@
     $T$ tal que ninguno de sus vértices es adyacente a otro y que maximiza la 
     suma de los pesos de los nodos, es decir, el conjunto $V$ de vértices tal 
     que para ningún par de ellos existe alguna arista que los conecte y que 
-    maximiza la suma de los pesos de los nodos. 
+    maximiza la suma de los pesos de los nodos. Para ello, caractetizaremos la 
+    substructura óptima del problema para resolverlo usando programación 
+    dinámica. Consideraremos cada subárbol de $T$ como un subproblema, y por 
+    lo tanto nuestro objetivo es relacionar la solución de todo el árbol con 
+    las soluciones de los subárboles. De esta forma, notemos que si denotamos 
+    a la raíz del árbol como un vértice arbitrario $v$, entonces hay dos 
+    posibilidades:
+    \begin{itemize}
+        \item El vértice $v$ forma parte del conjunto independiente de peso 
+        máximo de $T$. Esto implica que los hijos de $v$ no pueden pertenecer 
+        al conjunto deseado, pues sabemos que los vértices no deben de estar 
+        conectados por alguna arista. Así, este conjunto consiste en $v$ más 
+        la unión de los conjuntos independientes de peso máximo de los 
+        subárboles de los nietos de $v$.
+
+        \item El vértice $v$ no forma parte del conjunto independiente de peso 
+        máximo de $T$. Entonces este conjunto es simplemente la unión de los 
+        conjuntos independientes de peso máximo de los subárboles de los hijos 
+        de $v$. 
+    \end{itemize} 
+
+    Con estas dos observaciones es posible escribir nuestro paso recursivo: Sea 
+    $T(v)$ la longitud (peso) del conjunto independiente de peso máximo en el 
+    subárbol cuya raíz es $v$, entonces 
+    \begin{equation*}
+        T(v) = 
+        \begin{cases}
+            w(v) & \text{si $v$ es una hoja} \\
+            max \left\{w(v) + \sum_{x \; \in \; \text{nietos de $v$}} 
+            T(x), \sum_{x \; \in \; \text{hijos de $v$}} T(x) \right\} 
+            & \text{otherwise}
+        \end{cases}
+    \end{equation*}
+
+    Mostraremos que $T(v)$ es correcto.
+    \begin{proof}
+        Inducción sobre $v$. 
+        \begin{itemize}
+            \item \textcolor{blue}{Caso base}. Si $v$ es una hoja, entonces 
+            $T(v) = w(v)$. Esto es correcto ya que no tiene subárboles que 
+            contengan un conjunto independiente de peso máximo, por lo que 
+            este único vértice es el conjunto que buscamos. 
+
+            \item \textcolor{blue}{Hipótesis de inducción}. Supongamos que 
+            esta función se cumple para $k$, es decir, supongamos que 
+            \begin{equation*}
+                T(k) = max \left\{w(v) + \sum_{x \; \in \;
+                \text{nietos de $v$}} T(x), \sum_{x \; \in \; 
+                \text{hijos de $v$}} T(x) \right\} 
+            \end{equation*}
+
+            contiene el tamaño del conjunto independiente de peso máximo en 
+            el subárbol cuya raíz es $k$.
+
+            \item \textcolor{blue}{Paso inductivo}. Veamos que esto se cumple 
+            para $k+1$. Tenemos que 
+            \begin{align*}
+                T(k+1) 
+                &= T(k) + 1 \\
+                &= max \left\{w(k) + \sum_{x \; \in \; \text{nietos de $k$}} 
+                T(x), \sum_{x \; \in \; \text{hijos de $k$}} T(x) \right\}
+                + 1 
+                && \text{H.I}
+            \end{align*}
+
+            Así, por hipótesis de inducción, tenemos que $T(n+1)$ contiene el 
+            tamaño del conjunto independiente de peso máximo más uno, que es 
+            a lo que queríamos llegar.
+        \end{itemize}
+
+        Por lo tanto, el algoritmo es correcto.
+        
+    \end{proof}
+
+    Ahora bien, veamos que este algoritmo es de tiempo lineal. Notemos que 
+    debemos calcular el peso máximo del conjunto independiente que tiene cada 
+    vértice del árbol como raíz una sola vez. En las siguientes veces que se
+    desee consultar el valor, este ya estará almacenado en el arreglo de 
+    programación dinámica $T$ y podemos indexarlo y regresar su valor en 
+    tiempo constante. Así, calcularlos toma tiempo $O(n)$ porque hay $n$ nodos 
+    en el árbol $T$. Luego, para cada vértice, el algoritmo sólo mira a sus 
+    hijos y a sus nietos; por lo que cada vértice $v$ se mira sólo tres veces:
+    cuando lo miramos como raíz, cuando lo miramos como hijo y cuando lo 
+    miramos como nieto. Así, a cada nodo lo miramos un número constante de 
+    veces y sólamente en una ocasión (la primera) es cuando hacemos la llamada 
+    para calcular su valor. Por lo tanto, la complejidad total de nuestro 
+    algoritmo es $O(|V|)$. 
 
     % Ejercicio 4.
     \item Mientras caminas por la playa encuentras un cofre de tesoros. El 
