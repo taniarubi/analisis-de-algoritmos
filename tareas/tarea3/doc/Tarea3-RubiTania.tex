@@ -53,11 +53,6 @@
 
     \textsc{Solución:}
 
-    Esto se traduce al siguiente algoritmo:
-    \begin{itemize}
-        \item 
-    \end{itemize}
-
     % Ejercicio 2.
     \item Dados dos árboles generadores $T$ y $R$ de una gráfica $G$. Muestra 
     cómo encontrar la secuencia más corta de árboles generadores $T_0, T_1, 
@@ -73,6 +68,12 @@
     árbol con raíz con $n$ vértices. Cada nodo $v \in T$ tiene asociado un peso 
     $w(v)$. Utilizándo programación dinámica, encuentre un algoritmo de tiempo 
     lineal para encontrar el conjunto independiente de $T$ de peso máximo.
+
+    \textsc{Solución:} Queremos encontrar el conjunto de vértices en el árbol 
+    $T$ tal que ninguno de sus vértices es adyacente a otro y que maximiza la 
+    suma de los pesos de los nodos, es decir, el conjunto $V$ de vértices tal 
+    que para ningún par de ellos existe alguna arista que los conecte y que 
+    maximiza la suma de los pesos de los nodos. 
 
     % Ejercicio 4.
     \item Mientras caminas por la playa encuentras un cofre de tesoros. El 
@@ -93,14 +94,15 @@
         tienen un menor peso. Luego, ordenamos los tesoros, en orden 
         descendente, de acuerdo a su valor de costo unitario. Lo ordenamos de 
         esta forma para ir tomándo siempre a los tesoros que nos aportan 
-        mayor valor en tiempo constante. Después, iremos metiéndo a la 
-        mochila lo máximo posible del tesoro con mayor valor unitario, es decir, 
-        del tesoro que está al inicio de esta nueva lista ordenada de tesoros. 
-        Si se termina este tesoro, es decir, logramos meterlo completo a la 
-        mochila, y queda más lugar en la mochila, entonces tomamos el segundo 
-        objeto con mayor valor unitario y repetimos el proceso (vamos metiéndo 
-        lo máximo posible del tesoro). Terminamos cuando llenamos por completo 
-        la mochila.
+        mayor valor en tiempo constante. Después, iremos metiéndo a la mochila 
+        los tesoros enteros que están al inicio de la lista ordenada si el 
+        peso de éstos no es mayor a la capacidad de la mochila. En otro caso, 
+        partimos el tesoro actual que intentamos meter para quedarnos sólo con 
+        una fracción del mismo. De esta forma, metemos a la mochila todos los 
+        tesoros con mayor costo unitario que podamos, y cuando ya no sea posible
+        meter más tesoros enteros, simplemente cortamos el tesoro final en la 
+        fracción que nos falta. Terminamos cuando llenamos completamente la 
+        mochila.
 
         Así, esto se traduce al siguiente algoritmo:
         \begin{itemize}
@@ -133,7 +135,17 @@
             \end{itemize}
         \end{itemize}
 
-        Este algoritmo funciona porque 
+        Este algoritmo funciona porque siempre garantizamos que metemos a la 
+        mochila los tesoros con mayor costo unitario, lo que implica que 
+        siempre metemos a aquellos tesoros que nos aportan mayor valor con 
+        menos peso. Metemos a los primeros $k$ tesoros con mayor costo 
+        unitario (de esta forma, obtenemos la mayor ganancia en tesoros con 
+        el menor peso) hasta llenar la mochila. Los $k-1$ tesoros que 
+        elegimos se meten enteros a la mochila, mientras que el $k-$ésimo 
+        elemento termina de llenar la mochila con la parte fraccional que 
+        falta. De esta forma, como tomamos únicamente a los que nos aportan 
+        mayor costo unitario, logramos maximizar el valor de los tesoros 
+        que metemos a la mochila. 
 
         Ahora bien, calcular el valor de costo unitario para cada uno de los 
         $n$ tesoros nos toma tiempo lineal, ya que recorremos toda la lista 
@@ -156,8 +168,7 @@
             esta vez sin ordenarlos. Así, supongamos que el conjunto de valores 
             unitarios es 
             \begin{equation*}
-                \rho = \{\frac{v_1}{w_i}, \ldots, \frac{v_n}{w_n}\}
-                     = \{u_1, \ldots, u_n\}
+                \rho = \{\frac{v_1}{w_1}, \ldots, \frac{v_n}{w_n}\}
             \end{equation*}
 
             \item[2.] Encontramos la mediana del conjunto $\rho$ usando el 
@@ -194,87 +205,114 @@
 
             Definimos a $m$ como la mediana del conjunto $\rho$.
             
-            \item[3.] Creamos tres nuevos conjuntos $C_1, C_2, C_3$, donde 
+            \item[3.] Creamos tres nuevos conjuntos $C_1, C_2, C_3$ tal que 
             \begin{itemize}
-                \item $C_1$ tendrá los valores unitarios cuyos valores sean 
+                \item $C_1$ tendrá los costos unitarios cuyos valores sean 
                 estrictamente mayores a la mediana $m$, es decir, 
                 \begin{equation*}
-                    C_1 = \{u_i \; | \; m < u_i, 1 \leq i \leq n\}
+                    C_1 = \{\frac{v_i}{w_i} \; | \; \frac{v_i}{w_i} > m, 
+                    1 \leq i \leq n\}
+                    \quad \quad \text{con} \; \; 
+                    W_1 = \sum_{i \in C_1} w_1
                 \end{equation*}
 
                 Este conjunto se refiere a los tesoros que nos conviene tener, 
                 pues tienen mayor valor por unidad.
 
-                \item $C_2$ tendrá los valores unitarios cuyos valores sean 
+                \item $C_2$ tendrá los costos unitarios cuyos valores sean 
                 igual a la mediana $m$, es decir, 
                 \begin{equation*}
-                    C_2 = \{u_i \; | \; m = u_i, 1 \leq i \leq n\}
+                    C_2 = \{\frac{v_i}{w_i} \; | \; \frac{v_i}{w_i} = m, 
+                    1 \leq i \leq n\}
+                    \quad \quad \text{con} \; \; 
+                    W_2 = \sum_{i \in C_2} w_i
                 \end{equation*}
 
-                \item $C_3$ tendrá los valores unitarios cuyos valores sean 
+                \item $C_3$ tendrá los costos unitarios cuyos valores sean 
                 estrictamente menores a la mediana $m$, es decir, 
                 \begin{equation*}
-                    C_3 = \{u_i \; | \; m > u_i, 1 \leq i \leq n\}
+                    C_3 = \{\frac{v_i}{w_i} \; | \; \frac{v_i}{w_i} < m, 
+                    1 \leq i \leq n\}
+                    \quad \quad 
+                    W_3 = \sum_{i \in C_3} w_i
                 \end{equation*}
             \end{itemize}
 
-            De esta forma, consideremos dos casos posibles:
-            \begin{enumerate}
-                \item Si el valor de la suma de los valores unitarios de los 
-                tesoros en el conjunto $C_1$
-                \begin{equation*}
-                    \sum_{i \in C_1} w_i
-                \end{equation*}
-
-                excede la capacidad de la mochila, entonces repetimos 
-                recursivamente el algoritmo, pero esta vez sólo lo aplicamos 
-                sobre $C_1$ para quedarnos con los tesoros que valen más.
+            \item[4.] De esta forma, 
+            \begin{itemize}
+                \item Si $W_1 > M$, es decir, si la suma de los costos 
+                unitarios de los tesoros en el conjunto $C_1$ es mayor que la 
+                capacidad de la mochila, entonces aplicamos recursivamente 
+                el algoritmo sobre el conjunto $C_1$ para quedarnos con los 
+                tesoros que valen más.
                 
-                \item En otro caso, vamos metiéndo los tesoros que corresponden 
-                al conjunto $C_2$ mientras haya tesoros y no excedamos la 
-                capacidad de la mochila.
-                \begin{enumerate}
-                    \item Si se llena la mochila, entonces vamos a considerar
+                \item Sino, mientras no excedamos la capacidad de la mochila 
+                y $C_2$ no sea vacío, entonces vamos metiéndo los tesoros del 
+                conjunto $C_2$ (cuyo costo unitario es igual a la mediana $m$)
+                a la mochila.
+                \begin{itemize}
+                    \item Si se llena la mochila, entonces regresamos los 
                     los tesoros correspondientes al conjunto $C_1$ y a los 
-                    tesoros que agregamos del conjunto $C_2$.
+                    tesoros que logramos agregar del conjunto $C_2$.
 
-                    \item En otro caso, actualizamos la capacidad actual de la 
-                    mochila en 
-                    \begin{equation*}
-                        \sum_{i \in C_1} w_i + \sum_{i \in C_2} w_i
-                    \end{equation*}
+                    \item Sino, reducimos la capacidad de la mochila en 
+                    $W_1 + W_2$, pues estamos considerándo los tesoros 
+                    correspondientes a $C_1$ y $C_2$. Como aún hay espacio 
+                    en la mochila, entonces hacemos recursión sobre el 
+                    conjunto $C_3$; lo que hará que regresemos los tesoros 
+                    en los conjuntos $C_1$, $C_2$ y los que logremos agregar 
+                    a la mochila del conjunto $C_3$ durante esa llamda
+                    recursiva. 
+                \end{itemize}
+            \end{itemize}
 
-                    pues estamos considerando los tesoros correspondientes a 
-                    $C_1$ y $C_2$. Como todavía hay espacio, entonces volvemos 
-                    a repetir el algoritmo sobre el conjunto $C_3$.
-                \end{enumerate}
-            \end{enumerate}
+            Este algoritmo funciona porque gracias a la obtención de la 
+            mediana podemos encontrar a aquellos tesoros cuyo costo unitario 
+            es el mayor (éstos son aquellos que nos importan). De esta forma, 
+            podemos garantizar que siempre vamos agregándo a la mochila 
+            aquellos tesoros que nos conviene meter a la mochila. Vamos 
+            revisándo conjunto por conjunto para poder seleccionar los 
+            tesoros que queremos, los cuales son aquellos que son mayores a la 
+            mediana (si logramos tomar todo el conjunto, entonces los 
+            siguientes que nos convienen son los que son iguales a la mediana, 
+            y así sucesivamente). Gracias a las llamadas recursivas logramos 
+            ir metiéndo los tesoros que más nos convienen en ese momento, esto 
+            mientras haya lugar en la mochila. Así, podemos obtener los tesoros 
+            que maximizan la ganancia. 
 
-            Podemos resolver esta recurrencia utilizándo el Teorema Maestro:
-
-            La recurrencia 
-            \begin{align*}
-                T(n) &= aT \left( \frac{n}{b} \right) + cn^k \\
-                T(1) &= c \\
-            \end{align*}
-
-            donde $a, b, c, k$ son constantes, se resuelve como 
-            \begin{align*}
-                T(n) &\in \Theta(n^k) \quad \quad si a < b^k \\
-                T(n) &\in \Theta(n^k \log (n)) \quad \quad si a = b^k \\
-                T(n) &\in \Theta(n^{\log_b (a)}) \quad \quad si a > b^k
-            \end{align*}
-
-            Como en nuestro caso tenemos 
+            Ahora bien, obtener el valor del costo unitario de cada uno de los 
+            $n$ tesoros nos toma $\Theta(n)$, pues siemore debemos recorrer 
+            toda la lista de tesoros. Encontrar la mediana de un conjunto de 
+            tamaño $n$ nos toma $O(n)$, por lo visto en clase. Crear los 
+            nuevos tres conjuntos nos toma $\Theta(n)$, pues basta con recorrer 
+            el arreglo para poder colocar a cada uno de los valores en el 
+            nuevo conjunto que le corresponde. Luego, el paso recursivo
+            considera a lo más la mitad del conjunto actual (por cómo están 
+            separados los conjuntos), por lo que la función de recurrencia 
+            sería 
             \begin{equation*}
-                T(n)
-            \end{equation*}
+                T(n) = T \left( \frac{n}{2} \right) + O(n)
+            \end{equation*} 
 
-            entonces con $a = 1, b = 2, c = 1, k = 1$ la solución a la 
-            recurrencia es $\Theta(n)$. 
+            donde $O(n)$ corresponde a las observaciones anteriores. Así, esta 
+            recurrencia podemos resolverla utilizándo el Teorema Maestro: 
             
-            Por lo tanto, la complejidad total de nuestro algoritmo es 
-            $\Theta(n)$.
+            Como nuestra expresión es de la forma 
+            \begin{equation*}
+                T(n) = aT \left( \frac{n}{b} \right) + cn^k 
+            \end{equation*} 
+
+            donde $a, b, c, k$ son constantes, entonces podemos solucionar 
+            la recurrencia como sigue:
+
+            Si $a = 1, b = 2, c = 1, k = 1$, se cumple que 
+            \begin{equation*}
+                a < b^k = 1 < 2^k
+            \end{equation*} 
+            
+            por lo que $T(n) \in \Theta(n^k)$ y obtenemos la solución 
+            $\Theta(n^1) = \Theta(n)$. Así, la complejidad total de nuestro 
+            algoritmo es $\Theta(n)$. 
             
         \end{itemize}
     \end{itemize}
