@@ -14,17 +14,11 @@
 \usepackage{mathtools}
 \usepackage{latexsym}
 \usepackage{enumerate}
-\usepackage{ragged2e}
 \usepackage{listings}
 \usepackage[dvipsnames]{xcolor}
-\usepackage{multicol}
-\usepackage{wrapfig,lipsum,booktabs}
 \usepackage{float}
 \usepackage{graphicx}
-\usepackage{subcaption}
-\usepackage{hyperref}
 \usepackage[linguistics]{forest}
-\usetikzlibrary{positioning,matrix, arrows.meta}
 
 % Modificamos los márgenes del documento.                                       
 \usepackage[lmargin=1.5cm,rmargin=1.5cm,top=1.5cm,bottom=1.5cm]{geometry}
@@ -42,16 +36,285 @@
     % Ejercicio 1.
     \item Un pescador está sobre un océano rectangular. El valor del pez en el 
     punto $(i, j)$ está dado por un arreglo $A$ de dimensión $2 (n \times m)$.
-    Diseña un algoritmo que calcule el máximo valor de pescado que un pescador
+    Diseña un algoritmo que calcule el máximo valor de pescados que un pescador
     puede atrapar en un camino desde la esquina superior izquierda a la esquina 
-    inferior derecha. El pescador sólo puede moverse hacia abajo o hacia arriba,
-    como se ilustra en la siguiente figura: 
+    inferior derecha. El pescador sólo puede moverse hacia abajo o hacia la 
+    derecha, como se ilustra en la siguiente figura: 
     \begin{figure}[h]
         \centering
         \includegraphics[width=0.5\linewidth]{imagenes/ejercicio1.png}
     \end{figure}
 
-    \textsc{Solución:}
+    \textsc{Solución:} Queremos encontrar el máximo valor de peces que podemos 
+    obtener al realizar únicamente movimiéntos hacia la derecha y hacia abajo. 
+    Así, nuestro objetivo será modificar la matriz $A$ de tal manera que en 
+    cada sub-instancia del problema tengamos en $A[i][j]$ el valor máximo de 
+    pescaditos que el pescador puede atrapar desde $A[0][0]$ hasta $A[i][j]$
+    realizando sólo dos tipos de movimiéntos. De esta forma, al tener cada 
+    celda de $A$ actualizada como describimos anteriormente, al final bastará 
+    regresar el valor de $A[n-1][m-1]$, pues ésta contendrá el valor máximo 
+    de pescaditos que deseamos. 
+
+    Así, consideremos los siguientes puntos:
+    \begin{itemize}
+        \item El caso base sería que la celda $A[0][0]$ no puede ser 
+        actualizada. Esto se debe a que el valor en esa celda es el máximo 
+        que el pescador puede obtener si va desde $A[0][0]$ a $A[0][0]$ (no 
+        se mueve).
+
+        \item Para el primer renglón de $A$, bastará con ir obteniéndo la 
+        suma acumulada de la celda inmediatamente a la izquierda de la 
+        actual. Si pensamos que el pescador se está moviéndo siempre hacia 
+        la derecha en la primer fila, es decir, el pescador sólo se mueve 
+        sobre $A[0][j]$ con $j \in \{0, \ldots, m-1\}$; entonces 
+        \begin{equation*}
+            A[0][j] = A[0][j-1] + A[0][j]
+        \end{equation*}
+
+        Esto se debe a que al sumar el valor de la celda actual que tiene el 
+        valor del pez en ese lugar, junto con el máximo que puede obtener el 
+        pescador moviéndose solamente hacia la derecha desde $M[0][0]$ hasta 
+        una celda previa que ya contiene el máximo, entonces obtenemos el 
+        valor deseado. 
+
+        \begin{proof}
+            Inducción sobre la columna $j$.
+            \begin{itemize}
+                \item \textcolor{blue}{Caso base.} Cuando $j = 0$, entonces 
+                $A[0][0]$ tiene ya el máximo valor que el pescador puede 
+                obtener (por el punto anterior).
+
+                \item \textcolor{blue}{Hipótesis de inducción.} Supongamos que 
+                se cumple para $k$, es decir, supongamos que $A[0][k]$ tiene el 
+                valor máximo que el pescador puede obtener moviéndose siempre a 
+                la derecha sobre el primer renglón hasta ese punto.  
+
+                \item \textcolor{blue}{Paso inductivo.} Queremos probar que se 
+                cumple para $A[0][k+1]$. Entonces 
+                \begin{align*}
+                    A[0][k+1]
+                     &= A[0][k] + A[0][k+1] 
+                     && \text{por definición}
+                \end{align*}
+
+                Por hipótesis de inducción tenemos que $A[0][k]$ tiene el 
+                valor máximo que el pescador puede obtener moviéndose a la 
+                derecha desde $A[0][0]$ hasta $A[0][k]$. Así, para obtener el 
+                máximo hasta la celda que le sigue a la derecha, basta con 
+                sumarle el valor que tiene actualmente. Por lo tanto, si 
+                actualizamos $A[0][k+1]$ con $A[0][k] + A[0][k+1]$ entonces 
+                obtendremos el valor máximo hasta este punto.
+            \end{itemize}
+
+            Por lo tanto, si hacemos que $A[0][j] = A[0][j-1] + A[0][j]$, 
+            entonces obtendremos en cada celda del primer renglón el valor 
+            máximo que el pescador puede conseguir moviéndose siempre a la 
+            derecha sobre el primer renglón. 
+
+        \end{proof}
+
+        \item De manera análoga, tenemos el caso para la primer columna 
+        de $A$. Será suficiente con ir obteniéndo la suma acumulada de la 
+        celda inmediatamente arriba de la actual. Si pensamos que el 
+        pescador siempre se está moviéndo hacia abajo en la primer columna, 
+        es decir, el pescador sólo se mueve sobre $A[i][0]$ con 
+        $i \in \{0, 1, \ldots, n-1\}$; entonces 
+        \begin{equation*}
+            A[i][0] = A[i-1][0] + A[i][0]
+        \end{equation*}
+
+        Esto se debe a que al sumar el valor de la celda actual que tiene 
+        el valor del pez en ese lugar, junto con el máximo que puede obtener 
+        el pescador moviéndose solamente hacia abajo desde $A[0][0]$ hasta 
+        una celda previa que ya contiene el máximo, entonces obtenemos el 
+        valor deseado. 
+        \begin{proof}
+            Inducción sobre el renglón $i$.
+            \begin{itemize}
+                \item \textcolor{blue}{Caso base}. Cuando $i = 0$, entonces 
+                $A[0][0]$ tiene ya el máximo valor que el pescador puede 
+                obtener (por el primer punto).
+
+                \item \textcolor{blue}{Hipótesis de inducción}. Supongamos que 
+                se cumple para $k$, es decir, supongamos que se cumple que 
+                $A[k][0]$ tiene el valor máximo que el pescador puede obtener 
+                moviéndose siempre hacia abajo sobre la primer columna hasta 
+                ese punto.  
+
+                \item \textcolor{blue}{Paso inductivo}. Queremos probar que se 
+                cumple para $A[k+1][0]$. Entonces 
+                \begin{align*}
+                    A[k+1][0] &= A[k][0] + A[k+1][0]
+                    && \text{por definición} 
+                \end{align*}
+
+                Por hipótesis de inducción tenemos que $A[k][0]$ tiene el valor 
+                máximo que el pescador puede obtener moviéndose a la derecha 
+                desde $A[0][0]$ hasta $A[k][0]$. Así, para obtener el máximo 
+                hasta la celda que le sigue abajo, basta con sumarle el valor 
+                que tiene actualmente. Por lo tanto, si actualizamos 
+                $A[k+1][0]$ con $A[k][0] + A[k+1][0]$, entonces obtendremos el 
+                valor máximo hasta este punto. 
+            \end{itemize}
+
+            Por lo tanto, si hacemos que $A[i][0] = A[i-1][0] + A[i][0]$, 
+            entonces obtendremos en cada celda de la primer columna el valor 
+            máximo que el pescador puede conseguir moviéndose siempre hacia 
+            abajo sobre la primer columna.
+
+        \end{proof}
+
+        \item Para actualizar la parte de la matriz $A$ que falta, entonces 
+        es suficiente considerar el valor actual de cada celda que contiene
+        el valor del pez en ese lugar del océano junto con el máximo valor 
+        en las celdas inmediatamente arriba y a la izquierda de la actual, 
+        es decir, 
+        \begin{equation*}
+            A[i][j] = A[i][j] + max\left\{A[i-1][j], A[i][j-1] \right\}
+        \end{equation*}
+
+        Esto lo haremos para las entradas $(i,j)$ con  
+        $i \in \{1, \ldots, n-1\}, j \in \{1, \ldots, j-1\}$.
+
+        Mostraremos que gracias a esta expresión, cada celda tendrá el 
+        valor máximo que el pescador puede conseguir moviéndose desde 
+        $M[0][0]$ hasta $M[i][j]$ con movimiéntos únicamente hacia la 
+        derecha o hacia abajo.
+        \begin{proof}
+            Inducción sobre el renglón $i$.
+            \begin{itemize}
+                \item \textcolor{blue}{Caso base}. Como $i=1$, entonces 
+                debemos mostrar que
+                \begin{equation*}
+                    A[1][j] = 
+                    A[1][j] + max\left\{A[0][j], A[1][j-1] \right\}
+                \end{equation*}
+
+                \begin{proof}
+                    Inducción sobre la columna $j$.
+                    \begin{itemize}
+                        \item \textcolor{purple}{Caso base}. Como $j=1$, 
+                        entonces
+                        \begin{equation*}
+                            A[1][1] = 
+                            A[1][1] + max\left\{A[0][1], A[1][0] \right\}
+                        \end{equation*} 
+
+                        Así, tendremos que $A[1][1]$ contiene el máximo valor 
+                        que el pescador puede conseguir moviéndose solamente 
+                        a la derecha o hacia abajo desde $A[0][0]$ y hasta 
+                        $A[1][1]$. Por las demostraciones anteriores sabemos
+                        que $A[0][1]$ ya tiene el máximo valor que puede 
+                        conseguir el pescador moviéndose solamente hacia la 
+                        derecha de la posición inicial y $A[1][0]$ ya tiene 
+                        el máximo valor que puede conseguir el pescador 
+                        moviéndose solamente hacia abajo desde $A[0][0]$. 
+                        Entonces basta con sumarle el valor de la celda actual 
+                        $A[1][1]$ al valor más grande de las dos opciones 
+                        que se tienen por la restricción de los movimientos 
+                        para obtener el valor máximo deseado. Por lo tanto, 
+                        este caso se cumple. 
+
+                        \item \textcolor{purple}{Hipótesis de inducción}. 
+                        Supongamos que se cumple para $k$, es decir, supongamos
+                        que $A[1][k]$ tiene el valor máximo que el pescador 
+                        puede obtener moviéndose con las restricciones dadas
+                        hasta ese punto desde $A[0][0]$.
+
+                        \item \textcolor{purple}{Paso inductivo}. Queremos 
+                        probar que se cumple para $A[1][k+1]$. Entonces 
+                        \begin{align*}
+                            A[1][k+1] 
+                            &= A[1][k+1] + max\left\{A[0][k+1], A[1][k] \right\}
+                            && \text{por definición}
+                        \end{align*}
+
+                        Por el paso inductivo del primer renglón tenemos que 
+                        $A[0][k+1]$ ya tiene el máximo valor que puede obtener el 
+                        pescador moviéndose solamente hacia la derecha. Luego, 
+                        por hipótesis de inducción, $A[1][k]$ ya tiene el máximo
+                        valor que el pescador puede obtener moviéndose con las 
+                        restricciones dadas hasta ese punto desde $A[0][0]$. Así, 
+                        al considerar el valor máximo de estos dos óptimos, se 
+                        obtiene el óptimo al moverse a la derecha o hacia abajo 
+                        desde $A[0][0]$; y solo falta sumar el valor actual de 
+                        $A[1][k+1]$ para obtener el máximo valor deseado. 
+                    \end{itemize}
+                \end{proof}
+
+                \item \textcolor{blue}{Hipótesis de inducción}. Supongamos que 
+                se cumple para $k$, es decir, supongamos que $A[k][j]$ tiene 
+                el valor máximo que el pescador puede obtener moviéndose hacia 
+                abajo o hacia la derecha desde $A[0][0]$ hasta $A[k][j]$. 
+
+                \item \textcolor{blue}{Paso inductivo}. Queremos mostrar que se 
+                cumple para $k+1$. Entonces 
+                \begin{align*}
+                    A[k+1][j] 
+                    &= A[k+1][j] + max\left\{A[k][j], A[k][j-1] \right\}
+                \end{align*}
+
+                Por hipótesis de inducción tenemos que $A[k][j], A[k][j-1]$ 
+                tienen ya el valor máximo que el pescador puede obtener 
+                moviéndose hacia abajo o hacia la derecha desde $A[0][0]$
+                hasta $A[k][j]$ y $A[k][j-1]$, respectivamente. Así, al 
+                considerar el valor máximo de estos dos, se obtiene el 
+                óptimo deseado. Así, sumando el valor actual de $A[k+1][j]$
+                obtenemos el valor máximo buscado. 
+            \end{itemize}
+
+            Por lo tanto, cada entrada $(i,j)$ de la matriz $A$ con 
+            $i \in \{1, \ldots, n-1\}$ y $j \in \{1, \ldots, m-1\}$ tendrá 
+            el valor máximo que el pescador puede obtener moviéndose solamente 
+            a la derecha o hacia abajo desde el punto inicial $A[0][0]$ si 
+            \begin{equation*}
+                A[i][j] = A[i][j] + max\left\{A[i-1][j], A[i][j-1] \right\}
+            \end{equation*}
+        \end{proof}
+    \end{itemize}
+
+    \newpage
+    Esto lo podemos traducir como el siguiente algoritmo:
+    \begin{itemize}
+        \item[1.] Definimos $i = j = 0$.
+
+        \item[2.] Mientras $j$ sea menor que $m$, hacemos
+        \begin{equation*}
+            A[0][j] = A[0][j-1] + A[0][j]
+        \end{equation*}
+
+        Aumentamos en una unidad a $j$.
+
+        \item[3.] Mientras $i$ sea menor que $n$, hacemos 
+        \begin{equation*}
+            A[i][0] = A[i-1][0] + A[i][0]
+        \end{equation*}
+
+        Aumentamos en una unidad a $i$.
+
+        \item[4.] Definimos $i = j = 1$.
+
+        \item[5.] Mientras $i$ sea menor que $n$, hacemos 
+        \begin{itemize}
+            \item Mientras $j$ sea menor que $m$, hacemos 
+            \begin{equation*}
+                A[i][j] = A[i][j] + max\left\{A[i-1][j], A[i][j-1]\right\}
+            \end{equation*}
+
+            Aumentamos en una unidad a $j$.
+        \end{itemize}
+
+        Aumentamos en una unidad a $i$.
+
+        \item[6.] Regresamos $A[n-1][m-1]$.
+    \end{itemize}
+
+    Ahora bien, los ciclos \texttt{while} de los pasos $2$ y $3$ nos toman 
+    $\Theta(m)$ y $\Theta(n)$, respectivamente; pues estamos recorriendo una 
+    sola vez un renglón y una columna. Y el ciclo \texttt{while} del paso $5$
+    nos toma $\Theta(nm)$, ya que estamos recorriendo lo que queda de la 
+    matriz $A$ (entrada por entrada). Por lo tanto, la complejidad total del 
+    algoritmo es de $\Theta(nm)$.
 
     % Ejercicio 2.
     \item Dados dos árboles generadores $T$ y $R$ de una gráfica $G$. Muestra 
@@ -97,7 +360,7 @@
     Con estas dos observaciones es posible escribir nuestro paso recursivo: Sea 
     $T(v)$ la longitud (peso) del conjunto independiente de peso máximo en el 
     subárbol cuya raíz es $v$, entonces 
-    \begin{equation*}
+    \begin{equation}
         T(v) = 
         \begin{cases}
             w(v) & \text{si $v$ es una hoja} \\
@@ -105,47 +368,56 @@
             T(x), \sum_{x \; \in \; \text{hijos de $v$}} T(x) \right\} 
             & \text{otherwise}
         \end{cases}
-    \end{equation*}
+        \label{eq:tree}
+    \end{equation}
 
     Mostraremos que $T(v)$ es correcto.
     \begin{proof}
-        Inducción sobre $v$. 
+        Inducción sobre el vértice $v$. 
         \begin{itemize}
             \item \textcolor{blue}{Caso base}. Si $v$ es una hoja, entonces 
             $T(v) = w(v)$. Esto es correcto ya que no tiene subárboles que 
             contengan un conjunto independiente de peso máximo, por lo que 
-            este único vértice es el conjunto que buscamos. 
+            este único vértice es el conjunto de peso máximo que buscamos. 
 
             \item \textcolor{blue}{Hipótesis de inducción}. Supongamos que 
             esta función se cumple para $k$, es decir, supongamos que 
             \begin{equation*}
-                T(k) = max \left\{w(v) + \sum_{x \; \in \;
-                \text{nietos de $v$}} T(x), \sum_{x \; \in \; 
-                \text{hijos de $v$}} T(x) \right\} 
+                T(k) = max \left\{w(k) + \sum_{x \; \in \;
+                \text{nietos de $k$}} T(x), \sum_{x \; \in \; 
+                \text{hijos de $k$}} T(x) \right\} 
             \end{equation*}
 
             contiene el tamaño del conjunto independiente de peso máximo en 
             el subárbol cuya raíz es $k$.
 
             \item \textcolor{blue}{Paso inductivo}. Veamos que esto se cumple 
-            para $k+1$. Tenemos que 
+            para $k+1$. Entonces 
             \begin{align*}
                 T(k+1) 
-                &= T(k) + 1 \\
+                &= T(k) + 1 
+                && \text{$T$ abre sumas} \\
+                &= T(k) + w(u) 
+                && \text{un vértice $u$ más} \\
                 &= max \left\{w(k) + \sum_{x \; \in \; \text{nietos de $k$}} 
                 T(x), \sum_{x \; \in \; \text{hijos de $k$}} T(x) \right\}
-                + 1 
+                + w(u)
                 && \text{H.I}
             \end{align*}
 
-            Así, por hipótesis de inducción, tenemos que $T(n+1)$ contiene el 
-            tamaño del conjunto independiente de peso máximo más uno, que es 
-            a lo que queríamos llegar.
+            Por hipótesis de inducción, tenemos que $T(k)$ tiene el tamaño 
+            del conjunto independiente de peso máximo en el subárbol cuya 
+            raíz es $k$. Así, al sumar el peso del vétice $w(u)$ estamos 
+            obteniéndo el tamaño máximo del conjunto independiente de peso 
+            máximo en el subárbol cuya raíz es $k+1$.
         \end{itemize}
 
         Por lo tanto, el algoritmo es correcto.
-        
+
     \end{proof}
+
+    Así, gracias a la programación dinámica, efectivamente \ref{eq:tree} regresa 
+    el conjunto independiente de peso máximo de $T$.
 
     Ahora bien, veamos que este algoritmo es de tiempo lineal. Notemos que 
     debemos calcular el peso máximo del conjunto independiente que tiene cada 
@@ -510,11 +782,186 @@
     \begin{enumerate}
         % Ejercicio 6.a
         \item Pruebe que $E(1, n) = n$.
+        
+        \begin{proof}
+            Inducción sobre el número de pisos $n$.
+            \begin{itemize}
+                \item \textcolor{blue}{Caso base}. Si $n = 1$ entonces 
+                el número mínimo de experimentos para determinar a $f$
+                es $1$, pues sólo hay un piso. Como $n=1$, entonces 
+                sólo pueden pasar dos cosas:
+                \begin{itemize}
+                    \item El huevo se rompe, lo que implica que $f=1$. Por lo 
+                    que $n=1$ es el mínimo número de experimentos para determinar
+                    a $f$.
+
+                    \item El huevo no se rompe, lo que implica que $f=n+1$. El 
+                    problema nos dice que en este caso, el huevo nunca se rompe, 
+                    pero como ya no podemos subir más pisos, entonces sabemos 
+                    que el número mínimo para determinar a $f$ es $1$.
+                \end{itemize}
+                
+                \item \textcolor{blue}{Hipótesis de inducción}. Supongamos 
+                que se cumple para $k$, es decir, supongamos que 
+                \begin{equation*}
+                    E(1, k) = k
+                \end{equation*}
+                es el número mínimo de experimentos para determinar a $f$ si 
+                sólo tenemos un huevo.
+
+                \item \textcolor{blue}{Paso inductivo}. Queremos probar que se 
+                cumple para $k+1$. Entonces 
+                \begin{align*}
+                    E(1, k+1) = k+1
+                \end{align*}
+
+                Tenemos dos posibles casos:
+                \begin{itemize}
+                    \item El huevo se rompe, lo que implica que $f=k+1$. Por 
+                    hipótesis de inducción, tenemos que $k$ es el número 
+                    mínimo de experimentos para determinar a $f$ si sólo 
+                    tenemos un huevo. Así, para obtener el número mínimo de 
+                    experimentos del siguiente piso debemos sumar este valor 
+                    más uno.
+
+                    \item El huevo no se rompe, lo que implica que $f=k+2$.
+                    El problema nos dice que en este caso, el huevo nunca se 
+                    rompe, pero como ya no podemos subir más pisos, entonces 
+                    sabemos que el número mínimo para determinar a $f$ es 
+                    $k+1$.
+                \end{itemize}
+            \end{itemize}
+
+            Por lo tanto, el número mínimo de experimentos para determinar a 
+            $f$ es $n$ si sólo tenemos un huevo. 
+
+        \end{proof}
+
+        Otra forma de ver este problema es que, como sólo tenemos un huevo, 
+        entonces en el peor caso necesitamos tirar $n$ veces el huevo para 
+        encontrar a $f$ (pues comenzamos desde el piso $1$ y terminamos 
+        en el piso $n$). Debemos avanzar piso por piso ya que si lo hacemos 
+        de otra forma (de dos en dos, por ejemplo) no tenemos forma de saber 
+        en qué piso se rompe el huevo. De esta forma, $E(1, n) = n$.
 
         % Ejercicio 6.b
         \item Encuentre una recurrencia para $E(k,n)$. Utilice programación 
         dinámica para encontrar $E(k,n)$. ¿Qué tan rápido es su algoritmo?
+
+        \textsc{Solución:} Debemos tener en cuenta las siguientes 
+        observaciones 
+        \begin{itemize}
+            \item Si un huevo se ha roto, entonces ya no podemos volver a 
+            utilizarlo.
+
+            \item Un huevo se puede reutilizar si y sólo si sobrevive a 
+            la caída. 
+
+            \item Si un huevo se rompe en el piso $t$, entonces éste también 
+            se romperá en los todos los $t+1$ pisos.
+
+            \item Si un huevo sobrevive a la caída en el piso $t$, entonces 
+            éste también sobrevivirá a la caída de todos los $t-1$ pisos.
+        \end{itemize}
+
+        De esta forma, si tenemos $k$ huevos y $n$ pisos, podemos considerar 
+        dos casos al momento de que un huevo es lanzado desde el piso $t$, 
+        con $t \in \{1, 2, \ldots, n\}$:
+        \begin{itemize}
+            \item El huevo se rompe. Esto implica que todos los pisos arriba 
+            del piso $t$ rompen el huevo, pero los que están por debajo del 
+            piso $t$ debemos considerárlos aún (pues el piso seguro más alto 
+            está en algún lugar por debajo de $t$). Así, el problema se reduce 
+            a $k-1$ huevos y $t-1$ pisos por revisar.
+
+            \item El huevo no se rompe. Esto implica que todos los pisos 
+            por debajo del piso $t$ tampoco rompen el huevo, pero los que están 
+            por arriba del piso $t$ debemos considerárlos aún (pues el piso 
+            seguro más alto está por arriba de $t$). Así, el problema se  
+            reduce a $k$ huevos y $n-t$ pisos por revisar. 
+        \end{itemize}
+
+        Notemos que necesitamos minimizar el número de experimentos en el peor 
+        de los casos, así que tomamos el máximo valor de estas dos situaciones, 
+        y seleccionamos el piso que produce el mínimo número de experimentos.
+
+        De esta forma, si $E(k,n)$ es la función que calcula el número mínimo 
+        de experimentos para determinar a $f$, entonces 
+        \begin{equation*}
+            E(k, n) = 
+            \begin{cases}
+                0 & \text{si $n =0$} \\
+                1 & \text{si $n = 1$} \\
+                n & \text{si $k = 1$} \\
+                1 + min\left\{max\left\{E(k-1, t-1), E(k, n-t)\right\}\right\} & 
+                \text{otherwise}
+            \end{cases}
+        \end{equation*}
     \end{enumerate}
+
+    Mostraremos la correctud de esta función.
+    \begin{proof}
+        Inducción sobre el número de huevos $k$.
+        \begin{itemize}
+            \item \textcolor{blue}{Caso base}.
+
+            \item \textcolor{blue}{Hipótesis de inducción}.
+
+            \item \textcolor{blue}{Paso inductivo}.
+        \end{itemize}
+    \end{proof}
+
+    Esto se traduce al siguiente algoritmo:
+    \begin{itemize}
+        \item[1.] Definimos la matriz $E[k+1][n+1]$ y la variable $i=1$.
+
+        \item[2.] Mientras $i$ sea menor o igual a $k$, hacemos:
+        \begin{itemize}
+            \item $E[i][1] = 1$
+            \item $E[i][0] = 0$
+            \item Aumentamos en una unidad a $i$.
+        \end{itemize}
+
+        \item[3.] Definimos la variable $j = 1$.
+        
+        \item[4.] Mientras $j$ sea menor o igual a $n$, hacemos 
+        \begin{itemize}
+            \item $E[1][j] = j$
+        \end{itemize}
+
+        \item[5.] Definimos las variables $i = j = 2$, $t = 1$ y $m = 0$.
+
+        \item[6.] Mientras $i$ sea menor o igual a $k$, hacemos:
+        \begin{itemize}
+            \item Mientras $j$ sea menor o igual a $n$, hacemos:
+            \begin{itemize}
+                \item $E[i][j] = \infty$
+
+                \item Mientras $t$ sea menor o igual a $j$
+                \begin{itemize}
+                    \item 
+                    $m = 1 + 
+                    min\left\{max\left\{E[i-1][t-1], E[i][j-t]\right\}\right\}$
+
+                    \item Si $m$ es menor que $E[i][j]$, entonces $E[i][j] = m$.
+
+                    \item Incrementamos en una unidad a $t$.
+                \end{itemize}
+
+                \item Incrementamos en una unidad a $j$.
+            \end{itemize}
+
+            \item Incrementamos en una unidad a $i$.
+        \end{itemize}
+
+        \item[7.] Regresamos $E[k,n]$.
+    \end{itemize}
+
+    Ahora bien, los ciclos de los pasos $2.$ y $3.$ nos toman $O(k)$ y $O(n)$,
+    respectivamente; pues recorren la matriz $E$ en una sola dirección. El 
+    ciclo en el paso $6.$ nos toma $O(kn^2)$, pues usamos un ciclo $k$ veces y 
+    un ciclo $n^2$ veces para cada huevo. Por lo tanto, la complejidad total 
+    del algoritmo es $O(kn^2)$.
 
     % Ejercicio 7.
     \item Construye el árbol de Huffman para codificar el siguiente texto:
