@@ -345,40 +345,120 @@
     posibilidades:
     \begin{itemize}
         \item El vértice $v$ forma parte del conjunto independiente de peso 
-        máximo de $T$. Esto implica que los hijos de $v$ no pueden pertenecer 
-        al conjunto deseado, pues sabemos que los vértices no deben de estar 
-        conectados por alguna arista. Así, este conjunto consiste en $v$ más 
-        la unión de los conjuntos independientes de peso máximo de los 
-        subárboles de los nietos de $v$.
+        máximo del subárbol $T_i$. Esto implica que los hijos de $v$ no pueden
+        pertenecer al conjunto deseado, pues sabemos que los vértices no deben 
+        de estar conectados por alguna arista. Denotaremos a este conjunto como 
+        $S(v)$. Así, $S(v)$ consiste en $v$ más la unión de los conjuntos 
+        independientes de peso máximo de los subárboles de los nietos de $v$. 
+        Esto se puede calcular como 
+        \begin{equation*}
+            S(v) = w(v) + \sum_{x \; \in \; \text{nietos}(v)} S(x)
+        \end{equation*}
+
+        \begin{proof}
+            Inducción sobre $v$.
+            \begin{itemize}
+                \item \textcolor{blue}{Caso base}. Si $v$ es una hoja, entonces 
+                el tamaño del conjunto independiente de peso máximo es justamente 
+                el peso de $v$, pues éste no tiene subárboles (y por ende, no 
+                tiene nietos).
+
+                \item \textcolor{blue}{Hipótesis de inducción}.Supongamos que se
+                cumple para $k$, es decir, supongamos que 
+                \begin{equation*}
+                    S(k) = w(k) + \sum_{x \; \in \; \text{nietos}(k)} S(x)
+                \end{equation*}
+
+                tiene el tamaño del conjunto independiente de peso máximo. 
+
+                \item \textcolor{blue}{Paso inductivo}. Queremos probar que se 
+                cumple para $k+1$. Entonces 
+                \begin{align*}
+                    S(k+1)
+                    &= S(k) + w(u) \\
+                    &= \left(w(k) + \sum_{x \; \in \; \text{nietos}(k)} S(x)
+                       \right) + w(u)
+                \end{align*}
+
+                Como $u$ fue agregado al conjunto $S$, eso significa que $u$ 
+                es una hoja o es el nieto de un vértice $v$. Por hipótesis de 
+                inducción, sabemos que $S(k)$ tiene el tamaño del conjunto 
+                independiente de peso máximo. Así, al sumarle $w(u)$ a este 
+                valor, obtenemos que $S(k+1)$ tiene el tamaño del conjunto 
+                independiente de peso máximo.
+            \end{itemize}
+        \end{proof}
 
         \item El vértice $v$ no forma parte del conjunto independiente de peso 
-        máximo de $T$. Entonces este conjunto es simplemente la unión de los 
-        conjuntos independientes de peso máximo de los subárboles de los hijos 
-        de $v$. 
+        máximo del subárbol $T_i$. Entonces este conjunto es simplemente la 
+        unión de los conjuntos independientes de peso máximo de los subárboles 
+        de los hijos de $v$. Esto se puede calcular como 
+        \begin{equation*}
+            S'(v) = \sum_{x \; \in \; \text{hijos}(v)} S'(x)
+        \end{equation*} 
+
+        \begin{proof}
+            Inducción sobre $v$.
+            \begin{itemize}
+                \item \textcolor{blue}{Caso base}. Si $v$ es una hoja, entonces 
+                el tamaño del conjunto independiente de peso máximo es $0$, 
+                pues nuestro vértice no tiene hijos.
+
+                \item \textcolor{blue}{Hipótesis de inducción}.Supongamos que se
+                cumple para $k$, es decir, supongamos que 
+                \begin{equation*}
+                    S'(k) = \sum_{x \; \in \; \text{hijos}(k)} S'(x)
+                \end{equation*}
+
+                tiene el tamaño del conjunto independiente de peso máximo. 
+
+                \item \textcolor{blue}{Paso inductivo}. Queremos probar que se 
+                cumple para $k+1$. Entonces 
+                \begin{align*}
+                    S'(k+1)
+                    &= S'(k) + w(u) \\
+                    &= \left(\sum_{x \; \in \; \text{hijos}(k)} S'(x)\right) 
+                    + w(u)
+                \end{align*}
+
+                Como $u$ fue agregado al conjunto $S'$, eso significa que $u$ 
+                es el hijo de un vértice $v$. Por hipótesis de inducción, 
+                sabemos que $S'(k)$ tiene el tamaño del conjunto independiente de 
+                peso máximo. Así, al sumarle $w(u)$ a este valor, obtenemos que 
+                $S'(k+1)$ tiene el tamaño del conjunto independiente de peso 
+                máximo.
+            \end{itemize}
+        \end{proof}
+        
     \end{itemize} 
 
     Con estas dos observaciones es posible escribir nuestro paso recursivo: Sea 
-    $T(v)$ la longitud (peso) del conjunto independiente de peso máximo en el 
-    subárbol cuya raíz es $v$, entonces 
-    \begin{equation}
+    $T(v)$ el tamaño del conjunto independiente de peso máximo en el subárbol 
+    cuya raíz es $v$, entonces 
+    \begin{equation*}
         T(v) = 
         \begin{cases}
-            w(v) & \text{si $v$ es una hoja} \\
+            w(v) & \text{si $v$ es hoja y $v \in S$} \\
+            0 & \text{si $v$ es hoja y $v \in S'$} \\
             max \left\{w(v) + \sum_{x \; \in \; \text{nietos de $v$}} 
-            T(x), \sum_{x \; \in \; \text{hijos de $v$}} T(x) \right\} 
+            T(x), \sum_{x \; \in \; \text{hijos}(v)} T(x)\right\} 
             & \text{otherwise}
         \end{cases}
-        \label{eq:tree}
-    \end{equation}
+    \end{equation*}
 
     Mostraremos que $T(v)$ es correcto.
     \begin{proof}
         Inducción sobre el vértice $v$. 
         \begin{itemize}
             \item \textcolor{blue}{Caso base}. Si $v$ es una hoja, entonces 
-            $T(v) = w(v)$. Esto es correcto ya que no tiene subárboles que 
-            contengan un conjunto independiente de peso máximo, por lo que 
-            este único vértice es el conjunto de peso máximo que buscamos. 
+            tenemos dos casos:
+            \begin{itemize}
+                \item $v \in S$. Por el caso base de una de las demostraciones 
+                anteriores, este caso se cumple.
+
+                \item $v \in S'$. Por el caso base de una de las demostraciones
+                anteriores, este caso se cumple.
+            \end{itemize}
 
             \item \textcolor{blue}{Hipótesis de inducción}. Supongamos que 
             esta función se cumple para $k$, es decir, supongamos que 
@@ -395,43 +475,61 @@
             para $k+1$. Entonces 
             \begin{align*}
                 T(k+1) 
-                &= T(k) + 1 
-                && \text{$T$ abre sumas} \\
-                &= T(k) + w(u) 
-                && \text{un vértice $u$ más} \\
+                &= T(k) + 1 \\
+                &= T(k) + w(u) \\ 
                 &= max \left\{w(k) + \sum_{x \; \in \; \text{nietos de $k$}} 
                 T(x), \sum_{x \; \in \; \text{hijos de $k$}} T(x) \right\}
                 + w(u)
-                && \text{H.I}
+                && \text{H.I} \\
+                &= max \left\{
+                    \left(w(k) + \sum_{x \; \in \; \text{nietos de $k$} T(x)} 
+                    \right) + w(u), 
+                    \left(\sum_{x \; \in \; \text{hijos de $k$}} T(x) \right)
+                    + w(u) \right\}
             \end{align*}
 
-            Por hipótesis de inducción, tenemos que $T(k)$ tiene el tamaño 
-            del conjunto independiente de peso máximo en el subárbol cuya 
-            raíz es $k$. Así, al sumar el peso del vétice $w(u)$ estamos 
-            obteniéndo el tamaño máximo del conjunto independiente de peso 
-            máximo en el subárbol cuya raíz es $k+1$.
+            Estos son los pasos inductivos de las demostraciones anteriores, 
+            por lo tanto $S(k+1)$ tiene el tamaño del conjunto independiente
+            de peso máximo (pues las dos expresiones donde del $max$ ya 
+            contienen el máximo valor de considerar (o no) a $k+1$ dentro del 
+            conjunto independiente de peso máximo). 
         \end{itemize}
 
         Por lo tanto, el algoritmo es correcto.
 
     \end{proof}
 
-    Así, gracias a la programación dinámica, efectivamente \ref{eq:tree} regresa 
-    el conjunto independiente de peso máximo de $T$.
+    Esto lo podemos traducir al siguiente algoritmo usando programación dinámica:
+    \begin{itemize}
+        \item Definimos a $r$ como la raíz del árbol $T$.
+
+        \item Para todos los nodos en $T$ usando un recorrido \texttt{postorder}:
+        \begin{itemize}
+            \item Si $v$ es una hoja, entonces $S(v) = w(v)$ y $S'(v) = 0$.
+            
+            \item Sino, $S(v) = w(v) + \sum_{x \in \text{nietos}(v)} S(x)$ y 
+            $S'(v) = \sum_{x \in \text{hijos}(v)} S'(x)\}$
+        \end{itemize}
+
+        \item Regresamos $max\{S(r), S'(r)\}$
+    \end{itemize}
+
+    Usamos \texttt{postorder} pues así garantizamos que visitamos a los hijos 
+    antes que al padre. 
 
     Ahora bien, veamos que este algoritmo es de tiempo lineal. Notemos que 
     debemos calcular el peso máximo del conjunto independiente que tiene cada 
-    vértice del árbol como raíz una sola vez. En las siguientes veces que se
-    desee consultar el valor, este ya estará almacenado en el arreglo de 
-    programación dinámica $T$ y podemos indexarlo y regresar su valor en 
-    tiempo constante. Así, calcularlos toma tiempo $O(n)$ porque hay $n$ nodos 
-    en el árbol $T$. Luego, para cada vértice, el algoritmo sólo mira a sus 
-    hijos y a sus nietos; por lo que cada vértice $v$ se mira sólo tres veces:
-    cuando lo miramos como raíz, cuando lo miramos como hijo y cuando lo 
-    miramos como nieto. Así, a cada nodo lo miramos un número constante de 
-    veces y sólamente en una ocasión (la primera) es cuando hacemos la llamada 
-    para calcular su valor. Por lo tanto, la complejidad total de nuestro 
-    algoritmo es $O(|V|)$. 
+    vértice del árbol como raíz una sola vez (usando un recorrido postorder, 
+    el cual nos toma $O(|V|)$). En las siguientes veces que se desee consultar 
+    el valor, este ya estará almacenado en el arreglo de programación dinámica 
+    $T$ y podemos indexarlo y regresar su valor en tiempo constante. Así, 
+    calcularlos toma tiempo $O(|V|)$. Luego, para cada vértice, el algoritmo 
+    sólo mira a sus hijos y a sus nietos; por lo que cada vértice $v$ se mira 
+    sólo tres veces: cuando lo miramos como raíz, cuando lo miramos como hijo y 
+    cuando lo miramos como nieto. Así, a cada nodo lo miramos un número 
+    constante de veces y sólamente en una ocasión (la primera) es cuando 
+    hacemos la llamada para calcular su valor. Por lo tanto, la complejidad 
+    total de nuestro algoritmo es $O(|V|)$. 
 
     % Ejercicio 4.
     \item Mientras caminas por la playa encuentras un cofre de tesoros. El 
@@ -787,9 +885,7 @@
             Inducción sobre el número de pisos $n$.
             \begin{itemize}
                 \item \textcolor{blue}{Caso base}. Si $n = 1$ entonces 
-                el número mínimo de experimentos para determinar a $f$
-                es $1$, pues sólo hay un piso. Como $n=1$, entonces 
-                sólo pueden pasar dos cosas:
+                tenemos dos casos:
                 \begin{itemize}
                     \item El huevo se rompe, lo que implica que $f=1$. Por lo 
                     que $n=1$ es el mínimo número de experimentos para determinar
@@ -810,26 +906,21 @@
                 sólo tenemos un huevo.
 
                 \item \textcolor{blue}{Paso inductivo}. Queremos probar que se 
-                cumple para $k+1$. Entonces 
-                \begin{align*}
-                    E(1, k+1) = k+1
-                \end{align*}
-
-                Tenemos dos posibles casos:
+                cumple para $k+1$. Para $E(1, k+1)$ tenemos dos casos:
                 \begin{itemize}
-                    \item El huevo se rompe, lo que implica que $f=k+1$. Por 
-                    hipótesis de inducción, tenemos que $k$ es el número 
-                    mínimo de experimentos para determinar a $f$ si sólo 
-                    tenemos un huevo. Así, para obtener el número mínimo de 
-                    experimentos del siguiente piso debemos sumar este valor 
-                    más uno.
+                    \item El huevo se rompe, lo que implica que $f = k+1$. 
+                    Por hipótesis de inducción tenemos que $E(1,k) = k$ tiene 
+                    el mínimo número de experimentos para encontrar a $f$. 
+                    Así, para obtener el mínimo número de experimentos para 
+                    el piso $k+1$ debemos sumarle una unidad a $k$ (pues en el 
+                    piso $k+1$ se rompe el huevo). Por lo tanto, 
+                    $E(1,k+1) = k+1$.
 
-                    \item El huevo no se rompe, lo que implica que $f=k+2$.
-                    El problema nos dice que en este caso, el huevo nunca se 
-                    rompe, pero como ya no podemos subir más pisos, entonces 
-                    sabemos que el número mínimo para determinar a $f$ es 
-                    $k+1$.
-                \end{itemize}
+                    \item El huevo no se rompe, lo que implica que $f > k+1$. 
+                    Por hipótesis de inducción tenemos que $E(1,k) = k$ tiene 
+                    el mínimo número de experimentos para encontrar a $f$. 
+                    Así,  
+                \end{itemize} 
             \end{itemize}
 
             Por lo tanto, el número mínimo de experimentos para determinar a 
@@ -873,6 +964,46 @@
             piso $t$ debemos considerárlos aún (pues el piso seguro más alto 
             está en algún lugar por debajo de $t$). Así, el problema se reduce 
             a $k-1$ huevos y $t-1$ pisos por revisar.
+            \begin{proof}
+                Inducción sobre $k$.
+                \begin{itemize}
+                    \item \textcolor{blue}{Caso base}. Si $k = 1$, entonces 
+                    $E(0, t-1) = 0$ tiene el mínimo número de experimentos 
+                    para encontrar a $f$.
+                    \begin{proof}
+                        Inducción sobre $t$.
+                        \begin{itemize}
+                            \item \textcolor{purple}{Caso base}. Si $t = 1$, 
+                            entonces $E(0, 0) = 0$ pues la cantidad de huevos 
+                            es $0$ y no estamos subiéndo a ningún piso.
+
+                            \item \textcolor{purple}{Hipótesis de inducción}.
+                            Supongamos que se cumple para $a$, es decir, 
+                            supongamos que $E(0, a-1) = 0$ tiene el número 
+                            mínimo de experimentos para encontrar a $f$. 
+
+                            \item \textcolor{purple}{Paso inductivo}. Queremos 
+                            probar que se cumple para $a+1$. Por hipótesis de 
+                            inducción sabemos que $E(0,a-1)$ tiene el número 
+                            mínimo de experimentos para encontrar a $f$. Como 
+                            la cantidad de huevos es $0$, entonces para el 
+                            siguiente piso el número de intentos seguirá 
+                            siendo $0$. Por lo tanto, $E(0, a-1)$ tiene el 
+                            mínimo número de experimentos para encontrar a 
+                            $f$. 
+                        \end{itemize}
+                    \end{proof}
+
+                    \item \textcolor{blue}{Hipótesis de inducción}. Supongamos 
+                    que se cumple para $a$, es decir, supongamos que 
+                    $E(a-1, t-1)$ tiene el número mínimo para encontrar el valor 
+                    de $f$. 
+
+                    \item \textcolor{blue}{Paso inductivo}. Queremos probar que 
+                    se cumple para $a+1$. Por hipótesis de inducción sabemos que 
+                    $E(a-1, t-1)$ tiene el número mínimo para encontrar 
+                \end{itemize}
+            \end{proof}
 
             \item El huevo no se rompe. Esto implica que todos los pisos 
             por debajo del piso $t$ tampoco rompen el huevo, pero los que están 
@@ -904,14 +1035,33 @@
         Inducción sobre el número de huevos $k$.
         \begin{itemize}
             \item \textcolor{blue}{Caso base}.
+            \begin{itemize}
+                \item Si $k = 1$, por el inciso anterior, sabemos que el 
+                número mínimo de experimentos es $n$. 
+            \end{itemize}
 
-            \item \textcolor{blue}{Hipótesis de inducción}.
+            \item \textcolor{blue}{Hipótesis de inducción}. Supongamos que se 
+            cumple para $a$, es decir, supongamos que 
+            \begin{equation*}
+                E(a, n) =
+                1 + min\left\{max\left\{E(a-1, t-1), E(a, n-t)\right\}\right\}
+            \end{equation*}
 
-            \item \textcolor{blue}{Paso inductivo}.
+            es el número mínimo de experimentos para encontrar a $f$.
+
+            \item \textcolor{blue}{Paso inductivo}. Queremos probar que se 
+            cumple para $a + 1$. Entonces 
+            \begin{align*}
+                E(a+1, n) = 
+                1 + min\left\{max\left\{E(a, t-1), E(a+1, n-t)\right\}\right\}
+            \end{align*}
+
+
         \end{itemize}
     \end{proof}
 
-    Esto se traduce al siguiente algoritmo:
+    Esto lo podemos implementar, usando programación dinámica, de la siguiente 
+    manera: 
     \begin{itemize}
         \item[1.] Definimos la matriz $E[k+1][n+1]$ y la variable $i=1$.
 

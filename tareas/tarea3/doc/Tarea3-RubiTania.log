@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.11.12)  9 DEC 2020 02:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2020.11.12)  10 DEC 2020 03:02
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -655,23 +655,27 @@ Package pdftex.def Info: imagenes/ejercicio1.png  used on input line 45.
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 312.
  (/usr/share/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-) [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] (/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.aux
+) [4] [5] [6] [7] [8] [9] [10] [11] [12]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[13] [14] [15] [16] [17] [18] (/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.aux
 LaTeX Info: Redefining \. on input line 4.
 LaTeX Info: Redefining \% on input line 4.
 ) ) 
 Here is how much of TeX's memory you used:
- 31353 strings out of 480478
- 683818 string characters out of 5905958
- 955531 words of memory out of 5000000
- 46973 multiletter control sequences out of 15000+600000
+ 31352 strings out of 480478
+ 683809 string characters out of 5905958
+ 960899 words of memory out of 5000000
+ 46972 multiletter control sequences out of 15000+600000
  546340 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 174i,15n,190p,1669b,3782s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 174i,16n,190p,1669b,3780s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on /home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.pdf (17 pages, 433069 bytes).
+Output written on /home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.pdf (18 pages, 439332 bytes).
 PDF statistics:
- 139 PDF objects out of 1000 (max. 8388607)
- 100 compressed objects within 1 object stream
+ 143 PDF objects out of 1000 (max. 8388607)
+ 102 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
 
