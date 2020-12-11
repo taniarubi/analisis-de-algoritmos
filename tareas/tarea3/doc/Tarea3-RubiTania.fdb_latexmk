@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1607590958 "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.tex" "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.pdf" "Tarea3-RubiTania" 1607590963
-  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.aux" 1607590962 3247 367a019bab713d933da62269901529e2 ""
-  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.tex" 1607590958 75598 3aa3d8c3c8561ac37d54c564fb433ec0 ""
+["pdflatex"] 1607670996 "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.tex" "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.pdf" "Tarea3-RubiTania" 1607671009
+  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.aux" 1607671008 3247 dddc3755cad529ab470625198ba1b68d ""
+  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.tex" 1607670995 72116 4817b22ef9410d6fafeedcdcb7a35940 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1591545468 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1591545468 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1591545468 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -198,12 +198,12 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1591545468 33301 a3134070eacafb10b1f371612ce2650d ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1605207236 4855604 a2b69e422d881628e3d9a5db2035053f ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1605207222 2514049 a4a9c6529f28fca34d49fc061c5f6e6e ""
-  "Tarea3-RubiTania.aux" 1607590962 3247 367a019bab713d933da62269901529e2 "pdflatex"
-  "Tarea3-RubiTania.tex" 1607590958 75598 3aa3d8c3c8561ac37d54c564fb433ec0 ""
+  "Tarea3-RubiTania.aux" 1607671008 3247 dddc3755cad529ab470625198ba1b68d "pdflatex"
+  "Tarea3-RubiTania.tex" 1607670995 72116 4817b22ef9410d6fafeedcdcb7a35940 ""
   "imagenes/ejercicio1.png" 1606332283 120870 d3efe3631ad1b5978559fab7e6f93b62 ""
   (generated)
-  "Tarea3-RubiTania.pdf"
   "Tarea3-RubiTania.aux"
+  "Tarea3-RubiTania.pdf"
+  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.log"
   "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.pdf"
   "Tarea3-RubiTania.log"
-  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea3/doc/Tarea3-RubiTania.log"

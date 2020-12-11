@@ -422,11 +422,11 @@
                 \end{align*}
 
                 Como $u$ fue agregado al conjunto $S'$, eso significa que $u$ 
-                es el hijo de un vértice $v$. Por hipótesis de inducción, 
-                sabemos que $S'(k)$ tiene el tamaño del conjunto independiente de 
-                peso máximo. Así, al sumarle $w(u)$ a este valor, obtenemos que 
-                $S'(k+1)$ tiene el tamaño del conjunto independiente de peso 
-                máximo.
+                es una hoja o el hijo de un vértice $v$. Por hipótesis de 
+                inducción, sabemos que $S'(k)$ tiene el tamaño del conjunto 
+                independiente de peso máximo. Así, al sumarle $w(u)$ a este 
+                valor, obtenemos que $S'(k+1)$ tiene el tamaño del conjunto 
+                independiente de peso máximo.
             \end{itemize}
         \end{proof}
         
@@ -438,8 +438,8 @@
     \begin{equation*}
         T(v) = 
         \begin{cases}
-            w(v) & \text{si $v$ es hoja y $v \in S$} \\
             0 & \text{si $v$ es hoja y $v \in S'$} \\
+            w(v) & \text{si $v$ es hoja y $v \in S$} \\
             max \left\{w(v) + \sum_{x \; \in \; \text{nietos de $v$}} 
             T(x), \sum_{x \; \in \; \text{hijos}(v)} T(x)\right\} 
             & \text{otherwise}
@@ -489,10 +489,11 @@
             \end{align*}
 
             Estos son los pasos inductivos de las demostraciones anteriores, 
-            por lo tanto $S(k+1)$ tiene el tamaño del conjunto independiente
-            de peso máximo (pues las dos expresiones donde del $max$ ya 
-            contienen el máximo valor de considerar (o no) a $k+1$ dentro del 
-            conjunto independiente de peso máximo). 
+            por lo que las expresiones dentro del \texttt{max} ya contienen 
+            el conjunto independiente de peso máximo al considerar (o no) el 
+            vértice $k+1$ como parte del conjunto; por lo que al tomar el 
+            el máximo de estos dos óptimos obtenemos el conjunto independiente
+            de peso máximo del subárbol cuya raíz es $k+1$.
         \end{itemize}
 
         Por lo tanto, el algoritmo es correcto.
@@ -882,58 +883,27 @@
         \item Pruebe que $E(1, n) = n$.
         
         \begin{proof}
-            Inducción sobre el número de pisos $n$.
+            Sin pérdida de generalidad, comenzamos a lanzar el huevo desde el 
+            piso $1$. Notemos que debemos lanzar el huevo piso por piso, ya que 
+            si lo hacemos de otra manera (digamos, de dos en dos), como sólo 
+            tenemos un huevo, entonces no tenemos forma de saber en qué piso se 
+            rompe. 
+            
+            Por otro lado, en el peor caso, tenemos que $f \geq n$, por lo que 
+            tenemos dos casos:
             \begin{itemize}
-                \item \textcolor{blue}{Caso base}. Si $n = 1$ entonces 
-                tenemos dos casos:
-                \begin{itemize}
-                    \item El huevo se rompe, lo que implica que $f=1$. Por lo 
-                    que $n=1$ es el mínimo número de experimentos para determinar
-                    a $f$.
+                \item $f = n$. Como subimos piso por piso, entonces hasta que 
+                llegamos al piso $n$ sabemos que el huevo se rompe. Por lo 
+                tanto, $E(1,n) = n$.
 
-                    \item El huevo no se rompe, lo que implica que $f=n+1$. El 
-                    problema nos dice que en este caso, el huevo nunca se rompe, 
-                    pero como ya no podemos subir más pisos, entonces sabemos 
-                    que el número mínimo para determinar a $f$ es $1$.
-                \end{itemize}
-                
-                \item \textcolor{blue}{Hipótesis de inducción}. Supongamos 
-                que se cumple para $k$, es decir, supongamos que 
-                \begin{equation*}
-                    E(1, k) = k
-                \end{equation*}
-                es el número mínimo de experimentos para determinar a $f$ si 
-                sólo tenemos un huevo.
-
-                \item \textcolor{blue}{Paso inductivo}. Queremos probar que se 
-                cumple para $k+1$. Para $E(1, k+1)$ tenemos dos casos:
-                \begin{itemize}
-                    \item El huevo se rompe, lo que implica que $f = k+1$. 
-                    Por hipótesis de inducción tenemos que $E(1,k) = k$ tiene 
-                    el mínimo número de experimentos para encontrar a $f$. 
-                    Así, para obtener el mínimo número de experimentos para 
-                    el piso $k+1$ debemos sumarle una unidad a $k$ (pues en el 
-                    piso $k+1$ se rompe el huevo). Por lo tanto, 
-                    $E(1,k+1) = k+1$.
-
-                    \item El huevo no se rompe, lo que implica que $f > k+1$. 
-                    Por hipótesis de inducción tenemos que $E(1,k) = k$ tiene 
-                    el mínimo número de experimentos para encontrar a $f$. 
-                    Así,  
-                \end{itemize} 
+                \item $f > n$. Como subimos piso por piso, al llegar al piso 
+                $n$ tenemos que el huevo no se rompe (el problema nos dice 
+                que en este caso el huevo nunca se romperá). Pero, como ya no 
+                podemos subir más pisos, entonces es suficiente con llegar al 
+                $n-$ésimo piso para saber que $f > n$. Por lo tanto, 
+                $E(1, n) = n$. 
             \end{itemize}
-
-            Por lo tanto, el número mínimo de experimentos para determinar a 
-            $f$ es $n$ si sólo tenemos un huevo. 
-
         \end{proof}
-
-        Otra forma de ver este problema es que, como sólo tenemos un huevo, 
-        entonces en el peor caso necesitamos tirar $n$ veces el huevo para 
-        encontrar a $f$ (pues comenzamos desde el piso $1$ y terminamos 
-        en el piso $n$). Debemos avanzar piso por piso ya que si lo hacemos 
-        de otra forma (de dos en dos, por ejemplo) no tenemos forma de saber 
-        en qué piso se rompe el huevo. De esta forma, $E(1, n) = n$.
 
         % Ejercicio 6.b
         \item Encuentre una recurrencia para $E(k,n)$. Utilice programación 
@@ -949,61 +919,24 @@
             la caída. 
 
             \item Si un huevo se rompe en el piso $t$, entonces éste también 
-            se romperá en los todos los $t+1$ pisos.
+            se romperá en los todos los $t+1$ pisos, es decir, el huevo se 
+            rompe también en los pisos que están por encima de $t$.
 
             \item Si un huevo sobrevive a la caída en el piso $t$, entonces 
-            éste también sobrevivirá a la caída de todos los $t-1$ pisos.
+            éste también sobrevivirá a la caída de todos los $t-1$ pisos, 
+            es decir, el huevo sobrevive también en los pisos que están por 
+            debajo de $t$. 
         \end{itemize}
 
         De esta forma, si tenemos $k$ huevos y $n$ pisos, podemos considerar 
         dos casos al momento de que un huevo es lanzado desde el piso $t$, 
-        con $t \in \{1, 2, \ldots, n\}$:
+        con $t \in \{1, 2, \ldots, f\}$:
         \begin{itemize}
-            \item El huevo se rompe. Esto implica que todos los pisos arriba 
-            del piso $t$ rompen el huevo, pero los que están por debajo del 
+            \item El huevo se rompe. Esto implica que todos los pisos que están
+            encima de $t$ rompen el huevo, pero los que están por debajo del 
             piso $t$ debemos considerárlos aún (pues el piso seguro más alto 
             está en algún lugar por debajo de $t$). Así, el problema se reduce 
             a $k-1$ huevos y $t-1$ pisos por revisar.
-            \begin{proof}
-                Inducción sobre $k$.
-                \begin{itemize}
-                    \item \textcolor{blue}{Caso base}. Si $k = 1$, entonces 
-                    $E(0, t-1) = 0$ tiene el mínimo número de experimentos 
-                    para encontrar a $f$.
-                    \begin{proof}
-                        Inducción sobre $t$.
-                        \begin{itemize}
-                            \item \textcolor{purple}{Caso base}. Si $t = 1$, 
-                            entonces $E(0, 0) = 0$ pues la cantidad de huevos 
-                            es $0$ y no estamos subiéndo a ningún piso.
-
-                            \item \textcolor{purple}{Hipótesis de inducción}.
-                            Supongamos que se cumple para $a$, es decir, 
-                            supongamos que $E(0, a-1) = 0$ tiene el número 
-                            mínimo de experimentos para encontrar a $f$. 
-
-                            \item \textcolor{purple}{Paso inductivo}. Queremos 
-                            probar que se cumple para $a+1$. Por hipótesis de 
-                            inducción sabemos que $E(0,a-1)$ tiene el número 
-                            mínimo de experimentos para encontrar a $f$. Como 
-                            la cantidad de huevos es $0$, entonces para el 
-                            siguiente piso el número de intentos seguirá 
-                            siendo $0$. Por lo tanto, $E(0, a-1)$ tiene el 
-                            mínimo número de experimentos para encontrar a 
-                            $f$. 
-                        \end{itemize}
-                    \end{proof}
-
-                    \item \textcolor{blue}{Hipótesis de inducción}. Supongamos 
-                    que se cumple para $a$, es decir, supongamos que 
-                    $E(a-1, t-1)$ tiene el número mínimo para encontrar el valor 
-                    de $f$. 
-
-                    \item \textcolor{blue}{Paso inductivo}. Queremos probar que 
-                    se cumple para $a+1$. Por hipótesis de inducción sabemos que 
-                    $E(a-1, t-1)$ tiene el número mínimo para encontrar 
-                \end{itemize}
-            \end{proof}
 
             \item El huevo no se rompe. Esto implica que todos los pisos 
             por debajo del piso $t$ tampoco rompen el huevo, pero los que están 
@@ -1028,37 +961,24 @@
                 \text{otherwise}
             \end{cases}
         \end{equation*}
+
+        con $t \in \{1, 2, \ldots, f\}$.
     \end{enumerate}
 
-    Mostraremos la correctud de esta función.
-    \begin{proof}
-        Inducción sobre el número de huevos $k$.
-        \begin{itemize}
-            \item \textcolor{blue}{Caso base}.
-            \begin{itemize}
-                \item Si $k = 1$, por el inciso anterior, sabemos que el 
-                número mínimo de experimentos es $n$. 
-            \end{itemize}
+    Esta función es correcta pues $E(k-1, t-1)$ y $E(k, n-t)$ con 
+    $t \in \{1, 2, \ldots, f\}$ tienen el número mínimo de experimentos
+    para encontrar a $f$ considerándo si un huevo en el piso $t$ se 
+    rompe (o no); esto por las justificaciones dadas anteriormente. De 
+    esta forma, al obtener el máximo de éstos dos valores (pues debemos 
+    considerar el peor de los casos) y tomando luego el mínimo de estos 
+    peores casos obtenemos que efectivamente 
+    \begin{equation*}
+        min\left\{max\left\{E(k-1, t-1), E(k, n-t)\right\}\right\}
+    \end{equation*}
 
-            \item \textcolor{blue}{Hipótesis de inducción}. Supongamos que se 
-            cumple para $a$, es decir, supongamos que 
-            \begin{equation*}
-                E(a, n) =
-                1 + min\left\{max\left\{E(a-1, t-1), E(a, n-t)\right\}\right\}
-            \end{equation*}
-
-            es el número mínimo de experimentos para encontrar a $f$.
-
-            \item \textcolor{blue}{Paso inductivo}. Queremos probar que se 
-            cumple para $a + 1$. Entonces 
-            \begin{align*}
-                E(a+1, n) = 
-                1 + min\left\{max\left\{E(a, t-1), E(a+1, n-t)\right\}\right\}
-            \end{align*}
-
-
-        \end{itemize}
-    \end{proof}
+    calcula el número mínimo de experimentos para encontrar a $f$. 
+    Finalmente, le sumamos una unidad a esta expresión pues también 
+    estamos realizando un experimento desde un piso en particular.
 
     Esto lo podemos implementar, usando programación dinámica, de la siguiente 
     manera: 
@@ -1107,11 +1027,13 @@
         \item[7.] Regresamos $E[k,n]$.
     \end{itemize}
 
-    Ahora bien, los ciclos de los pasos $2.$ y $3.$ nos toman $O(k)$ y $O(n)$,
+    De esta forma, evitamos volver a calcular los mismos subproblemas 
+    memoizando la función $E(k,n)$ con una matriz $E[k,n]$. Ahora bien, los 
+    ciclos de los pasos $2.$ y $3.$ nos toman $\Theta(k)$ y $\Theta(n)$, 
     respectivamente; pues recorren la matriz $E$ en una sola dirección. El 
-    ciclo en el paso $6.$ nos toma $O(kn^2)$, pues usamos un ciclo $k$ veces y 
-    un ciclo $n^2$ veces para cada huevo. Por lo tanto, la complejidad total 
-    del algoritmo es $O(kn^2)$.
+    ciclo en el paso $6.$ nos toma $O(kn^2)$, pues usamos un ciclo $k$ veces 
+    y un ciclo $n \times n$ veces para cada huevo. Por lo tanto, la 
+    complejidad total del algoritmo es $O(kn^2)$.
 
     % Ejercicio 7.
     \item Construye el árbol de Huffman para codificar el siguiente texto:
@@ -1858,18 +1780,23 @@
     \end{center}
 
     % Ejercicio 8.
-    \item Supongamos que el mago Merlín tiene un conjunto $A[1, \ldots, n]$ de 
-    pociones, las cuales puede mezclar de dos maneras consecutivas con un costo 
-    de $A[i] \times A[i + 1]$ y resulta en la poción $A[i] + A[i+1]$. Merlín 
-    quiere mezclar todas las pociones pero con el mínimo costo.
+    \item Supongamos que el mago Merlín tiene un conjunto $A$ de pociones de 
+    tamaño $n$ y que quiere mezclarlas todas pero haciéndo parejas entre 
+    todas ellas pero sin tomarlas arbitrariamente, es decir, haciéndo pares 
+    entre pociones consecutivas. El costo de unir dos pociones es de 
+    $A[i] \times A[i+1]$ y genera la poción $(A[i] + A[i+1]) \pmod{10}$. 
     \begin{enumerate}
         % Ejercicio 8.a
         \item Diseña un algoritmo que garantice unir todas las pociones con 
         un costo mínimo.
+
+        \textsc{Solución:}
         
         % Ejercicio 8.b
         \item ¿Cuál es el mínimo costo si se tienen 5 pociones cuyos valores son:
         $1, 9, 6, 2 3$?
+
+        \textsc{Solución:}
     \end{enumerate}
 
 \end{enumerate}
