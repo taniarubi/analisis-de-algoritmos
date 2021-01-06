@@ -309,20 +309,104 @@
         \item[6.] Regresamos $A[n-1][m-1]$.
     \end{itemize}
 
-    Ahora bien, los ciclos \texttt{while} de los pasos $2$ y $3$ nos toman 
-    $\Theta(m)$ y $\Theta(n)$, respectivamente; pues estamos recorriendo una 
-    sola vez un renglón y una columna. Y el ciclo \texttt{while} del paso $5$
-    nos toma $\Theta(nm)$, ya que estamos recorriendo lo que queda de la 
-    matriz $A$ (entrada por entrada). Por lo tanto, la complejidad total del 
-    algoritmo es de $\Theta(nm)$.
+    De esta forma, evitamos volver a calcular los mismos subproblemas 
+    usando memoización con el arreglo $A[n][m]$. Ahora bien, los ciclos 
+    \texttt{while} de los pasos $2$ y $3$ nos toman $\Theta(m)$ y 
+    $\Theta(n)$, respectivamente; pues estamos recorriendo una sola vez un 
+    renglón y una columna. Y el ciclo \texttt{while} del paso $5$ nos toma 
+    $\Theta(nm)$, ya que estamos recorriendo lo que queda de la matriz $A$ 
+    (entrada por entrada). Por lo tanto, la complejidad total del algoritmo 
+    es de $\Theta(nm)$.
 
     % Ejercicio 2.
     \item Dados dos árboles generadores $T$ y $R$ de una gráfica $G$. Muestra 
     cómo encontrar la secuencia más corta de árboles generadores $T_0, T_1, 
     \ldots, T_k$ tal que $T_0 = T, T_k = R$, y cada árbol $T_i$ difiere del 
     anterior $T_{i-1}$ agregando y borrando una arista.
+    
+    \textsc{Solución:} Sean $T$ y $R$ dos árboles generadores de $G$. Veamos 
+    que si $S$ es un árbol generador de la gráfica $G$, entonces podemos 
+    llegar a otro árbol generador $U$ eliminándo y agregando una arista. 
+    \begin{proof}
+        Sea $G$ una gráfica con un conjunto de vértices V(G) y un conjunto
+        de aristas $E(G)$. Si el número de aristas es menor que $|V(G)| - 1$, 
+        entonces $G$ no es conexa, por lo que no podemos tener un árbol 
+        generador (pues el número mínimo de aristas que tiene un árbol es 
+        $|V(G)|-1$). De esta forma, supongamos que estamos trabajando sobre 
+        una gráfica $G$ conexa. Entonces, tenemos dos casos:
+        \begin{itemize}
+            \item El número de aristas de $G$ es exactamente $|V(G)|-1$, es 
+            decir, $G$ tiene el mínimo número de aristas para ser conexa.
+            Por la definición de árbol, entonces la gráfica $G$ es el 
+            árbol generador y no hay que quitarle ni agregarle más aristas.
 
-    % Ejercicio 3.
+            \item El número de aristas de $G$ es mayor a $|V(G)|-1$. Sea 
+            $S$ el árbol generador de $G$. Por definición, $S$ tiene $|V(G)|-1$
+            aristas, y como $G$ tiene más aristas que $S$ entonces existe al 
+            menos un arista que está en $G$ pero no está en $S$. Como 
+            $|V(G)|-1$ es el mínimo número de aristas para que $G$ sea conexo, 
+            entonces si ponemos una arista en $S$ que está en $G$ pero no 
+            está en $S$, entonces se forma un ciclo. De esta forma, podemos 
+            eliminar cualquier arista del ciclo (que no sea la que agregamos)
+            y el árbol seguirá siendo conexo (pues los vértices extremos 
+            siguen estándo conectados). Por lo tanto, hay otro árbol generador 
+            distinto a $S$ tal que éstos sólo difieren en una arista. 
+        \end{itemize}
+    \end{proof}
+
+    Ahora bien, queremos encontrar la secuencia más corta entre los árboles 
+    generadores $T$ y $R$ de $G$. Así, podemos realizar el siguiente 
+    algoritmo:
+    \begin{itemize}
+        \item[1.] Tomamos el conjunto de aristas que están en $R$ pero no están 
+        en $T$, es decir, tomaremos el conjunto $E(R) - E(T)$.
+
+        \item[2.] Como ya sabemos que podemos ir de un árbol generador a otro 
+        difiriéndo sólo en una arista, entonces hacemos lo siguiente: tomamos 
+        una arista del conjunto $E(R) - E(T)$ y la ponemos en $T$. Como esa 
+        arista no estaba en $T$, entonces se forma un ciclo en este árbol. 
+        Sabemos que este ciclo no está en $R$, pues si esto sucediera entonces 
+        $R$ no sería un árbol generador. Entonces, como tenemos este ciclo,
+        al menos una de las aristas dentro del ciclo no pertenece a $R$. 
+        Tomamos cualquiera de las aristas dentro del ciclo que no está en $R$
+        y la eliminamos de $T$. Así, obtenemos un árbol $T_i$ que se parece 
+        una arista más a $R$.
+
+        \item[3.] Si $T_i = R$, entonces terminamos.
+
+        \item[4.] En caso contrario, volvemos a repetir el algoritmo desde el 
+        paso $2$  sin volver a tomar en cuenta las aristas en el conjunto 
+        $E(R) - E(T)$ que ya hemos usado.  
+    \end{itemize}
+
+    Mostraremos que este algoritmo efectivamente regresa la mínima 
+    secuencia entre los árboles generadores $T$ y $R$.
+    \begin{proof}
+        Procedemos por contradicción. Sea $C = \{T_0, T_1, \ldots, T_k\}$ la 
+        secuencia más corta entre los árboles generadores $T$ y $R$ 
+        obtenida por el algoritmo anterior. Supongamos que existe otra 
+        secuencia aún más corta $C'$ entre los árboles generadores $T$ y $R$. 
+        Esto quiere decir que $C$ tiene al menos un árbol $T_i$ que no está 
+        en $C'$, pero como todos los árboles $T_j$ dentro de $C$ fueron 
+        generados difiriéndo en una arista, entonces esto significa que al 
+        menos hay dos árboles $T_{i-i}$ y $T_i$ en $C$ que difieren en dos 
+        aristas (pues ya demostramos que podemos ir de un árbol generador 
+        a otro difiriéndo solo en una arista); lo que implica que ya no 
+        estamos borrando e insertando una sola arista. Contradicción.
+        
+        Por lo tanto, efectivamente $C$ es la secuencia más corta entre los 
+        subárboles $T$ y $R$.
+
+    \end{proof}
+
+    Ahora bien, la complejidad de este algoritmo depende mucho de como 
+    tratemos a nuestra gráfica. Sabemos que encontrar el conjunto $E(R) - E(T)$
+    nos toma tiempo lineal (pues debemos recorrer cada una de las gráficas y 
+    luego encontrar el conjunto diferencia). Luego, en el peor de los casos, 
+    nos tardamos $O(|V|^2)$ para el resto de los pasos del algoritmo, pues 
+    debemos estar revisándo los árboles generados $n$ veces. 
+
+    % Ejercicio 3.$
     \item Sea $G$ una gráfica con $n$ vértices. Un subconjunto $S$ de los 
     vértices de $G$ es independiente si cualesquiera dos elementos de $S$ no 
     son adyacentes. En general, el problema de encontrar el conjunto 
@@ -384,7 +468,7 @@
                 es una hoja o es el nieto de un vértice $v$. Por hipótesis de 
                 inducción, sabemos que $S(k)$ tiene el tamaño del conjunto 
                 independiente de peso máximo. Así, al sumarle $w(u)$ a este 
-                valor, obtenemos que $S(k+1)$ tiene el tamaño del conjunto 
+                valor, obtenemos que $S(k+1)$ tiene el tamaño del conjunto
                 independiente de peso máximo.
             \end{itemize}
         \end{proof}
@@ -424,7 +508,9 @@
                 Como $u$ fue agregado al conjunto $S'$, eso significa que $u$ 
                 es una hoja o el hijo de un vértice $v$. Por hipótesis de 
                 inducción, sabemos que $S'(k)$ tiene el tamaño del conjunto 
-                independiente de peso máximo. Así, al sumarle $w(u)$ a este 
+                independiente de 
+                \newpage
+                peso máximo. Así, al sumarle $w(u)$ a este 
                 valor, obtenemos que $S'(k+1)$ tiene el tamaño del conjunto 
                 independiente de peso máximo.
             \end{itemize}
@@ -1035,6 +1121,7 @@
     y un ciclo $n \times n$ veces para cada huevo. Por lo tanto, la 
     complejidad total del algoritmo es $O(kn^2)$.
 
+    \newpage
     % Ejercicio 7.
     \item Construye el árbol de Huffman para codificar el siguiente texto:
     \begin{center}
@@ -1683,6 +1770,7 @@
         }
     \end{table}
     
+    \newpage
     Así, el árbol de Huffman se vería de la forma:
     \begin{figure}[H]
         \centering
@@ -1790,15 +1878,179 @@
         \item Diseña un algoritmo que garantice unir todas las pociones con 
         un costo mínimo.
 
-        \textsc{Solución:}
+        \textsc{Solución:} Sea $A = P_1, P_2, \ldots, P_n$ el conjunto de 
+        pociones de Merlín. Definimos a $M(i,j)$ como el costo mínimo de 
+        unir las pociones $P_{i \ldots j}$. Si tenemos $n$ pociones que 
+        se multiplican $P_i P_{i+1} \cdots P_j$ para $1 \leq i \leq j \leq n$,
+        entonces el mínimo costo para $A_{1 \ldots n}$ será $M(1, n)$. 
+        
+        Tomemos en cuenta las siguientes observaciones:
+        \begin{itemize}
+            \item Si $i = j$, entonces la cadena de pociones es simplemente 
+            $P_{i \ldots i} = P_i$. Entonces, no se tienen que efectuar 
+            operaciones para multiplicar una sola matriz, por lo que 
+            $M(i,j) = 0$.
+
+            \item Si $i < j$, entonces podemos aprovechar la substructura 
+            óptima del problema que ya calculamos en el primer paso.
+            Supongamos que vamos a separar la secuencia de pociones a 
+            multiplicar en dos segmentos dados por $P_k$ y $P_{k+1}$, con 
+            $1 \leq k < j$. Así, la secuencia $P_i P_{i+1} \cdots P_j$
+            será $(P_i P_{i+1} \cdots P_k)(P_{k+1} \cdots P_j)$. Por lo 
+            tanto, el costo de multiplicar la secuencia será el costo de 
+            ambas subsecuencias sumado al costo de multiplicar ambas secuencias 
+            entre sí. 
+        \end{itemize}
+
+        De esta forma, la recurrencia del problema sería:
+        \begin{equation*}
+            M(i,j) = 
+            \begin{cases}
+                0 & \text{si } $i = j$ \\
+                min_{i \leq k < j} \left\{M(i,k) + M[k+1, j] + 
+                p_{i-1} p_k p_j\right\} & \text{si } $i < j$
+            \end{cases}
+        \end{equation*}
+
+        Esto lo podemos traducir al siguiente algoritmo:
+        \begin{itemize}
+            \item[1.] Definimos la matriz $M[n, n]$ y la variable $i = 1$.
+
+            \item[2.] Mientras $i \leq n$, hacemos 
+            \begin{itemize}
+                \item M[i,i] = 0
+                \item Incrementamos en una unidad a $i$.
+            \end{itemize}
+
+            \item[3.] Definimos las variable $i = d = 1$ y $j = 0$.
+
+            \item [4.] Mientras $d$ sea menor o igual a $n-1$, hacemos:
+            \begin{itemize}
+                \item Mientras $i$ sea menor o igual a $n-d$, hacemos 
+                \begin{itemize}
+                    \item $j = (i + d) \pmod{10}$
+
+                    \item $M[i,j] = \infty$
+
+                    \item Mientras $k = i$, sea menor a $j-1$, hacemos
+                    \begin{itemize}
+                        \item $M[i,j] = min\{M[i,j], M[i,k]+M[k+1, j] + 
+                        d_{i-1}d_{k}d_{j}\}$
+                    \end{itemize}
+                \end{itemize}
+            \end{itemize}
+
+            \item[5.] Regresamos $M[0,n]$.
+        \end{itemize}
+
+        Ahora bien, como todos los valores $M[i][j]$ deben ser calculados antes 
+        de que se pueda calcular $M[0,n]$, entonces esto nos toma $O(n^2)$; y 
+        cada calculo $M[i][j]$ nos toma tiempo lineal. Por lo tanto, la 
+        complejidad total del algoritmo es de $O(n^3)$.
         
         % Ejercicio 8.b
         \item ¿Cuál es el mínimo costo si se tienen 5 pociones cuyos valores son:
-        $1, 9, 6, 2 3$?
+        $1, 9, 6, 2, 3$?
 
         \textsc{Solución:}
-    \end{enumerate}
+        \begin{table} [H]
+            \parbox{.45\linewidth}{
+            \centering
+            \begin{tabular}{|c|c|c|}
+            \hline
+            $P_i$ & R & C \\
+            \hline
+            $(1,9)$ & $0$ & $9$ \\
+            \hline
+            $(9,6)$ & $5$ & $54$ \\
+            \hline
+            $(6,2)$ & $8$ & $12$ \\
+            \hline
+            $(2,3)$ & $5$ & $6$ \\
+            \hline
+            \end{tabular}
+            \caption{Conjuntos de longitud $2$}
+            }
+            \hfill
+            \parbox{.45\linewidth}{
+            \centering
+            \begin{tabular}{|c|c|c|}
+            \hline
+            $P_i$ & R & C \\
+            \hline
+            $(1, (9,6))$ & $6$ & $59$ \\
+            \hline
+            $((1,9), 6)$ & $6$ & $9$ \\
+            \hline
+            $(9, (6,2))$ & $7$ & $84$\\
+            \hline
+            $((9,6), 2)$ & $7$ & $64$ \\
+            \hline
+            $(6, (2,3))$ & $1$ & $36$\\
+            \hline
+            $((6,2), 3)$ & $1$ & $36$ \\
+            \hline
+            \end{tabular}
+            \caption{Conjuntos de longitud $3$}
+            }
+        \end{table}
 
+        \begin{table}[H]
+            \parbox{.45\linewidth}{
+            \centering
+            \begin{tabular}{|c|c|c|}
+            \hline
+            $P_i$ & R & C \\
+            \hline
+            $(1, ((9,6),2))$ & $8$ & $71$ \\
+            \hline
+            $(1, (9,(6,2)))$ & $8$ & $91$ \\
+            \hline
+            $(9, ((6,2),3))$ & $0$ & $45$ \\
+            \hline
+            $(9, (6,(2,3)))$ & $0$ & $45$ \\
+            \hline
+            $(((1,9),6), 2)$ & $8$ & $21$ \\
+            \hline
+            $((1, (9,6)), 2)$ & $8$ & $21$ \\
+            \hline
+            $(((9,6),2), 3)$ & $0$ & $71$ \\
+            \hline
+            $((9, (6,2)), 3)$ & $0$ & $105$ \\
+            \hline
+            \end{tabular}
+            \caption{Conjuntos de longitud $4$}
+            }
+            \hfill
+            \parbox{.45\linewidth}{
+            \centering
+            \begin{tabular}{|c|c|c|}
+            \hline
+            $P_i$ & R & C\\
+            \hline
+            $(1, (9, ((6,2),3)))$ & $1$ & $45$\\
+            \hline
+            $(1, (9, (6,(2,3))))$ & $1$ & $45$\\
+            \hline
+            $(1, (((9,6),2), 3))$ & $1$ & $71$ \\
+            \hline
+            $(1, ((9, (6,2)), 3))$ & $1$ & $105$ \\
+            \hline
+            $((1, ((9,6),2)),3)$ & $1$ & $95$ \\
+            \hline
+            $((1, (9,(6,2))), 3)$ & $1$ & $115$ \\
+            \hline
+            $((((1,9),6), 2), 3)$ & $1$ & $45$ \\
+            \hline
+            $(((1, (9,6)), 2), 3)$ & $1$ & $45$ \\
+            \hline
+            \end{tabular}
+            \caption{Conjuntos de longitud $5$}
+            }
+            \end{table}
+
+            Por lo tanto, el costo mínimo es $45$ con una poción resultante $1$.
+    \end{enumerate}
 \end{enumerate}
 
 \end{document}
