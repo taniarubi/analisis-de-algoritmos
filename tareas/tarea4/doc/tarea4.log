@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.1.19)  26 JAN 2021 11:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.1.19)  27 JAN 2021 00:17
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -642,40 +642,39 @@ LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 71
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 ) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
-<imagenes/FORD.png, id=24, 579.66562pt x 136.25906pt>
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4]
+<imagenes/FORD.png, id=32, 579.66562pt x 136.25906pt>
 File: imagenes/FORD.png Graphic file (type png)
 <use imagenes/FORD.png>
-Package pdftex.def Info: imagenes/FORD.png  used on input line 262.
+Package pdftex.def Info: imagenes/FORD.png  used on input line 354.
 (pdftex.def)             Requested size: 264.46837pt x 62.16637pt.
- [3 </home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/imagenes/FORD.png (PNG copy)>]
-<imagenes/pseudo.png, id=30, 636.87938pt x 265.74281pt>
+<imagenes/pseudo.png, id=33, 636.87938pt x 265.74281pt>
 File: imagenes/pseudo.png Graphic file (type png)
 <use imagenes/pseudo.png>
-Package pdftex.def Info: imagenes/pseudo.png  used on input line 295.
+Package pdftex.def Info: imagenes/pseudo.png  used on input line 387.
 (pdftex.def)             Requested size: 264.46837pt x 110.35014pt.
-<imagenes/path.png, id=31, 268.00125pt x 266.49562pt>
+<imagenes/path.png, id=34, 268.00125pt x 266.49562pt>
 File: imagenes/path.png Graphic file (type png)
 <use imagenes/path.png>
-Package pdftex.def Info: imagenes/path.png  used on input line 320.
+Package pdftex.def Info: imagenes/path.png  used on input line 412.
 (pdftex.def)             Requested size: 111.08026pt x 110.45535pt.
- [4 </home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/imagenes/pseudo.png (PNG copy)> </home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/imagenes/path.png (PNG copy)>] [5] (/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.aux
+ [5 </home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/imagenes/FORD.png (PNG copy)> </home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/imagenes/pseudo.png (PNG copy)>] [6 </home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/imagenes/path.png (PNG copy)>] (/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.aux
 LaTeX Info: Redefining \. on input line 5.
 LaTeX Info: Redefining \% on input line 5.
 ) ) 
 Here is how much of TeX's memory you used:
  26792 strings out of 479383
  600634 string characters out of 5875830
- 925491 words of memory out of 5000000
+ 925489 words of memory out of 5000000
  43507 multiletter control sequences out of 15000+600000
  415898 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  93i,9n,98p,1659b,402s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on /home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.pdf (5 pages, 307640 bytes).
+Output written on /home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.pdf (6 pages, 314182 bytes).
 PDF statistics:
- 82 PDF objects out of 1000 (max. 8388607)
- 58 compressed objects within 1 object stream
+ 85 PDF objects out of 1000 (max. 8388607)
+ 60 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  28 words of extra memory for PDF output out of 10000 (max. 10000000)
 

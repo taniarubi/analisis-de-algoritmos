@@ -102,12 +102,88 @@
     \texttt{Costo}$_c$ y \texttt{Costo}$_b$, respectivamente. Diseña un algoritmo 
     de tiempo $O(n + m)$ que determine qué caminos reparar y qué bibliotecas 
     construir tal que cada ciudad pueda acceder a una biblioteca y el costo sea 
-    mínimo. Por ejemplo, si el \texttt{Costo}$_c \leq$ \texttt{Costo}$_b$, pues 
-    la solución es construir a cada ciudad su biblioteca.
+    mínimo.
 
     \textsc{Solución:} Representamos al país como una gráfica $G = (V, E)$. 
     Cada uno de los vértices de $G$ corresponderán a una ciudad y las aristas 
-    corresponderán a los caminos bidireccionales que existen entre las ciudades.
+    corresponderán a los caminos bidireccionales que existen entre las 
+    ciudades.
+
+    Ahora bien, para que un ciudadano tenga acceso a una biblioteca, debemos 
+    tener en cuenta dos propiedades importantes:
+    \begin{itemize}
+        \item La ciudad en la que habita tiene una biblioteca.
+        \item Puede viajar desde su ciudad hasta una que tenga una biblioteca.
+    \end{itemize}
+
+    Así, tenemos que cada componente conexa de la ciudad debe de tener al menos
+    una biblioteca. Para cada componente, definimos un contador \texttt{cc} (será 
+    variable global), el cual se encargará de contabilizar el número de vértices 
+    en la componente. Luego, tenemos tres posibles casos:
+    \begin{itemize}
+        \item Si \texttt{Costo}$_c <$ \texttt{Costo}$_b$, entonces el costo 
+        mínimo será construir una biblioteca y \texttt{cc-1} caminos para 
+        conectar a las ciudades (pues este número es suficiente para reparar 
+        los caminos que conectan a las ciudades). Como un ciudadano puede acceder 
+        a una biblioteca si puede viajar hacia ella, es decir, existe un camino 
+        desde su ciudad a la que tiene la biblioteca; entonces en este caso 
+        resulta más barato construir una sóla biblioteca (que es más cara) y 
+        reparar los caminos entre las ciudades para que puedan llegar a ella.
+
+        \item Si \texttt{Costo}$_c >$ \texttt{Costo}$_b$, entonces el costo 
+        mínimo es construir una biblioteca por cada ciudad. Como un ciudadano 
+        puede acceder a una biblioteca si se encuentra en su ciudad, entonces 
+        es más económico construir puras bibliotecas (que son las más baratas)
+        en lugar de incrementar el costo reparándo caminos.
+
+        \item Si \texttt{Costo}$_c =$ \texttt{Costo}$_b$, entonces se pueden 
+        aplicar cualquiera de los dos procedimiento anteriores, pues como los 
+        costos son iguales, el resultado será el mismo.
+    \end{itemize}
+
+    Con esta idea, podemos utilizar DFS sobre la gráfica $G$ para contar el 
+    número de vértices en cada componente conexa (gracias a que este recorrido 
+    genera un árbol por cada componente de $G$), y luego calcular el costo 
+    mínimo (de acuerdo a las consideraciones anteriores). Así, este procedimiento 
+    lo podemos traducir como el siguiente algoritmo:
+    \begin{itemize}
+        \item Inicializamos la variable \texttt{costo = 0}.
+        \item Para cada vértice $v_i \in V(G)$ que no ha sido visitado:
+        \begin{itemize}
+            \item Inicializamos la variable \texttt{cc = 0}.
+            \item Aplicamos el algoritmo DFS con el vértice $v_i$.
+            \item Si \texttt{Costo}$_c <$ \texttt{Costo}$_b$, entonces 
+            \texttt{costo += Costo\_b + Costo\_c * (cc-1)}
+            \item En caso contrario, \texttt{costo += Costo\_b * cc}
+        \end{itemize}
+
+        \item Regresamos \texttt{costo}.
+    \end{itemize}
+
+    donde el algoritmo DFS se vería de la siguiente forma:
+    \begin{itemize}
+        \item Marcamos \texttt{origen} como visitado.
+        \item Aumentamos al contador \texttt{cc} en una unidad.
+        \item Para cada vértice $v$ adyacente a \texttt{origen} en $G$:
+        \begin{itemize}
+            \item Si $v$ no ha sido visitado, entonces lo marcamos como 
+            visitado.
+            \item Llamámos recursivamente a DFS con $v$.
+        \end{itemize}
+    \end{itemize}
+
+    Ahora bien, este algoritmo funciona porque gracias a DFS podemos analizar 
+    cada una de las componentes conexas (ya que $G$ no necesariamente debe 
+    ser un país donde todas sus ciudades están conectadas) y de acuerdo al 
+    número de vértices de cada una podemos calcular el costo mínimo 
+    (dependiéndo de los costos de construcción que nos den).
+
+    Como estamos usando DFS para calcular el número de vértices en cada 
+    componente conexa, entonces esto nos toma en total $O(n + m)$ (pues 
+    exploramos todas las aristas y vértices de $G$); y calcular
+    el costo mínimo nos toma tiempo constante, pues sólo debemos realizar 
+    operaciones aritméticas. Por lo tanto, la complejidad total del algoritmo 
+    es de $O(n + m)$.
 
     % Ejercicio 3.
     \item La \textsc{onu} quiere mandar al espacio dos personas a la luna de
@@ -119,15 +195,31 @@
 
     % Ejercicio 4.
     \item Supongamos que tenemos un conjunto de $n$ ciudades $c_1, c_2, \ldots,
-    c_n$, y una tabla $D[1 \ldots n,  \ldots n]$ tal que $D[i,j]$ es la longitud 
+    c_n$, y una tabla $D[1 \ldots n, 1 \ldots n]$ tal que $D[i,j]$ es la longitud 
     de una carretera que une a la ciudad $c_i$ con la ciudad $c_j$ (este valor 
     puede ser $\infty$ si no hay carretera entre $c_i$ y $c_j$). Encuentre un 
     algoritmo eficiente que encuentre la ruta más corta entre las ciudades $c_1$
     y $c_n$ tal que dicha ruta no pasa por más de $k$ ciudades distintas a 
     $c_1$ y $c_n$.
 
+    \textsc{Solución:} Representamos el conjunto de ciudades como una gráfica
+    $G = (V, E)$. Cada uno de los vértices corresponderá a una ciudad $c_i$. 
+    Por otro lado, las aristas corresponderán a las carreteras que unen a las 
+    ciudades entre sí (para hacer la gráfica dirigida, colocamos dos aristas: 
+    una de ida y otra de regreso) y tendrán un peso $w_d$ de acuerdo a la 
+    longitud de cada carretera. Consideramos además a la tabla $D$ como 
+    nuestra matriz de adyacencias, donde cada entrada $D[i,j]$ corresponde al 
+    peso $w_d$ de las aristas entre dos ciudades (notemos además que $D[i,j] = 
+    D[j, i]$ para no tener que repetir las aristas en la tabla de adyacencias)
+    y si no hay una arista que una a las ciudades, entonces el peso puede ser 
+    $\infty$.
+
+    Como queremos encontrar un camino entre dos vértices tal que dicho camino 
+    no pase por más de $k$ ciudades diferentes, entonces podríamos recorrer 
+    todos los caminos de longitud a lo más $k$ desde $c_1$ hasta $c_n$
+
     % Ejercicio 5.
-    \item Diseña un algoritmo de tiempo $O(V)$ que determine si una gráfica 
+    \item Diseña un algoritmo de tiempo $O(V)$ que determine si una gráfica no
     dirigida $G = (V, E)$ contiene o no un ciclo.
 
     \textsc{Solución:} Sea $G$ una gráfica con un conjunto de vértices $V(G)$ y 
