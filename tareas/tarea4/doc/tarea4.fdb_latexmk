@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1611728243 "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.tex" "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.pdf" "tarea4" 1611728244
-  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.aux" 1611728244 565 ee2547790f13252fc7dd1d60994cfe88 ""
-  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.tex" 1611728242 24213 013fb28a3b877b3dd2e1fbb44610b6ac ""
+["pdflatex"] 1611740383 "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.tex" "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.pdf" "tarea4" 1611740385
+  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.aux" 1611740385 598 09c7660be32fff152195fa9ad76e6e23 ""
+  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.tex" 1611740383 28303 dac1054d35724e86ea82c24260718243 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1607249373 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1607249373 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1607249373 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -191,11 +191,11 @@
   "imagenes/FORD.png" 1611606549 34914 4bf391d8d02bd13f146f8dabdaae91e1 ""
   "imagenes/path.png" 1611616602 7877 d33f078b66a8b8ca8f27d2d1c8835bcf ""
   "imagenes/pseudo.png" 1611613644 71593 59c9aa20417be7f1d75c25a5d9317b79 ""
-  "tarea4.aux" 1611728244 565 ee2547790f13252fc7dd1d60994cfe88 "pdflatex"
-  "tarea4.tex" 1611728242 24213 013fb28a3b877b3dd2e1fbb44610b6ac ""
+  "tarea4.aux" 1611740385 598 09c7660be32fff152195fa9ad76e6e23 "pdflatex"
+  "tarea4.tex" 1611740383 28303 dac1054d35724e86ea82c24260718243 ""
   (generated)
-  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.log"
   "tarea4.pdf"
   "tarea4.log"
   "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.pdf"
+  "/home/taniarubi/Documents/fciencias/analisis-de-algoritmos/tareas/tarea4/doc/tarea4.log"
   "tarea4.aux"

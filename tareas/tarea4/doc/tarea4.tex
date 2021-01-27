@@ -191,7 +191,55 @@
     astronauta es del mismo país que el $j-$ésimo, determina el número de 
     pares posibles a formar. 
 
-    \textsc{Solución:}
+    \textsc{Solución:} El hint para este problema es determinar el número de 
+    países que existen. Para lograr esto, utilizaremos \texttt{union-find}. 
+    Recordemos que éste es una estructura de datos que modela una colección de 
+    conjuntos disjuntos y está basado en dos operaciones:
+    \begin{itemize}
+        \item \texttt{Find(A)}. Determina a cuál conjunto pertenece el elemento 
+        $A$. Esta operación puede ser usada para determinar si $2$ elementos 
+        están o no en el mismo conjunto.
+        \item \texttt{Union(A,B)}. Une todo el conjunto al que pertenece $A$ 
+        con todo el conjunto al que pertence $B$, dando como resultado un nuevo 
+        conjunto basado en los elementos tanto de $A$ como de $B$.
+    \end{itemize}
+
+    Si bien hay varias formas de implementarlo, usaremos aquella que es conocida
+    como \texttt{bosque de conjuntos disjuntos}. Éste es una estructura donde 
+    cada conjunto está representado por un árbo con raíz. El representante es, 
+    naturalmente, la raíz. Cada nodo de cada árbol apunta únicamente a su padre, 
+    a excepción de la raíz (que apunta a sí misma). La función \texttt{Find(A)}
+    busca la raíz del árbol en el que se encuentra el elemento $A$, mientras que 
+    la función \texttt{Union(A,B)} pone a la raíz del árbol que contiene a $B$
+    como hijo de la raíz del árbol que contiene a $A$. De esta forma, cada 
+    astronauta será un vértice en el bosque. Como cada par $(i,j)$ de 
+    astronautas pertenece al mismo país, entonces podemos agregar una arista 
+    entre sus vértices y unir los árboles a los que pertenecen. Así, un árbol 
+    del bosque representará a todos los astronautas del mismo país. Contando el 
+    número de árboles disjuntos y su tamaño $t_p$ podemos obtener la subdivisión 
+    exacta de todos los astronautas. Como tenemos que elegir a dos personas de 
+    diferentes países, entonces podemos elegir a los posibles pares con el 
+    siguiente algoritmo:
+    \begin{itemize}
+        \item Inicializamos \texttt{aux = num = 0}.
+        \item Para cada uno de los valores de \texttt{tamaño} $t_p$:
+        \begin{itemize}
+            \item \texttt{num += aux * t\_p}
+            \item \texttt{aux += t\_p}
+        \end{itemize}
+
+        \item Regresamos \texttt{num}
+    \end{itemize}
+
+    Finalmente, la implementación del bosque de conjuntos disjuntos en la que 
+    \texttt{Find(A)} no actualiza los punteros de los padres y en la que 
+    \texttt{Union(A,B)} no intenta controlar las alturas de los árboles, puede 
+    tener (en el peor caso) árboles con altura $O(n)$. En esta situación, 
+    ambas funciones nos tomarían tiempo $O(n)$ (se pueden hacer mejoras al 
+    algoritmo, pero nos quedaremos con esta). Por otro lado, calcular el
+    número de pares posibles a formar nos toma también $O(k)$, donde $k$ es el 
+    número de países. Por lo tanto, la complejidad total del algoritmo es de
+    $O(n)$.
 
     % Ejercicio 4.
     \item Supongamos que tenemos un conjunto de $n$ ciudades $c_1, c_2, \ldots,
@@ -234,28 +282,6 @@
 
         \item Si el número de aristas de $G$ es mayor o igual que $|V(G)|$
         entonces necesariamente tenemos un ciclo.
-        \begin{proof}
-            Sea $k$ el número de componentes conexas de la gráfica $G$. 
-            Realizamos la inducción sobre $k$.
-            \begin{itemize}
-                \item \textcolor{blue}{Caso base:} $k=1$. Esto quiere decir que 
-                $G$ es una gráfica conexa. Como $|E(G)| \geq |V(G)|$, entonces 
-                $G$ no puede ser un árbol (pues debería de tener $|V(G)|-1$ 
-                aristas), lo que implica que contiene un ciclo.
-                
-                \item \textcolor{blue}{Hipótesis de inducción.} Supongamos que 
-                se cumple para $k$, es decir, supongamos que si el número de 
-                aristas de $G$ es mayor o igual que $|V(G)|$ entonces $G$ tiene 
-                un ciclo.
-
-                \item \textcolor{blue}{Paso inductivo.}
-            \end{itemize}
-
-        \end{proof}
-
-        De esta forma, podemos afirmar que si esta hipótesis se cumple, entonces 
-        $G$ tiene un ciclo. En particular, si quisiéramos saber cuál es éste, 
-        podemos hacer lo siguiente:
         \begin{itemize}
             \item Si $G$ es conexa, entonces recorremos la gráfica usando DFS
             (iniciándo en un vértice arbitrario). Como la gráfica es conexa, 
@@ -265,17 +291,29 @@
             $|E(G)| \geq |V(G)|$). Esta arista da un ciclo en $G$.
 
             \item Si $G$ es disconexa, entonces sabemos que alguna de sus $k$ 
-            componentes conexas tiene un ciclo. Bastará con usar la idea del 
-            inciso anterior para las componentes conexas para conocer nuestro 
-            ciclo.
+            componentes conexas tiene un ciclo (pues seguirá la misma lógica 
+            que en el inciso anterior). Así, vamos verificando vértice por 
+            vértice hasta encontrar una componente conexa (los vamos marcando 
+            como visitados). Una vez que la encontremos, aplicamos DFS y 
+            esperamos tener el mismo resultado que en el inciso anterior. 
+            Si no lo encontramos, como todos esos vértices ya fueron 
+            visitados, entonces seguimos probando este método hasta encontrar 
+            la componente que contiene el ciclo.
         \end{itemize}
     \end{itemize}
+
+    Este algoritmo funciona porque en ambos casos usamos DFS para poder buscar 
+    el ciclo. Al usar este recorrido, nos aseguramos de no repetir vértices y 
+    de buscar todas las componentes conexas que podría tener nuestra gráfica, 
+    por lo que siempre buscamos en toda la gráfica el ciclo.
 
     Por otro lado, la complejidad del algoritmo efectivamente es $O(V)$. 
     Recordemos que DFS nos toma $O(V + E)$ en tiempo. En el primer caso, como 
     $|E(G)| < |V(G)|$, entonces DFS nos toma $O(V + E) = O(V)$ en tiempo. En 
-    el segundo caso, no es necesario buscar el ciclo (pues sólo nos piden una 
-    respuesta binaria) ya que sabemos que éste existe. 
+    el segundo caso, recorremos todos los vértices una sóla vez y si nos 
+    encontramos con alguna arista distinta de $V$, entonces ya la habremos visto 
+    antes, por lo que la complejidad también será de $O(V)$. Por lo tanto, la 
+    complejidad total del algoritmo es de $O(V)$.
 
     % Ejercicio 6.
     \item Supongamos que tenemos un flujo óptimo en una red $N$ con $n$ vértices,
@@ -286,18 +324,35 @@
         en una unidad. De un algoritmo de tiempo $O(n + E)$ para actualizar
         nuestro flujo. $E$ es el número de aristas de $N$.
 
-        \textsc{Solución}: Sabemos que este incremento no puede disminuir el 
-        flujo máximo de la red $N$, pues todo flujo de la red original es un 
-        flujo de la red modificada. Además, si existe un corte mínimo en el que 
-        $e$ no se encuentra, entonces el flujo máximo no se puede incrementar, 
-        por lo que no existirá ningún camino aumentante en la red residual.
+        \textsc{Solución}: Sabemos que si existe un corte mínimo en el que la 
+        arista $e$ no se encuentra, entonces no se puede aumentar el flujo 
+        máximo; por lo que no existirá ningún camino aumentante en la red 
+        residual. En caso contrario, posiblemente podemos aumentar el flujo en
+        $1$. Para averiguarlo, realizamos una nueva iteración del algoritmo 
+        \texttt{Ford-Fulkerson}. Si existe un camino aumentante, entonces 
+        aumentará en esta iteración (sino, el flujo no cambia). Como el flujo 
+        aumenta estrictamente, entonces en una sóla iteración del ciclo 
+        \texttt{while} en la línea $3$ (ver \ref{fig:algoritmo}) de 
+        \texttt{Ford-Fulkerson}, el flujo aumentará en una unidad. Para encontrar 
+        un camino aumentante utilizamos BFS, el cual nos toma $O(V+E') = O(n+E)$ 
+        en tiempo.
 
         % Ejercicio 6.b
         \item Supongamos que la capacidad de una sola arista $e$ se decrementa
         en una unidad. De un algoritmo de tiempo $O(n + E)$ donde $E$ es el 
         número de aristas de $N$.
 
-        \textsc{Solución:}
+        \textsc{Solución:} Si el flujo de la arista $e$ ya estaba al menos $1$
+        unidad por debajo de la capacidad, entonces no cambia. En caso contrario,
+        debemos buscar un camino de $s$ a $t$ que contenga a $e$ (pues aún tiene 
+        capacidad residual positiva), esto lo haremos realizándo BFS (lo cual 
+        nos toma $O(V+E) = O(n+E)$). Decrementamos el flujo de cada arista en ese 
+        camino en $1$. Esto disminuye el flujo total en $1$ (pero no afecta el 
+        flujo máximo). Luego, ejecutamos una iteración del ciclo \texttt{while} 
+        del algoritmo \texttt{Ford-Fulkerson} (el cual nos toma $O(n+E)$). Por lo 
+        argumentado en el inciso anterior, el flujo aumenta estrictamente, lo 
+        que implica que no encontraremos ningún camino que aumente, o bien, 
+        aumentaremos el flujo en $1$ y terminamos.
     \end{itemize}
 
     % Ejercicio 7.
@@ -386,6 +441,7 @@
         \centering
         \includegraphics[width=0.5\textwidth]{imagenes/pseudo.png}
         \caption{Cormen, Introduction To Algorithms pag. 724}
+        \label{fig:algoritmo}
     \end{figure}
 
     Como lo indica el \texttt{Cormen}, la complejidad de la implementación 
