@@ -264,7 +264,9 @@
 
     Como queremos encontrar un camino entre dos vértices tal que dicho camino 
     no pase por más de $k$ ciudades diferentes, entonces podríamos recorrer 
-    todos los caminos de longitud a lo más $k$ desde $c_1$ hasta $c_n$
+    todos los caminos de longitud a lo más $k$ desde $c_1$ hasta $c_n$. 
+
+    \textbf{Ejercicio incompleto :c}
 
     % Ejercicio 5.
     \item Diseña un algoritmo de tiempo $O(V)$ que determine si una gráfica no
@@ -312,8 +314,9 @@
     $|E(G)| < |V(G)|$, entonces DFS nos toma $O(V + E) = O(V)$ en tiempo. En 
     el segundo caso, recorremos todos los vértices una sóla vez y si nos 
     encontramos con alguna arista distinta de $V$, entonces ya la habremos visto 
-    antes, por lo que la complejidad también será de $O(V)$. Por lo tanto, la 
-    complejidad total del algoritmo es de $O(V)$.
+    antes, por lo que vemos más vértices que aristas, y así la complejidad 
+    también será de $O(V)$. Por lo tanto, la complejidad total del algoritmo es 
+    de $O(V)$.
 
     % Ejercicio 6.
     \item Supongamos que tenemos un flujo óptimo en una red $N$ con $n$ vértices,
