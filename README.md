@@ -19,4 +19,5 @@ Durante este curso se realizaron:
    * Tarea 1: Ordenamientos.
    * Tarea 2: Búsqueda binaria y árboles binarios.
    * Tarea 3: Programación dinámica y algoritmos Greedy.
+   * Tarea 4: Gráficas y flujos.
 
